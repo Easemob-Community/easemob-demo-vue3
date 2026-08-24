@@ -4,7 +4,7 @@ defineOptions({ name: 'ChatPage' })
 
 <template>
   <div class="chat-page">
-    <h1>会话</h1>
-    <p>占位页面，后续集成 vue3-uikit 会话组件</p>
+    <h1>{{ $t('nav.chat') }}</h1>
+    <p>{{ $t('chat.placeholder') }}</p>
   </div>
 </template>

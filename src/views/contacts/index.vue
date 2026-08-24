@@ -4,7 +4,7 @@ defineOptions({ name: 'ContactsPage' })
 
 <template>
   <div class="contacts-page">
-    <h1>通讯录</h1>
-    <p>占位页面，后续集成 vue3-uikit 联系人组件</p>
+    <h1>{{ $t('nav.contacts') }}</h1>
+    <p>{{ $t('contacts.placeholder') }}</p>
   </div>
 </template>

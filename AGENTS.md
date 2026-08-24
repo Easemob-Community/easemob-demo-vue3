@@ -4,7 +4,7 @@
 
 ## 项目概述
 
-`easemob-demo-vue3` 是一款社区维护版环信（Easemob）IM Demo 应用，计划基于社区维护的 Vue3 UIKit（`vue3-uikit`）构建。**当前项目处于脚手架阶段**：路由、布局、axios 封装、Pinia store 已搭好骨架，登录 / 会话 / 通讯录等页面均为占位页，IM 相关逻辑尚未接入（代码中留有 `TODO` 注释标注后续工作，如登录态校验、token 注入、401 跳转等）。
+`easemob-demo-vue3` 是一款社区维护版环信（Easemob）IM Demo 应用，计划基于社区维护的 Vue3 UIKit（`vue3-uikit`）构建。**当前项目处于脚手架阶段**：路由、布局、axios 封装、Pinia store 已搭好骨架，登录态校验、token 注入、401 跳转、页面标题 i18n 化等基础链路已实现，登录 / 会话 / 通讯录等页面仍为占位页，IM 相关逻辑尚未接入（代码中留有 `TODO` 注释标注后续工作，如统一错误提示、接入 uikit 组件等）。
 
 - 包管理器：pnpm 10+（`packageManager: pnpm@10.24.0`）
 - Node.js：>= 20.19
@@ -20,6 +20,7 @@
 - Sass（样式预处理）
 - postcss-px-to-viewport-8-plugin（H5 端 px 转 vw，配置见 `postcss.config.js`）
 - eruda（H5 真机调试面板，仅开发环境且移动端加载）
+- Vitest 4（单元测试，环境 happy-dom，配置见 `vitest.config.ts`，用例与被测模块同目录 `*.spec.ts`）
 - ESLint 10（flat config）+ Prettier 3
 
 ## 常用命令
@@ -29,20 +30,23 @@ pnpm install     # 安装依赖
 pnpm dev         # 启动开发服务器（默认 5173 端口）
 pnpm build       # 先 vue-tsc 类型检查，再 vite build 生产构建
 pnpm preview     # 预览生产构建产物
+pnpm test        # 运行单元测试（Vitest，一次执行）
+pnpm test:watch  # 运行单元测试（watch 模式）
 pnpm lint        # ESLint 检查
 pnpm lint:fix    # ESLint 自动修复
 pnpm format      # Prettier 格式化 src 下的 ts/vue/css/scss
 ```
 
-**注意**：项目目前没有任何测试框架（无 Vitest / Jest / Playwright 等依赖和配置），提交代码前以 `pnpm build`（含类型检查）和 `pnpm lint` 通过为准。
+**注意**：提交代码前以 `pnpm build`（含类型检查）、`pnpm lint`、`pnpm test` 全部通过为准；改动 `src/api`、`src/store` 等被测试覆盖的模块时，同步补充/更新对应 `*.spec.ts`。
 
 ## 目录结构
 
 ```
 ├── index.html
 ├── vite.config.ts          # alias @、dev server proxy、环境变量加载
-├── .env.development        # 开发环境变量（VITE_API_BASE_URL、VITE_PROXY_TARGET）
-├── .env.production         # 生产环境变量（VITE_API_BASE_URL）
+├── vitest.config.ts        # Vitest 单元测试配置（happy-dom 环境、@ 别名）
+├── .env.development        # 开发环境变量（VITE_API_BASE_URL、VITE_PROXY_TARGET、VITE_API_TIMEOUT）
+├── .env.production         # 生产环境变量（VITE_API_BASE_URL、VITE_API_TIMEOUT）
 ├── eslint.config.js        # ESLint flat config
 ├── .prettierrc             # Prettier 配置
 ├── postcss.config.js       # H5 适配：px 自动转 vw（375 设计稿基准）
@@ -60,16 +64,16 @@ pnpm format      # Prettier 格式化 src 下的 ts/vue/css/scss
     ├── composables/        # 组合式函数（空，含 .gitkeep）
     ├── utils/              # 工具函数（空，含 .gitkeep）
     ├── styles/             # 全局样式：index.scss / reset.scss / themes.scss(主题 CSS 变量) / variables.scss
-    └── types/              # 全局类型声明（index.d.ts）
+    └── types/              # 共享业务类型（index.d.ts：ApiResult / PageQuery / PageResult / LoginResult）
 ```
 
 ## 架构要点
 
 - **路径别名**：`@` 指向 `src/`（`vite.config.ts` 与 `tsconfig.app.json` 均已配置），导入 src 内模块一律使用 `@/`。
 - **接口代理**：开发环境 `/api` 代理到 `VITE_PROXY_TARGET`（默认 `http://localhost:8080`），代理时去掉 `/api` 前缀。
-- **环境变量**：仅暴露 `VITE_` 前缀变量；新增变量需在 `src/env.d.ts` 的 `ImportMetaEnv` 中补充类型声明。
-- **HTTP 封装**：`src/api/request.ts` 中 axios 实例读取 `VITE_API_BASE_URL` 作为 baseURL；响应拦截器按后端统一结构 `{ code, message, data }` 拆包，`code !== 0` 视为业务错误并 reject；拦截器已把返回值拆包为 `data`，接口模块调用签名写成 `request.post<unknown, unknown>(...)` 的形式。
-- **路由**：全部页面组件使用动态 `import()` 懒加载；`beforeEach` 守卫负责 NProgress 与页面标题（标题后缀为「环信 IM Demo」），登录态校验为 TODO；`/` 重定向到 `/chat`，未知路径落到 404 页。
+- **环境变量**：仅暴露 `VITE_` 前缀变量；新增变量需在 `src/env.d.ts` 的 `ImportMetaEnv` 中补充类型声明。`VITE_API_TIMEOUT` 为请求超时（毫秒），未配置时 request 默认 15000。
+- **HTTP 封装**：`src/api/request.ts` 中 axios 实例读取 `VITE_API_BASE_URL` 作为 baseURL、`VITE_API_TIMEOUT` 作为超时；请求拦截器自动注入 `Authorization: Bearer <token>`；响应拦截器按后端统一结构 `{ code, message, data }` 拆包，`code !== 0` 视为业务错误并 reject，HTTP 401 时清除登录态并跳转 `/login`（带 `redirect` 参数，防抖避免并发重复跳转）。**接口模块一律用类型友好的 `http.get<T> / http.post<T> / http.put<T> / http.delete<T>`（`src/api/request.ts` 导出）声明返回类型，不要直接用 `request.post<unknown, unknown>(...)`**；共享响应类型见 `src/types/index.d.ts`（`ApiResult` / `PageQuery` / `PageResult` / `LoginResult`）。
+- **路由**：全部页面组件使用动态 `import()` 懒加载；`beforeEach` 守卫负责 NProgress、登录态校验（`meta.requiresAuth`，未登录访问受保护页跳 `/login` 并携带 `redirect`，已登录访问 `/login` 跳 `/chat`）与页面标题（`meta.title` 存 i18n key，标题后缀为「环信 IM Demo」）；`/` 重定向到 `/chat`，未知路径落到 404 页。
 - **Pinia**：使用选项式 `defineStore`（见 `src/store/modules/user.ts`），当前仅有用户 store 占位。
 - **vue3-uikit 联调**：自研 `vue3-uikit` 本地联调时，可在 `vite.config.ts` 的 `resolve.alias` 中将其指向源码目录（配置文件中有注释示例）。
 - **H5 适配**：375 设计稿写 px 自动转 vw（`postcss.config.js`），安全区用 `safe-area-top/bottom` 工具类。细则见 `.agent/skills/h5-adaptation`。
@@ -90,7 +94,8 @@ pnpm format      # Prettier 格式化 src 下的 ts/vue/css/scss
 ## 安全注意事项
 
 - `.env.development` / `.env.production` 只存放非敏感配置（当前仅 API 地址）；**不要**把密钥、token 等敏感信息提交进仓库。
-- 登录 token 的注入与 401 跳转仍是 TODO（`src/api/request.ts`、`src/router/index.ts`），实现时注意不要硬编码凭据。
+- 滑块验证（阿里云验证码 2.0）与短信相关配置放在 `.env.production.local`（已被 `.gitignore` 的 `*.local` 规则排除，仅生产构建加载）；入库模板为 `.env.production.local.example`，新增配置项时同步更新模板；业务侧通过 `src/config/captcha.ts` 的 `captchaConfig` 读取，`enabled` 仅在生产且配置齐全时为 true。
+- 登录态链路已打通：请求拦截器注入 token、响应拦截器 401 统一跳转登录（`src/api/request.ts`）、路由守卫 `requiresAuth` 校验（`src/router/index.ts`）；登录页面本身仍是占位页，接入 uikit/真实接口时注意不要硬编码凭据，登录成功后调用 `useUserStore().setToken(...)` 即可由守卫自动放行。
 
 ## 部署
 

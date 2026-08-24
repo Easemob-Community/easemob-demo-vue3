@@ -9,6 +9,25 @@
     />
     <!-- H5 状态栏主题色，随深色模式由 useTheme 动态更新 -->
     <meta name="theme-color" content="#ffffff" />
+    <!-- 首帧同步主题，避免深色模式（或跟随系统）下首屏闪烁；localStorage key 与 useTheme 保持一致 -->
+    <script>
+      ;(function () {
+        try {
+          var mode = localStorage.getItem('app-theme-mode') || 'auto'
+          var dark =
+            mode === 'dark' ||
+            (mode === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches)
+          if (dark) {
+            document.documentElement.classList.add('dark')
+            document.documentElement.style.colorScheme = 'dark'
+            var themeColor = document.querySelector('meta[name="theme-color"]')
+            if (themeColor) themeColor.setAttribute('content', '#141414')
+          }
+        } catch (e) {
+          /* localStorage 不可用时静默降级 */
+        }
+      })()
+    </script>
     <title>环信 IM Vue3 Demo</title>
   </head>
   <body>

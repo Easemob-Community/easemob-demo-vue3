@@ -1,31 +1,36 @@
 import NProgress from 'nprogress'
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 
+import i18n from '@/locales'
+import { useUserStore } from '@/store/modules/user'
+
 NProgress.configure({ showSpinner: false })
 
+// meta.title 存 i18n 语言包 key，守卫内统一解析，切换语言后标题随之更新
 const routes: RouteRecordRaw[] = [
   {
     path: '/login',
     name: 'Login',
     component: () => import('@/views/login/index.vue'),
-    meta: { title: '登录' },
+    meta: { title: 'login.title', requiresAuth: false },
   },
   {
     path: '/',
     component: () => import('@/layout/index.vue'),
     redirect: '/chat',
+    meta: { requiresAuth: true },
     children: [
       {
         path: 'chat',
         name: 'Chat',
         component: () => import('@/views/chat/index.vue'),
-        meta: { title: '会话' },
+        meta: { title: 'nav.chat' },
       },
       {
         path: 'contacts',
         name: 'Contacts',
         component: () => import('@/views/contacts/index.vue'),
-        meta: { title: '通讯录' },
+        meta: { title: 'nav.contacts' },
       },
     ],
   },
@@ -33,7 +38,7 @@ const routes: RouteRecordRaw[] = [
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
     component: () => import('@/views/error/404.vue'),
-    meta: { title: '页面不存在' },
+    meta: { title: 'notFound.title', requiresAuth: false },
   },
 ]
 
@@ -44,8 +49,22 @@ const router = createRouter({
 
 router.beforeEach((to) => {
   NProgress.start()
-  document.title = to.meta.title ? `${to.meta.title} - 环信 IM Demo` : '环信 IM Demo'
-  // TODO: 登录态校验，未登录跳转 /login
+
+  const userStore = useUserStore()
+  const appTitle = i18n.global.t('app.title')
+
+  // 未登录访问受保护页面 → 登录页，携带来源路径便于登录后回跳
+  if (to.meta.requiresAuth && !userStore.token) {
+    return { path: '/login', query: { redirect: to.fullPath } }
+  }
+  // 已登录访问登录页 → 直接进入会话页
+  if (to.path === '/login' && userStore.token) {
+    return { path: '/chat' }
+  }
+
+  document.title = to.meta.title
+    ? `${i18n.global.t(to.meta.title as string)} - ${appTitle}`
+    : appTitle
   return true
 })
 

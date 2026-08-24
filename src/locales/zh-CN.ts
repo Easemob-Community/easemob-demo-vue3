@@ -7,6 +7,12 @@ export default {
     chat: '会话',
     contacts: '通讯录',
   },
+  chat: {
+    placeholder: '占位页面，后续集成 vue3-uikit 会话组件',
+  },
+  contacts: {
+    placeholder: '占位页面，后续集成 vue3-uikit 联系人组件',
+  },
   theme: {
     light: '浅色',
     dark: '深色',

@@ -7,6 +7,12 @@ export default {
     chat: 'Chats',
     contacts: 'Contacts',
   },
+  chat: {
+    placeholder: 'Placeholder page, will integrate the vue3-uikit conversation component',
+  },
+  contacts: {
+    placeholder: 'Placeholder page, will integrate the vue3-uikit contacts component',
+  },
   theme: {
     light: 'Light',
     dark: 'Dark',
