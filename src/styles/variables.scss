@@ -1,4 +1,2 @@
-// 全局样式变量
-$primary-color: #2563eb;
-$text-color: #1f2329;
-$border-color: #e5e6eb;
+// Sass 变量集中处（仅放与主题无关的 Sass 变量）
+// 注意：颜色一律走 themes.scss 的 CSS 变量（var(--color-*)），保证深色模式生效，此处不要再定义色值

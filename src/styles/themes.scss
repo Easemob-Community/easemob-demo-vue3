@@ -1,0 +1,20 @@
+// 主题 CSS 变量：浅色为默认，深色通过 html.dark 覆盖
+// 约定：组件颜色一律使用 var(--color-*)，不要写死色值，保证深色模式生效
+// vue3-uikit 接入后遵循同一约定（html.dark + 同名变量）
+:root {
+  --color-primary: #2563eb;
+  --color-text: #1f2329;
+  --color-text-secondary: #6b7280;
+  --color-bg: #ffffff;
+  --color-bg-secondary: #f5f6f7;
+  --color-border: #e5e6eb;
+}
+
+html.dark {
+  --color-primary: #3b82f6;
+  --color-text: #e5e7eb;
+  --color-text-secondary: #9ca3af;
+  --color-bg: #141414;
+  --color-bg-secondary: #1f1f1f;
+  --color-border: #303030;
+}

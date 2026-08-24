@@ -53,12 +53,13 @@ pnpm format      # Prettier 格式化 src 下的 ts/vue/css/scss
     ├── api/                # axios 封装（request.ts）与接口模块（user.ts）
     ├── router/             # 路由表 + 全局守卫（index.ts）
     ├── store/              # Pinia 实例（index.ts）与模块（modules/）
+    ├── locales/            # vue-i18n 语言包与实例（index.ts / zh-CN.ts / en-US.ts）
     ├── layout/             # 主布局（index.vue，左侧导航 + router-view）
     ├── views/              # 页面：login / chat / contacts / error(404)，均为占位页
     ├── components/         # 公共组件（空，含 .gitkeep）
     ├── composables/        # 组合式函数（空，含 .gitkeep）
     ├── utils/              # 工具函数（空，含 .gitkeep）
-    ├── styles/             # 全局样式：index.scss / reset.scss / variables.scss
+    ├── styles/             # 全局样式：index.scss / reset.scss / themes.scss(主题 CSS 变量) / variables.scss
     └── types/              # 全局类型声明（index.d.ts）
 ```
 
@@ -71,15 +72,17 @@ pnpm format      # Prettier 格式化 src 下的 ts/vue/css/scss
 - **路由**：全部页面组件使用动态 `import()` 懒加载；`beforeEach` 守卫负责 NProgress 与页面标题（标题后缀为「环信 IM Demo」），登录态校验为 TODO；`/` 重定向到 `/chat`，未知路径落到 404 页。
 - **Pinia**：使用选项式 `defineStore`（见 `src/store/modules/user.ts`），当前仅有用户 store 占位。
 - **vue3-uikit 联调**：自研 `vue3-uikit` 本地联调时，可在 `vite.config.ts` 的 `resolve.alias` 中将其指向源码目录（配置文件中有注释示例）。
-- **H5 适配**：样式按 375 设计稿写 px，`postcss-px-to-viewport-8-plugin`（`postcss.config.js`）构建时自动转 vw；个别不需转换的元素加 `keep-px` 类；`node_modules` 默认排除不转换；刘海屏用全局工具类 `safe-area-top` / `safe-area-bottom`；开发环境且移动端（UA 判断，见 `src/utils/env.ts`）自动加载 eruda，PC 与生产不加载。
-- **设备判断**：分两套，勿混用——UA 静态判断 `isMobile`（`src/utils/env.ts`）只用于启动期决策（如 eruda 加载）；运行期响应式判断用 `useMobileView`（`src/composables/useMobileView.ts`，基于 VueUse `useMediaQuery`，768px 断点），窗口变化自动更新。
+- **H5 适配**：375 设计稿写 px 自动转 vw（`postcss.config.js`），安全区用 `safe-area-top/bottom` 工具类。细则见 `.agent/skills/h5-adaptation`。
+- **设备判断**：启动期决策用 `isMobile`（`src/utils/env.ts`，UA 静态判断），运行期交互/布局切换用 `useMobileView`（`src/composables/useMobileView.ts`，768px 断点，响应式），勿混用。细则见 `.agent/skills/h5-adaptation`。
+- **多语言**：`vue-i18n`，语言包在 `src/locales/`（zh-CN / en-US，key 需保持同步）；模板用 `$t`，脚本用 `useI18n()`。新增文案/语言的流程见 `.agent/skills/i18n`。
+- **深色模式**：颜色一律用 `var(--color-*)` CSS 变量（定义在 `src/styles/themes.scss`），禁止写死色值；主题切换用 `useTheme`（`src/composables/useTheme.ts`）。约定与用法见 `.agent/skills/dark-mode`。
 - **VueUse**：已安装 `@vueuse/core`（见 `package.json`），组合式工具优先从 VueUse 复用，不要重复造轮子。
 
 ## 代码风格
 
 - **注释与文档使用中文**（项目内注释、README 均为中文），遵循现有风格。
 - 组件一律使用 `<script setup lang="ts">`，并用 `defineOptions({ name: '...' })` 显式命名（如 `AppLayout`、`LoginPage`）。
-- CSS 类名使用 BEM 风格（如 `app-layout__aside`）；Sass 全局变量集中在 `src/styles/variables.scss`。
+- CSS 类名使用 BEM 风格（如 `app-layout__aside`）；颜色用 `themes.scss` 的 CSS 变量，与主题无关的 Sass 变量集中在 `src/styles/variables.scss`。
 - Prettier：无分号、单引号、尾随逗号、行宽 100、LF 换行。
 - ESLint：`js.configs.recommended` + `typescript-eslint` recommended + `eslint-plugin-vue` flat/recommended + `eslint-config-prettier`（忽略 `dist` 和 `node_modules`）。
 - TypeScript 开启 `strict`、`noUnusedLocals`、`noUnusedParameters`、`verbatimModuleSyntax` 等严格选项，注意类型导入使用 `import type`。
@@ -92,3 +95,11 @@ pnpm format      # Prettier 格式化 src 下的 ts/vue/css/scss
 ## 部署
 
 通过 `pnpm build` 产出静态资源到 `dist/`，可用 `pnpm preview` 本地预览。目前仓库中没有 CI/CD、Docker 等部署配置。
+
+## Skills
+
+项目级 skills 存放在 `.agent/skills/`，按需加载：
+
+- `h5-adaptation`：H5 适配细则（px 转 vw、安全区、设备判断、eruda 调试）
+- `i18n`：多语言使用与扩展流程（新增文案 key、新增语言）
+- `dark-mode`：深色模式约定与使用（CSS 变量、useTheme、uikit 主题联动约定）

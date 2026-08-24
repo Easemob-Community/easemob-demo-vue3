@@ -4,7 +4,7 @@ defineOptions({ name: 'LoginPage' })
 
 <template>
   <div class="login-page">
-    <h1>登录</h1>
-    <p>占位页面，接入环信登录逻辑后替换</p>
+    <h1>{{ $t('login.title') }}</h1>
+    <p>{{ $t('login.placeholder') }}</p>
   </div>
 </template>

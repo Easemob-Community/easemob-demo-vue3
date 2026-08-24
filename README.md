@@ -9,11 +9,20 @@
 - [Vue Router](https://router.vuejs.org/) 路由
 - [Pinia](https://pinia.vuejs.org/) 状态管理
 - [VueUse](https://vueuse.org/) 组合式工具库（`useMediaQuery` 等）
+- [Vue I18n](https://vue-i18n.intlify.dev/) 多语言（zh-CN / en-US，配置见 `src/locales/`）
 - [Axios](https://axios-http.com/) HTTP 请求（已做二次封装，见 `src/api/request.ts`）
 - [NProgress](https://ricostacruz.com/nprogress/) 路由进度条
 - [Sass](https://sass-lang.com/) 样式预处理
 - ESLint + Prettier 代码规范
 - H5 适配：postcss-px-to-viewport（375 设计稿基准，px 自动转 vw）+ 安全区样式 + eruda 调试面板（仅开发环境且移动端加载）
+- 深色模式：CSS 变量 + `useTheme`（浅色 / 深色 / 跟随系统，localStorage 持久化）
+
+## 深色模式
+
+- 颜色一律使用 CSS 变量 `var(--color-*)`，定义在 `src/styles/themes.scss`（`:root` 浅色、`html.dark` 深色），组件内不要写死色值
+- 通过 `useTheme()`（`src/composables/useTheme.ts`）切换：`light` / `dark` / `auto`（跟随系统），选择持久化到 localStorage
+- 切换时同步 `<html>` 的 `color-scheme` 与 `theme-color` meta（H5 状态栏）
+- 后续 `vue3-uikit` 遵循同一约定：`html.dark` 类 + 同名 CSS 变量，即可与 Demo 联动
 
 ## H5 适配说明
 
