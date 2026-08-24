@@ -1,0 +1,16 @@
+@use './variables.scss';
+@use './reset.scss';
+
+// 覆盖 nprogress 顶部进度条颜色
+#nprogress .bar {
+  background: variables.$primary-color;
+}
+
+// H5 安全区适配（iPhone 刘海屏 / 底部 Home 指示条）
+.safe-area-top {
+  padding-top: env(safe-area-inset-top);
+}
+
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
