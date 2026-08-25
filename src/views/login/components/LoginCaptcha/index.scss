@@ -1,0 +1,22 @@
+.login-page__captcha-image {
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 8px;
+  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  canvas {
+    display: block;
+    border-radius: 10px;
+  }
+}

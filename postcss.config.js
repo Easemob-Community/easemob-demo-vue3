@@ -13,7 +13,8 @@ export default {
       minPixelValue: 1,
       mediaQuery: false,
       // 组件库（含后续接入的 vue3-uikit）如需一并适配，移除此项即可
-      exclude: /node_modules/,
+      // 登录页为桌面优先的固定像素布局，不参与 H5 px→vw 转换
+      exclude: [/node_modules/, /[\\/]login[\\/]/],
     },
   },
 }

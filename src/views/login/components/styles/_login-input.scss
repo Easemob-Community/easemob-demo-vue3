@@ -1,0 +1,38 @@
+@use './login-variables' as *;
+
+// 登录表单与开发者配置共用的输入框样式
+.login-page__input {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  transition: all 0.2s;
+
+  &--focused {
+    border-color: rgba(0, 158, 255, 0.7);
+    box-shadow:
+      0 0 0 3px rgba(0, 158, 255, 0.12),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  }
+
+  input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 14px;
+    font-weight: 500;
+    font-family: 'Outfit', sans-serif;
+    caret-color: $color-brand;
+    width: 100%;
+    padding: 13px 14px;
+
+    &::placeholder {
+      color: #b0bec5;
+    }
+  }
+}
