@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { EmUIKitProvider } from '@easemob/uikit-im'
+import { getEffectiveAppKey } from '@/config/dev'
 
-// UIKit 接入：appKey 走环境变量（格式 xxxx#xxxx）；未配置时 Provider 不初始化 SDK，
-// 登录逻辑接入后再通过 useClient().init(config) 显式初始化
-const appKey = import.meta.env.VITE_APP_KEY || ''
+// UIKit 接入：appKey 优先取开发者本地配置，未配置时回退到环境变量；
+// 均无配置时 Provider 不自动初始化 SDK，待登录逻辑通过 useClient().init(config) 显式初始化
+const appKey = getEffectiveAppKey()
 </script>
 
 <template>

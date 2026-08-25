@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { onUnmounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { getDevConfig, setDevConfig } from '@/config/dev'
 
 defineOptions({ name: 'LoginDevConfig' })
 
@@ -18,18 +19,47 @@ const focused = ref<string | null>(null)
 
 let devSaveTimer: ReturnType<typeof setTimeout> | null = null
 
+onMounted(() => {
+  const config = getDevConfig()
+  devAppKey.value = config.appKey
+  devImServer.value = config.imServer
+  devRestServer.value = config.restServer
+  useCustomServer.value = config.useCustomServer
+  usePrivateServer.value = config.usePrivateServer
+})
+
 onUnmounted(() => {
   if (devSaveTimer) clearTimeout(devSaveTimer)
 })
 
+function isValidAppKey(value: string): boolean {
+  return /^[^#\s]+#[^#\s]+$/.test(value.trim())
+}
+
 function handleDevSave() {
-  if (useCustomServer.value && !devAppKey.value.trim()) {
+  const appKey = devAppKey.value.trim()
+  const imServer = devImServer.value.trim()
+  const restServer = devRestServer.value.trim()
+
+  if (!isValidAppKey(appKey)) {
     devSaveState.value = 'error'
-  } else if (usePrivateServer.value && (!devImServer.value.trim() || !devRestServer.value.trim())) {
+  } else if (usePrivateServer.value && (!imServer || !restServer)) {
     devSaveState.value = 'error'
   } else {
     devSaveState.value = 'success'
+    setDevConfig({
+      appKey,
+      imServer,
+      restServer,
+      useCustomServer: useCustomServer.value,
+      usePrivateServer: usePrivateServer.value,
+    })
+    // appKey 变更需要 Provider 重新初始化，刷新页面生效
+    setTimeout(() => {
+      window.location.reload()
+    }, 600)
   }
+
   if (devSaveTimer) clearTimeout(devSaveTimer)
   devSaveTimer = setTimeout(
     () => {
