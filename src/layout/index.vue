@@ -22,8 +22,8 @@ function switchLocale(value: AppLocale) {
   <div class="app-layout" :class="{ 'app-layout--mobile': isMobileView }">
     <!-- PC：左侧边栏导航 -->
     <aside v-if="!isMobileView" class="app-layout__aside">
-      <router-link to="/chat">{{ t('nav.chat') }}</router-link>
-      <router-link to="/contacts">{{ t('nav.contacts') }}</router-link>
+      <router-link class="app-layout__nav-link" to="/chat">{{ t('nav.chat') }}</router-link>
+      <router-link class="app-layout__nav-link" to="/contacts">{{ t('nav.contacts') }}</router-link>
     </aside>
 
     <main class="app-layout__main">
@@ -32,7 +32,9 @@ function switchLocale(value: AppLocale) {
         <button
           v-for="item in SUPPORT_LOCALES"
           :key="item.value"
-          :class="{ active: locale === item.value }"
+          type="button"
+          class="app-layout__tool-btn"
+          :class="{ 'app-layout__tool-btn--active': locale === item.value }"
           @click="switchLocale(item.value)"
         >
           {{ item.label }}
@@ -40,13 +42,17 @@ function switchLocale(value: AppLocale) {
         <button
           v-for="item in THEME_MODES"
           :key="item"
-          :class="{ active: mode === item }"
+          type="button"
+          class="app-layout__tool-btn"
+          :class="{ 'app-layout__tool-btn--active': mode === item }"
           @click="setMode(item)"
         >
           {{ t(`theme.${item}`) }}
         </button>
       </div>
-      <router-view />
+      <div class="app-layout__content">
+        <router-view />
+      </div>
     </main>
 
     <!-- H5：底部 tabbar 导航，适配底部安全区 -->
@@ -76,12 +82,24 @@ function switchLocale(value: AppLocale) {
     border-right: 1px solid var(--color-border);
   }
 
+  &__nav-link {
+    font-size: 14px;
+    color: var(--color-text);
+    text-decoration: none;
+
+    &.router-link-active {
+      color: var(--color-primary);
+    }
+  }
+
   &__main {
     position: relative;
+    display: flex;
+    flex-direction: column;
     flex: 1;
     min-width: 0;
     min-height: 0;
-    overflow: auto;
+    overflow: hidden;
   }
 
   &__toolbar {
@@ -91,22 +109,28 @@ function switchLocale(value: AppLocale) {
     z-index: 10;
     display: flex;
     gap: 8px;
+  }
 
-    button {
-      padding: 4px 10px;
-      font-size: 12px;
-      color: var(--color-text);
-      border: 1px solid var(--color-border);
-      border-radius: 4px;
-      background: var(--color-bg);
-      cursor: pointer;
+  &__tool-btn {
+    padding: 4px 10px;
+    font-size: 12px;
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    background: var(--color-bg);
+    cursor: pointer;
+    transition: all 0.2s;
 
-      &.active {
-        color: #fff;
-        background: var(--color-primary);
-        border-color: var(--color-primary);
-      }
+    &--active {
+      color: #fff;
+      background: var(--color-primary);
+      border-color: var(--color-primary);
     }
+  }
+
+  &__content {
+    flex: 1;
+    min-height: 0;
   }
 
   &__tabbar {
