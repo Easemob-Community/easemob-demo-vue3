@@ -17,6 +17,9 @@ export const useUserStore = defineStore('user', {
     setToken(token: string) {
       this.token = token
     },
+    setUserId(userId: string) {
+      this.userId = userId
+    },
     reset() {
       this.$reset()
     },

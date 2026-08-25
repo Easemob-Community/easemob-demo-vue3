@@ -1,11 +1,26 @@
 <script setup lang="ts">
-import { computed, onUnmounted, ref } from 'vue'
+import { useClient } from '@easemob/uikit-core'
+import { computed, onUnmounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
+import { useUserStore } from '@/store/modules/user'
 import LoginCaptcha from '../LoginCaptcha/index.vue'
+
+interface Props {
+  /** 开发者模式：展示 userId + token 登录，用于 dev 环境直接连接 UIKit */
+  devMode?: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  devMode: false,
+})
 
 defineOptions({ name: 'LoginForm' })
 
 const { t } = useI18n()
+const router = useRouter()
+const userStore = useUserStore()
+const { login } = useClient()
 
 const phone = ref('')
 const smsCode = ref('')
@@ -17,6 +32,10 @@ const loginLoading = ref(false)
 const loginError = ref('')
 const smsLoading = ref(false)
 
+/** 开发者模式：userId + token */
+const devUserId = ref('')
+const devToken = ref('')
+
 const captchaRef = ref<InstanceType<typeof LoginCaptcha> | null>(null)
 
 let timerId: ReturnType<typeof setInterval> | null = null
@@ -24,6 +43,15 @@ let timerId: ReturnType<typeof setInterval> | null = null
 onUnmounted(() => {
   if (timerId) clearInterval(timerId)
 })
+
+// 切换开发者模式时清空错误与 loading
+watch(
+  () => props.devMode,
+  () => {
+    loginError.value = ''
+    loginLoading.value = false
+  },
+)
 
 const smsBtnText = computed(() => {
   if (smsLoading.value) return t('login.sending')
@@ -63,8 +91,28 @@ function handleCaptchaRefresh() {
   captchaInput.value = ''
 }
 
-function handleLogin() {
+async function handleLogin() {
   loginError.value = ''
+
+  if (props.devMode) {
+    if (!devUserId.value.trim() || !devToken.value.trim()) {
+      loginError.value = t('login.errorDevRequired')
+      return
+    }
+    loginLoading.value = true
+    try {
+      await login({ user: devUserId.value.trim(), accessToken: devToken.value.trim() })
+      userStore.setToken(devToken.value.trim())
+      userStore.setUserId(devUserId.value.trim())
+      await router.push('/chat')
+    } catch (err) {
+      loginError.value = err instanceof Error ? err.message : t('login.errorLoginFailed')
+    } finally {
+      loginLoading.value = false
+    }
+    return
+  }
+
   if (!agreed.value) {
     loginError.value = t('login.errorAgreeTerms')
     return
@@ -83,66 +131,100 @@ function handleLogin() {
 
 <template>
   <form class="login-page__form" @submit.prevent="handleLogin">
-    <!-- 手机号 -->
-    <div class="login-page__input" :class="{ 'login-page__input--focused': focused === 'phone' }">
-      <span class="login-page__phone-prefix">+86</span>
-      <span class="login-page__phone-divider" />
-      <input
-        v-model="phone"
-        type="tel"
-        :placeholder="$t('login.phonePlaceholder')"
-        maxlength="11"
-        required
-        @focus="focused = 'phone'"
-        @blur="focused = null"
-        @input="onPhoneInput"
-      />
-    </div>
-
-    <!-- 短信验证码 -->
-    <div class="login-page__sms-row">
-      <div class="login-page__input" :class="{ 'login-page__input--focused': focused === 'sms' }">
-        <input
-          v-model="smsCode"
-          type="text"
-          :placeholder="$t('login.smsCodePlaceholder')"
-          maxlength="6"
-          required
-          @focus="focused = 'sms'"
-          @blur="focused = null"
-          @input="onSmsInput"
-        />
-      </div>
-      <button
-        type="button"
-        class="login-page__sms-btn"
-        :disabled="smsCountdown > 0 || !phone || smsLoading"
-        @click="handleGetSms"
-      >
-        {{ smsBtnText }}
-      </button>
-    </div>
-
-    <!-- 图形验证码 -->
-    <div class="login-page__captcha-row">
+    <!-- 开发者模式：userId + token -->
+    <template v-if="devMode">
       <div
         class="login-page__input"
-        :class="{ 'login-page__input--focused': focused === 'captcha' }"
+        :class="{ 'login-page__input--focused': focused === 'devUserId' }"
       >
         <input
-          v-model="captchaInput"
+          v-model="devUserId"
           type="text"
-          :placeholder="$t('login.captchaPlaceholder')"
-          maxlength="5"
+          :placeholder="$t('login.devUserIdPlaceholder')"
           required
-          @focus="focused = 'captcha'"
+          @focus="focused = 'devUserId'"
           @blur="focused = null"
-          @input="onCaptchaInput"
         />
       </div>
-      <LoginCaptcha ref="captchaRef" @refresh="handleCaptchaRefresh" />
-    </div>
-    <p class="login-page__captcha-hint">{{ $t('login.captchaHint') }}</p>
+
+      <div
+        class="login-page__input"
+        :class="{ 'login-page__input--focused': focused === 'devToken' }"
+      >
+        <input
+          v-model="devToken"
+          type="text"
+          :placeholder="$t('login.devTokenPlaceholder')"
+          required
+          @focus="focused = 'devToken'"
+          @blur="focused = null"
+        />
+      </div>
+    </template>
+
+    <!-- 正式模式：手机号 + 短信验证码 + 图形验证码 -->
+    <template v-else>
+      <!-- 手机号 -->
+      <div class="login-page__input" :class="{ 'login-page__input--focused': focused === 'phone' }">
+        <span class="login-page__phone-prefix">+86</span>
+        <span class="login-page__phone-divider" />
+        <input
+          v-model="phone"
+          type="tel"
+          :placeholder="$t('login.phonePlaceholder')"
+          maxlength="11"
+          required
+          @focus="focused = 'phone'"
+          @blur="focused = null"
+          @input="onPhoneInput"
+        />
+      </div>
+
+      <!-- 短信验证码 -->
+      <div class="login-page__sms-row">
+        <div class="login-page__input" :class="{ 'login-page__input--focused': focused === 'sms' }">
+          <input
+            v-model="smsCode"
+            type="text"
+            :placeholder="$t('login.smsCodePlaceholder')"
+            maxlength="6"
+            required
+            @focus="focused = 'sms'"
+            @blur="focused = null"
+            @input="onSmsInput"
+          />
+        </div>
+        <button
+          type="button"
+          class="login-page__sms-btn"
+          :disabled="smsCountdown > 0 || !phone || smsLoading"
+          @click="handleGetSms"
+        >
+          {{ smsBtnText }}
+        </button>
+      </div>
+
+      <!-- 图形验证码 -->
+      <div class="login-page__captcha-row">
+        <div
+          class="login-page__input"
+          :class="{ 'login-page__input--focused': focused === 'captcha' }"
+        >
+          <input
+            v-model="captchaInput"
+            type="text"
+            :placeholder="$t('login.captchaPlaceholder')"
+            maxlength="5"
+            required
+            @focus="focused = 'captcha'"
+            @blur="focused = null"
+            @input="onCaptchaInput"
+          />
+        </div>
+        <LoginCaptcha ref="captchaRef" @refresh="handleCaptchaRefresh" />
+      </div>
+      <p class="login-page__captcha-hint">{{ $t('login.captchaHint') }}</p>
+    </template>
 
     <!-- 错误提示 -->
     <p v-if="loginError" class="login-page__error">{{ loginError }}</p>
@@ -153,7 +235,7 @@ function handleLogin() {
     </button>
 
     <!-- 用户协议 -->
-    <div class="login-page__terms">
+    <div v-if="!devMode" class="login-page__terms">
       <button
         type="button"
         class="login-page__checkbox"

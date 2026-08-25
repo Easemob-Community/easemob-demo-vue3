@@ -112,7 +112,7 @@ function handleDevIconDblClick() {
               <LoginDevConfig v-show="devMode" @exit="devMode = false" />
 
               <!-- 登录表单 -->
-              <LoginForm />
+              <LoginForm :dev-mode="devMode" />
             </div>
 
             <!-- 底部 shimmer 线 -->
