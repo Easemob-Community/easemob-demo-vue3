@@ -1,10 +1,30 @@
 <script setup lang="ts">
+import { EmChatContainer, EmConversationContainer } from '@easemob/uikit-im'
+
 defineOptions({ name: 'ChatPage' })
 </script>
 
 <template>
   <div class="chat-page">
-    <h1>{{ $t('nav.chat') }}</h1>
-    <p>{{ $t('chat.placeholder') }}</p>
+    <em-conversation-container class="chat-page__conversation" />
+    <em-chat-container class="chat-page__chat" />
   </div>
 </template>
+
+<style lang="scss" scoped>
+.chat-page {
+  display: flex;
+  height: 100%;
+
+  &__conversation {
+    width: 300px;
+    flex-shrink: 0;
+    border-right: 1px solid var(--color-border);
+  }
+
+  &__chat {
+    flex: 1;
+    min-width: 0;
+  }
+}
+</style>

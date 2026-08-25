@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { computed, onUnmounted, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import LoginCaptcha from '../LoginCaptcha/index.vue'
 
 defineOptions({ name: 'LoginForm' })
+
+const { t } = useI18n()
 
 const phone = ref('')
 const smsCode = ref('')
@@ -23,9 +26,9 @@ onUnmounted(() => {
 })
 
 const smsBtnText = computed(() => {
-  if (smsLoading.value) return '发送中...'
+  if (smsLoading.value) return t('login.sending')
   if (smsCountdown.value > 0) return `${smsCountdown.value}s`
-  return '获取验证码'
+  return t('login.getSmsCode')
 })
 
 function onPhoneInput(event: Event) {
@@ -63,11 +66,11 @@ function handleCaptchaRefresh() {
 function handleLogin() {
   loginError.value = ''
   if (!agreed.value) {
-    loginError.value = '请先同意环信服务条款和隐私政策'
+    loginError.value = t('login.errorAgreeTerms')
     return
   }
   if (captchaInput.value.toUpperCase() !== captchaRef.value?.text) {
-    loginError.value = '图像验证码不正确，请重试'
+    loginError.value = t('login.errorCaptcha')
     captchaRef.value?.refresh()
     return
   }
@@ -81,16 +84,13 @@ function handleLogin() {
 <template>
   <form class="login-page__form" @submit.prevent="handleLogin">
     <!-- 手机号 -->
-    <div
-      class="login-page__input"
-      :class="{ 'login-page__input--focused': focused === 'phone' }"
-    >
+    <div class="login-page__input" :class="{ 'login-page__input--focused': focused === 'phone' }">
       <span class="login-page__phone-prefix">+86</span>
       <span class="login-page__phone-divider" />
       <input
         v-model="phone"
         type="tel"
-        placeholder="请输入手机号"
+        :placeholder="$t('login.phonePlaceholder')"
         maxlength="11"
         required
         @focus="focused = 'phone'"
@@ -101,14 +101,11 @@ function handleLogin() {
 
     <!-- 短信验证码 -->
     <div class="login-page__sms-row">
-      <div
-        class="login-page__input"
-        :class="{ 'login-page__input--focused': focused === 'sms' }"
-      >
+      <div class="login-page__input" :class="{ 'login-page__input--focused': focused === 'sms' }">
         <input
           v-model="smsCode"
           type="text"
-          placeholder="短信验证码"
+          :placeholder="$t('login.smsCodePlaceholder')"
           maxlength="6"
           required
           @focus="focused = 'sms'"
@@ -135,7 +132,7 @@ function handleLogin() {
         <input
           v-model="captchaInput"
           type="text"
-          placeholder="输入图中文字"
+          :placeholder="$t('login.captchaPlaceholder')"
           maxlength="5"
           required
           @focus="focused = 'captcha'"
@@ -145,14 +142,14 @@ function handleLogin() {
       </div>
       <LoginCaptcha ref="captchaRef" @refresh="handleCaptchaRefresh" />
     </div>
-    <p class="login-page__captcha-hint">点击图片刷新验证码</p>
+    <p class="login-page__captcha-hint">{{ $t('login.captchaHint') }}</p>
 
     <!-- 错误提示 -->
     <p v-if="loginError" class="login-page__error">{{ loginError }}</p>
 
     <!-- 登录按钮 -->
     <button type="submit" class="login-page__submit" :disabled="loginLoading">
-      {{ loginLoading ? '登录中...' : '立即登录' }}
+      {{ loginLoading ? $t('login.loggingIn') : $t('login.login') }}
     </button>
 
     <!-- 用户协议 -->
@@ -174,21 +171,13 @@ function handleLogin() {
         </svg>
       </button>
       <p>
-        我已阅读并同意环信
-        <a
-          href="https://www.easemob.com/demo/agreement"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          服务条款
+        {{ $t('login.agreePrefix') }}
+        <a href="https://www.easemob.com/demo/agreement" target="_blank" rel="noopener noreferrer">
+          {{ $t('login.termsOfService') }}
         </a>
-        和
-        <a
-          href="https://www.easemob.com/console/privacy"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          隐私政策
+        {{ $t('login.and') }}
+        <a href="https://www.easemob.com/console/privacy" target="_blank" rel="noopener noreferrer">
+          {{ $t('login.privacyPolicy') }}
         </a>
       </p>
     </div>

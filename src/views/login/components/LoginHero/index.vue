@@ -108,10 +108,7 @@ onMounted(() => {
         <div class="login-page__ring login-page__ring--third">
           <svg viewBox="0 0 660 660">
             <defs>
-              <path
-                id="ring3"
-                d="M330,330 m-300,0 a300,300 0 1,1 600,0 a300,300 0 1,1 -600,0"
-              />
+              <path id="ring3" d="M330,330 m-300,0 a300,300 0 1,1 600,0 a300,300 0 1,1 -600,0" />
             </defs>
             <text>
               <textPath href="#ring3">
@@ -126,10 +123,7 @@ onMounted(() => {
         <div class="login-page__ring login-page__ring--fourth">
           <svg viewBox="0 0 430 430">
             <defs>
-              <path
-                id="ring4"
-                d="M215,215 m-195,0 a195,195 0 1,1 390,0 a195,195 0 1,1 -390,0"
-              />
+              <path id="ring4" d="M215,215 m-195,0 a195,195 0 1,1 390,0 a195,195 0 1,1 -390,0" />
             </defs>
             <text>
               <textPath href="#ring4">
@@ -172,12 +166,12 @@ onMounted(() => {
           </div>
           <div class="login-page__code-window-body">
             <div>
-              <span class="kw">const</span> <span class="var">msg</span>
-              <span class="op">=</span> <span class="obj">{</span>
+              <span class="kw">const</span> <span class="var">msg</span> <span class="op">=</span>
+              <span class="obj">{</span>
             </div>
             <div class="indent">
-              <span class="prop">type</span><span class="op">:</span>
-              <span class="str">"chat"</span><span class="op">,</span>
+              <span class="prop">type</span><span class="op">:</span> <span class="str">"chat"</span
+              ><span class="op">,</span>
             </div>
             <div class="indent">
               <span class="prop">to</span><span class="op">:</span>
@@ -189,9 +183,8 @@ onMounted(() => {
             </div>
             <div><span class="obj">}</span></div>
             <div class="mt">
-              <span class="kw">await</span> <span class="var">conn</span
-              ><span class="op">.</span><span class="fn">send</span
-              ><span class="op">(msg)</span>
+              <span class="kw">await</span> <span class="var">conn</span><span class="op">.</span
+              ><span class="fn">send</span><span class="op">(msg)</span>
             </div>
           </div>
         </div>
@@ -211,8 +204,8 @@ onMounted(() => {
             </div>
             <div class="indent"><span class="str">"easemob-websdk"</span></div>
             <div class="mt">
-              <span class="kw">const</span> <span class="var">conn</span>
-              <span class="op">=</span> <span class="fn">new</span>
+              <span class="kw">const</span> <span class="var">conn</span> <span class="op">=</span>
+              <span class="fn">new</span>
             </div>
             <div class="indent">
               <span class="obj">SDK.connection</span><span class="op">()</span>
@@ -225,12 +218,15 @@ onMounted(() => {
           <div class="login-page__bubble login-page__bubble--left">
             <div class="login-page__avatar">👩</div>
             <div class="login-page__bubble-text">
-              消息已送达 <span class="login-page__bubble-check">✓✓</span>
+              {{ $t('login.hero.chatBubbleDelivered') }}
+              <span class="login-page__bubble-check">✓✓</span>
             </div>
           </div>
           <div class="login-page__bubble login-page__bubble--right">
             <div class="login-page__bubble-text">
-              在线 <span class="login-page__bubble-highlight">2.4M</span> 用户 🚀
+              {{ $t('login.hero.onlineUsersPrefix') }}
+              <span class="login-page__bubble-highlight">2.4M</span>
+              {{ $t('login.hero.onlineUsersSuffix') }}
             </div>
             <div class="login-page__avatar">🐱</div>
           </div>
@@ -240,7 +236,7 @@ onMounted(() => {
         <div class="login-page__latency-card">
           <div class="login-page__latency-header">
             <span />
-            <span>实时连接</span>
+            <span>{{ $t('login.hero.realTimeConnection') }}</span>
           </div>
           <div class="login-page__latency-bars">
             <div
@@ -250,15 +246,13 @@ onMounted(() => {
               :style="{
                 height: `${h * 2}px`,
                 background:
-                  i > 8
-                    ? 'linear-gradient(to top, #009EFF, #6C63FF)'
-                    : 'rgba(255,255,255,0.15)',
+                  i > 8 ? 'linear-gradient(to top, #009EFF, #6C63FF)' : 'rgba(255,255,255,0.15)',
                 animationDuration: `${1.4 + (i % 5) * 0.3}s`,
                 animationDelay: `${i * 0.12}s`,
               }"
             />
           </div>
-          <p class="login-page__latency-desc">消息延迟 &lt; 50ms</p>
+          <p class="login-page__latency-desc">{{ $t('login.hero.latencyDesc') }}</p>
         </div>
       </div>
 
@@ -275,7 +269,7 @@ onMounted(() => {
       <img
         ref="heroImageRef"
         src="/login-assets/hero.png"
-        alt="环信即时通讯云主视觉"
+        :alt="$t('login.hero.alt')"
         class="login-page__hero-image"
         :class="{ 'login-page__hero-image--loaded': heroLoaded }"
         fetchpriority="high"

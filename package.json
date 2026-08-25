@@ -18,6 +18,8 @@
     "format": "prettier --write \"src/**/*.{ts,vue,css,scss}\""
   },
   "dependencies": {
+    "@easemob/uikit-core": "file:./easemob-uikit-core-1.1.0.tgz",
+    "@easemob/uikit-im": "file:./easemob-uikit-im-2.3.0.tgz",
     "@vueuse/core": "^14.4.0",
     "axios": "^1.19.0",
     "dayjs": "^1.11.23",
@@ -46,5 +48,11 @@
     "vite": "^8.2.2",
     "vitest": "^4.1.11",
     "vue-tsc": "^3.3.11"
+  },
+  "pnpm": {
+    "overrides": {
+      "@easemob/uikit-core": "file:./easemob-uikit-core-1.1.0.tgz",
+      "@easemob/uikit-im": "file:./easemob-uikit-im-2.3.0.tgz"
+    }
   }
 }

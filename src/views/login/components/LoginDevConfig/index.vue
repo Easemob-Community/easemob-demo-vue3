@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { onUnmounted, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 defineOptions({ name: 'LoginDevConfig' })
+
+const { t } = useI18n()
 
 const emit = defineEmits<{ exit: [] }>()
 
@@ -41,12 +44,12 @@ function handleDevSave() {
   <div class="login-page__dev-config">
     <div class="login-page__dev-divider">
       <span />
-      <span>开发者配置</span>
+      <span>{{ $t('login.devConfig') }}</span>
       <span />
     </div>
 
     <div class="login-page__dev-row">
-      <span>使用自定义服务器</span>
+      <span>{{ $t('login.useCustomServer') }}</span>
       <button
         type="button"
         class="login-page__switch"
@@ -66,7 +69,7 @@ function handleDevSave() {
         <input
           v-model="devAppKey"
           type="text"
-          placeholder="xxxx#xxxx"
+          :placeholder="$t('login.appKeyPlaceholder')"
           @focus="focused = 'devAppKey'"
           @blur="focused = null"
         />
@@ -74,7 +77,7 @@ function handleDevSave() {
     </div>
 
     <div class="login-page__dev-row">
-      <span>使用私有服务器</span>
+      <span>{{ $t('login.usePrivateServer') }}</span>
       <button
         type="button"
         class="login-page__switch"
@@ -86,15 +89,12 @@ function handleDevSave() {
     </div>
 
     <div class="login-page__dev-field">
-      <label>IM 服务器地址</label>
-      <div
-        class="login-page__input"
-        :class="{ 'login-page__input--focused': focused === 'devIm' }"
-      >
+      <label>{{ $t('login.imServerLabel') }}</label>
+      <div class="login-page__input" :class="{ 'login-page__input--focused': focused === 'devIm' }">
         <input
           v-model="devImServer"
           type="text"
-          placeholder="im-api-v2.easemob.com"
+          :placeholder="$t('login.imServerPlaceholder')"
           @focus="focused = 'devIm'"
           @blur="focused = null"
         />
@@ -102,7 +102,7 @@ function handleDevSave() {
     </div>
 
     <div class="login-page__dev-field">
-      <label>REST 服务器地址</label>
+      <label>{{ $t('login.restServerLabel') }}</label>
       <div
         class="login-page__input"
         :class="{ 'login-page__input--focused': focused === 'devRest' }"
@@ -110,7 +110,7 @@ function handleDevSave() {
         <input
           v-model="devRestServer"
           type="text"
-          placeholder="a1.easemob.com"
+          :placeholder="$t('login.restServerPlaceholder')"
           @focus="focused = 'devRest'"
           @blur="focused = null"
         />
@@ -129,20 +129,20 @@ function handleDevSave() {
       >
         {{
           devSaveState === 'success'
-            ? '✓  已保存'
+            ? `✓  ${t('login.saved')}`
             : devSaveState === 'error'
-              ? '请检查必填项'
-              : '保存配置'
+              ? t('login.checkRequired')
+              : t('login.saveConfig')
         }}
       </button>
       <button type="button" class="login-page__dev-exit" @click="emit('exit')">
-        退出
+        {{ $t('login.exit') }}
       </button>
     </div>
 
     <div class="login-page__dev-divider login-page__dev-divider--light">
       <span />
-      <span>登录</span>
+      <span>{{ $t('login.loginDivider') }}</span>
       <span />
     </div>
   </div>

@@ -5,6 +5,9 @@ import i18n from './locales'
 import router from './router'
 import pinia from './store'
 
+import UIKit from '@easemob/uikit-im'
+import '@easemob/uikit-im/theme'
+
 import { useTheme } from './composables/useTheme'
 import { isMobile } from './utils/env'
 
@@ -23,6 +26,7 @@ if (import.meta.env.DEV && isMobile) {
 const app = createApp(App)
 
 app.use(pinia)
+app.use(UIKit)
 app.use(router)
 app.use(i18n)
 

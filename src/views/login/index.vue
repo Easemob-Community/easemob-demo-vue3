@@ -1,10 +1,14 @@
 <script setup lang="ts">
-import { onUnmounted, ref } from 'vue'
+import { computed, onUnmounted, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { DEMO_VERSION, SDK_VERSION, UIKIT_VERSION } from '@/config/version'
 import LoginHero from './components/LoginHero/index.vue'
 import LoginDevConfig from './components/LoginDevConfig/index.vue'
 import LoginForm from './components/LoginForm/index.vue'
 
 defineOptions({ name: 'LoginPage' })
+
+const { t } = useI18n()
 
 // 开发者模式：双击右上角图标进入，单击退出
 const devMode = ref(false)
@@ -14,6 +18,12 @@ let devResetTimer: ReturnType<typeof setTimeout> | null = null
 
 onUnmounted(() => {
   if (devResetTimer) clearTimeout(devResetTimer)
+})
+
+const devIconTitle = computed(() => {
+  if (devMode.value) return t('login.devModeExitHint')
+  if (devDblClickCount.value === 1) return t('login.devModeEnterHint')
+  return ''
 })
 
 function handleDevIconClick() {
@@ -58,7 +68,7 @@ function handleDevIconDblClick() {
       rel="noopener noreferrer"
       class="login-page__logo"
     >
-      <img src="/login-assets/logo.svg" alt="环信 Easemob" />
+      <img src="/login-assets/logo.svg" :alt="$t('app.title')" />
     </a>
 
     <!-- 主内容区 -->
@@ -82,9 +92,7 @@ function handleDevIconDblClick() {
                   'login-page__dev-icon--active': devMode,
                   'login-page__dev-icon--hint': devDblClickCount === 1,
                 }"
-                :title="
-                  devMode ? '单击退出开发者模式' : devDblClickCount === 1 ? '再次双击激活' : ''
-                "
+                :title="devIconTitle"
                 @click="handleDevIconClick"
                 @dblclick="handleDevIconDblClick"
               >
@@ -95,9 +103,9 @@ function handleDevIconDblClick() {
             <div class="login-page__form-body">
               <!-- 标题 -->
               <div class="login-page__titles">
-                <p class="login-page__subtitle">欢迎体验</p>
-                <h2 class="login-page__title">环信即时通讯云</h2>
-                <p class="login-page__tagline">EASEMOB IM DEMO · FOR VUE</p>
+                <p class="login-page__subtitle">{{ $t('login.subtitle') }}</p>
+                <h2 class="login-page__title">{{ $t('login.mainTitle') }}</h2>
+                <p class="login-page__tagline">{{ $t('login.tagline') }}</p>
               </div>
 
               <!-- 开发者配置 -->
@@ -116,10 +124,16 @@ function handleDevIconDblClick() {
 
     <!-- 底部版本信息 -->
     <div class="login-page__footer">
-      <p>© 2026 环信</p>
+      <p>{{ $t('login.footer.copyright') }}</p>
       <span>|</span>
       <button type="button">
-        SDK版本：5.1.1&nbsp;&nbsp;UIKit版本：VUE 1.0.0&nbsp;&nbsp;Demo版本：2.0.0
+        {{
+          $t('login.footer.sdkVersion', {
+            sdkVersion: SDK_VERSION,
+            uikitVersion: UIKIT_VERSION,
+            demoVersion: DEMO_VERSION,
+          })
+        }}
       </button>
     </div>
   </div>

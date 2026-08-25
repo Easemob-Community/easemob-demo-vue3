@@ -8,6 +8,8 @@ interface ImportMetaEnv {
   readonly VITE_CAPTCHA_SCENE_ID?: string
   readonly VITE_CAPTCHA_PREFIX?: string
   readonly VITE_CAPTCHA_SECRET?: string
+  /** UIKit 接入：环信 AppKey（格式 xxxx#xxxx），未配置时 Provider 不初始化 SDK */
+  readonly VITE_APP_KEY?: string
 }
 
 interface ImportMeta {
