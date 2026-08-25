@@ -18,4 +18,10 @@ export default defineConfig(
     },
   },
   skipFormatting,
+  {
+    rules: {
+      // TypeScript 已负责未定义变量检查，关闭 ESLint 原生 no-undef 避免浏览器全局误报
+      'no-undef': 'off',
+    },
+  },
 )
