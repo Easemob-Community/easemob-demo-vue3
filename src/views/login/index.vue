@@ -10,8 +10,8 @@ defineOptions({ name: 'LoginPage' })
 
 const { t } = useI18n()
 
-// 开发者模式：双击右上角图标进入，单击退出
-const devMode = ref(false)
+// 开发者模式：localhost/dev 环境下默认开启，单击右上角图标退出，双击重新进入
+const devMode = ref(import.meta.env.DEV)
 const devDblClickCount = ref(0)
 
 let devResetTimer: ReturnType<typeof setTimeout> | null = null
