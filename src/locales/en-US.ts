@@ -3,15 +3,16 @@ export default {
   app: {
     title: 'Easemob IM Demo',
   },
+  common: {
+    back: 'Back',
+  },
   nav: {
     chat: 'Chats',
     contacts: 'Contacts',
   },
-  chat: {
-    placeholder: 'Placeholder page, will integrate the vue3-uikit conversation component',
-  },
+  chat: {},
   contacts: {
-    placeholder: 'Placeholder page, will integrate the vue3-uikit contacts component',
+    empty: 'Select a contact or group to view details',
   },
   theme: {
     light: 'Light',

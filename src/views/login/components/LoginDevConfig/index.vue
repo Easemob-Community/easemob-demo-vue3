@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { getDevConfig, setDevConfig } from '@/config/dev'
+import { getDevConfig, setDevConfig, type DevConfig } from '@/config/dev'
 
 defineOptions({ name: 'LoginDevConfig' })
 
@@ -47,13 +47,16 @@ function handleDevSave() {
     devSaveState.value = 'error'
   } else {
     devSaveState.value = 'success'
-    setDevConfig({
+    const existing = getDevConfig()
+    const config: DevConfig = {
+      ...existing,
       appKey,
       imServer,
       restServer,
       useCustomServer: useCustomServer.value,
       usePrivateServer: usePrivateServer.value,
-    })
+    }
+    setDevConfig(config)
     // appKey 变更需要 Provider 重新初始化，刷新页面生效
     setTimeout(() => {
       window.location.reload()

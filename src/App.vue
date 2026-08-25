@@ -16,7 +16,12 @@ const uikitTheme = computed(() => ({
 </script>
 
 <template>
-  <EmUIKitProvider :app-key="appKey" :auto-init="!!appKey" :theme="uikitTheme">
+  <EmUIKitProvider
+    :app-key="appKey"
+    :auto-init="!!appKey"
+    :theme="uikitTheme"
+    enable-presence
+  >
     <router-view />
   </EmUIKitProvider>
 </template>

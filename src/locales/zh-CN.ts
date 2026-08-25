@@ -3,15 +3,16 @@ export default {
   app: {
     title: '环信 IM Demo',
   },
+  common: {
+    back: '返回',
+  },
   nav: {
     chat: '会话',
     contacts: '通讯录',
   },
-  chat: {
-    placeholder: '占位页面，后续集成 vue3-uikit 会话组件',
-  },
+  chat: {},
   contacts: {
-    placeholder: '占位页面，后续集成 vue3-uikit 联系人组件',
+    empty: '选择联系人或群组查看详情',
   },
   theme: {
     light: '浅色',

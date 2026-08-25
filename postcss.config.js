@@ -12,9 +12,15 @@ export default {
       selectorBlackList: ['keep-px'],
       minPixelValue: 1,
       mediaQuery: false,
-      // 组件库（含后续接入的 vue3-uikit）如需一并适配，移除此项即可
-      // 登录页为桌面优先的固定像素布局，不参与 H5 px→vw 转换
-      exclude: [/node_modules/, /[\\/]login[\\/]/],
+      // 组件库（含后续接入的 vue3-uikit）不参与 H5 px→vw 转换
+      // 登录页、布局壳、会话/通讯录页为桌面优先的固定像素布局，亦不参与转换
+      exclude: [
+        /node_modules/,
+        /[\\/]login[\\/]/,
+        /[\\/]layout[\\/]/,
+        /[\\/]views[\\/]chat[\\/]/,
+        /[\\/]views[\\/]contacts[\\/]/,
+      ],
     },
   },
 }

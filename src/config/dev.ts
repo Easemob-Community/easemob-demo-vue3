@@ -8,6 +8,9 @@ export interface DevConfig {
   restServer: string
   useCustomServer: boolean
   usePrivateServer: boolean
+  /** 开发者模式登录凭据 */
+  devUserId: string
+  devToken: string
 }
 
 function safeParse<T>(raw: string | null, fallback: T): T {
@@ -30,6 +33,8 @@ export function getDevConfig(): DevConfig {
     restServer: parsed.restServer ?? '',
     useCustomServer: parsed.useCustomServer ?? false,
     usePrivateServer: parsed.usePrivateServer ?? false,
+    devUserId: parsed.devUserId ?? '',
+    devToken: parsed.devToken ?? '',
   }
 }
 

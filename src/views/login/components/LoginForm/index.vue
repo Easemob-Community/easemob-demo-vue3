@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { useClient } from '@easemob/uikit-im'
-import { computed, onUnmounted, ref, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/store/modules/user'
+import { getDevConfig, setDevConfig } from '@/config/dev'
 import LoginCaptcha from '../LoginCaptcha/index.vue'
 
 interface Props {
@@ -42,6 +43,12 @@ let timerId: ReturnType<typeof setInterval> | null = null
 
 onUnmounted(() => {
   if (timerId) clearInterval(timerId)
+})
+
+onMounted(() => {
+  const config = getDevConfig()
+  devUserId.value = config.devUserId
+  devToken.value = config.devToken
 })
 
 // 切换开发者模式时清空错误与 loading
@@ -101,9 +108,12 @@ async function handleLogin() {
     }
     loginLoading.value = true
     try {
-      await login({ user: devUserId.value.trim(), accessToken: devToken.value.trim() })
-      userStore.setToken(devToken.value.trim())
-      userStore.setUserId(devUserId.value.trim())
+      const trimmedUserId = devUserId.value.trim()
+      const trimmedToken = devToken.value.trim()
+      await login({ user: trimmedUserId, accessToken: trimmedToken })
+      userStore.setToken(trimmedToken)
+      userStore.setUserId(trimmedUserId)
+      setDevConfig({ ...getDevConfig(), devUserId: trimmedUserId, devToken: trimmedToken })
       await router.push('/chat')
     } catch (err) {
       loginError.value = err instanceof Error ? err.message : t('login.errorLoginFailed')
