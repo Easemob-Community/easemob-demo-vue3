@@ -1,6 +1,7 @@
-/** 开发者配置持久化：appKey / 私有服务器等，保存后刷新页面生效 */
+/** 开发者配置持久化：appKey / 私有服务器 / userId+token 等，保存后刷新页面生效 */
 
 const DEV_CONFIG_KEY = 'easemob-demo-dev-config'
+const DEV_PERSIST_KEY = 'easemob-demo-dev-persist'
 
 export interface DevConfig {
   appKey: string
@@ -22,11 +23,7 @@ function safeParse<T>(raw: string | null, fallback: T): T {
   }
 }
 
-export function getDevConfig(): DevConfig {
-  const parsed = safeParse<Partial<DevConfig>>(
-    typeof localStorage !== 'undefined' ? localStorage.getItem(DEV_CONFIG_KEY) : null,
-    {},
-  )
+function normalizeConfig(parsed: Partial<DevConfig>): DevConfig {
   return {
     appKey: parsed.appKey ?? '',
     imServer: parsed.imServer ?? '',
@@ -38,10 +35,40 @@ export function getDevConfig(): DevConfig {
   }
 }
 
-export function setDevConfig(config: DevConfig) {
+/** 按持久化开关选择存储：true → localStorage，false → sessionStorage */
+function storageFor(persist: boolean): Storage | null {
+  if (typeof window === 'undefined') return null
+  return persist ? window.localStorage : window.sessionStorage
+}
+
+/** 是否持久化配置：默认 true（localStorage）；关闭后改用 sessionStorage（刷新保留、关闭浏览器即丢） */
+export function getPersistEnabled(): boolean {
+  if (typeof localStorage === 'undefined') return true
+  return localStorage.getItem(DEV_PERSIST_KEY) !== 'false'
+}
+
+/** 切换持久化开关：把现有配置迁移到目标存储，并清理旧存储 */
+export function setPersistEnabled(persist: boolean) {
+  const prev = getPersistEnabled()
+  if (prev === persist) return
+
+  const raw = storageFor(prev)?.getItem(DEV_CONFIG_KEY) ?? null
+  const config = normalizeConfig(safeParse<Partial<DevConfig>>(raw, {}))
+  storageFor(persist)?.setItem(DEV_CONFIG_KEY, JSON.stringify(config))
+  storageFor(prev)?.removeItem(DEV_CONFIG_KEY)
+
   if (typeof localStorage !== 'undefined') {
-    localStorage.setItem(DEV_CONFIG_KEY, JSON.stringify(config))
+    localStorage.setItem(DEV_PERSIST_KEY, String(persist))
   }
+}
+
+export function getDevConfig(): DevConfig {
+  const raw = storageFor(getPersistEnabled())?.getItem(DEV_CONFIG_KEY) ?? null
+  return normalizeConfig(safeParse<Partial<DevConfig>>(raw, {}))
+}
+
+export function setDevConfig(config: DevConfig) {
+  storageFor(getPersistEnabled())?.setItem(DEV_CONFIG_KEY, JSON.stringify(config))
 }
 
 /** 实际生效的 appKey：开发者配置 > 环境变量 */

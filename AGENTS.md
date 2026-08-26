@@ -75,7 +75,8 @@ pnpm format      # Prettier 格式化 src 下的 ts/vue/css/scss
 - **HTTP 封装**：`src/api/request.ts` 中 axios 实例读取 `VITE_API_BASE_URL` 作为 baseURL、`VITE_API_TIMEOUT` 作为超时；请求拦截器自动注入 `Authorization: Bearer <token>`；响应拦截器按后端统一结构 `{ code, message, data }` 拆包，`code !== 0` 视为业务错误并 reject，HTTP 401 时清除登录态并跳转 `/login`（带 `redirect` 参数，防抖避免并发重复跳转）。**接口模块一律用类型友好的 `http.get<T> / http.post<T> / http.put<T> / http.delete<T>`（`src/api/request.ts` 导出）声明返回类型，不要直接用 `request.post<unknown, unknown>(...)`**；共享响应类型见 `src/types/index.d.ts`（`ApiResult` / `PageQuery` / `PageResult` / `LoginResult`）。
 - **路由**：全部页面组件使用动态 `import()` 懒加载；`beforeEach` 守卫负责 NProgress、登录态校验（`meta.requiresAuth`，未登录访问受保护页跳 `/login` 并携带 `redirect`，已登录访问 `/login` 跳 `/chat`）与页面标题（`meta.title` 存 i18n key，标题后缀为「环信 IM Demo」）；`/` 重定向到 `/chat`，未知路径落到 404 页。
 - **Pinia**：使用选项式 `defineStore`（见 `src/store/modules/user.ts`），当前仅有用户 store 占位。
-- **vue3-uikit 联调**：自研 `vue3-uikit` 本地联调时，可在 `vite.config.ts` 的 `resolve.alias` 中将其指向源码目录（配置文件中有注释示例）。
+- **vue3-uikit 联调（tgz 方式，当前采用）**：`package.json` 的 dependencies 与 `pnpm.overrides` 均通过 `file:./easemob-uikit-core-1.2.0.tgz` / `file:./easemob-uikit-im-2.4.0.tgz` 引用本地 tgz（位于仓库根目录，不入库）。uikit 源码仓库（`../UIKIT/easemob-uikit-vue/packages/uikit-core|uikit-im`）重新打包产出新 tgz 后，**必须把新打的 tgz 复制到本 demo 根目录、同步更新 `package.json` 依赖与 `pnpm.overrides` 的 tgz 文件名、执行 `pnpm install`，并重启 `pnpm dev`**——换 tgz 后运行中的 dev server 会继续服务旧版本的 vite 预打包缓存（`node_modules/.vite` 不自动刷新，典型症状：黑名单等新功能不出现、样式无变化）。`vite.config.ts` 已内置防呆（检测到已安装 uikit 产物比缓存新时自动清缓存），兜底可 `rm -rf node_modules/.vite` 后重启。完整流程与排查见 skill `uikit-tgz-integration`。
+- **vue3-uikit 联调（源码方式，备选）**：需要直接调试 uikit 源码时，可在 `vite.config.ts` 的 `resolve.alias` 中将其指向源码目录（配置文件中有注释示例）。
 - **H5 适配**：375 设计稿写 px 自动转 vw（`postcss.config.js`），安全区用 `safe-area-top/bottom` 工具类。细则见 `.agent/skills/h5-adaptation`。
 - **设备判断**：启动期决策用 `isMobile`（`src/utils/env.ts`，UA 静态判断），运行期交互/布局切换用 `useMobileView`（`src/composables/useMobileView.ts`，768px 断点，响应式），勿混用。细则见 `.agent/skills/h5-adaptation`。
 - **多语言**：`vue-i18n`，语言包在 `src/locales/`（zh-CN / en-US，key 需保持同步）；模板用 `$t`，脚本用 `useI18n()`。新增文案/语言的流程见 `.agent/skills/i18n`。
@@ -108,3 +109,4 @@ pnpm format      # Prettier 格式化 src 下的 ts/vue/css/scss
 - `h5-adaptation`：H5 适配细则（px 转 vw、安全区、设备判断、eruda 调试）
 - `i18n`：多语言使用与扩展流程（新增文案 key、新增语言）
 - `dark-mode`：深色模式约定与使用（CSS 变量、useTheme、uikit 主题联动约定）
+- `uikit-tgz-integration`：uikit tgz 换版流程、vite 预打包缓存坑与防呆（新功能/样式不生效时优先查）

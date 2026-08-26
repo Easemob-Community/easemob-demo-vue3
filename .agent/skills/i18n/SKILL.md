@@ -26,3 +26,11 @@ description: 多语言（vue-i18n）使用与扩展流程。新增文案 key、�
 ## 切换语言
 
 - 修改 `useI18n()` 返回的 `locale.value` 即可，示例见 `src/layout/index.vue` 右上角临时切换按钮（后续挪到设置页）。
+
+## 与 vue3-uikit 的联动
+
+UIKit 的语言与 Demo **共用同一份语言状态**，由 `src/composables/useUIKitConfig.ts` 的 `useUIKitConfig()` 统一联动，`App.vue` 已接入：
+
+- UIKit 只认 `zh-CN` / `en` 两种语言（`toUIKitLocale` 把 Demo 的 `en-US` 映射为 `en`）。
+- 语言切换分两处：`EmUIKitProvider` 的 `:locale` 属性只在挂载时生效一次，运行期切换靠 UIKit 的 `setLocale` 响应式同步（见 `useUIKitConfig` 内的 `watch`）。
+- 若新增 Demo 语言，需同步在 `UIKIT_LOCALE_MAP` 中补充到 UIKit 语言的映射（UIKit 无对应语言时回退 `zh-CN`）。

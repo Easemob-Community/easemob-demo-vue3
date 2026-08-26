@@ -1,25 +1,81 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
+  EmAddContactModal,
   EmContactContainer,
   EmContactDetail,
+  EmCreateGroupModal,
   EmGroupDetail,
   EmIcon,
+  EmResizable,
+  createUIKitStorageKey,
+  useUIKit,
 } from '@easemob/uikit-im'
 import type { UiContact, UiGroup } from '@easemob/uikit-core'
 
 import { useMobileView } from '@/composables/useMobileView'
+import {
+  CONTACTS_SIDEBAR_WIDTH,
+  DEMO_CONTACT_CONFIG,
+  DEMO_ICON_SIZE,
+  DEMO_RESIZABLE_CONFIG,
+  DEMO_SIDEBAR_CONFIG,
+} from '@/config/demo'
 
 defineOptions({ name: 'ContactsPage' })
 
 const { t } = useI18n()
 const isMobileView = useMobileView()
 
+/* ===== 通讯录侧边栏宽度（与会话页一致：EmResizable 拖拽调整 + localStorage 持久化） ===== */
+
+/** 默认宽度来自 Demo 配置常量；最小 / 最大宽度与 UIKit demo 的侧边栏配置一致 */
+const SIDEBAR_DEFAULT_WIDTH = CONTACTS_SIDEBAR_WIDTH
+const SIDEBAR_MIN_WIDTH = DEMO_SIDEBAR_CONFIG.minWidth
+const SIDEBAR_MAX_WIDTH = DEMO_SIDEBAR_CONFIG.maxWidth
+
+const { stores } = useUIKit()
+
+/** 存储 key：按 appKey + 用户隔离（与会话页共用同一套体系，key 独立互不影响） */
+const sidebarStorageKey = computed(() =>
+  createUIKitStorageKey(stores.client.appKey, stores.client.currentUser, 'layout_contacts_sidebar_width'),
+)
+
+const sidebarWidth = ref<number>(SIDEBAR_DEFAULT_WIDTH)
+
+/** 读取持久化宽度（含边界钳制）；登录用户变化时重新读取 */
+function readStoredSidebarWidth() {
+  const raw = localStorage.getItem(sidebarStorageKey.value)
+  const parsed = raw ? Number.parseInt(raw, 10) : Number.NaN
+  sidebarWidth.value = Number.isNaN(parsed)
+    ? SIDEBAR_DEFAULT_WIDTH
+    : Math.min(Math.max(parsed, SIDEBAR_MIN_WIDTH), SIDEBAR_MAX_WIDTH)
+}
+
+watch(
+  [() => stores.client.appKey, () => stores.client.currentUser],
+  () => readStoredSidebarWidth(),
+  { immediate: true },
+)
+
+/** 拖拽结束回调：写回状态并持久化到 UIKIT 内部配置存储 */
+function persistSidebarWidth(width: number) {
+  sidebarWidth.value = width
+  localStorage.setItem(sidebarStorageKey.value, String(width))
+}
+
 /** 当前选中的联系人/群组详情 ID */
 const detailUserId = ref<string | null>(null)
 const detailGroupId = ref<string | null>(null)
 const detailTitle = ref('')
+
+/**
+ * EmContactContainer 右上角加号只负责抛出 add-contact / create-group 事件，
+ * 自身不会弹出任何弹窗；这里由页面接管，弹出 uikit 内置的添加好友/创建群组弹窗。
+ */
+const showAddContactModal = ref(false)
+const showCreateGroupModal = ref(false)
 
 function onContactClick(contact: UiContact) {
   detailUserId.value = contact.userId
@@ -52,19 +108,32 @@ function backToContactList() {
 </script>
 
 <template>
-  <div class="contacts-page">
-    <!-- PC 端：左侧通讯录 + 右侧详情 -->
+  <div class="contacts-page" :class="{ 'contacts-page--pc': !isMobileView }">
+    <!-- PC 端：左侧通讯录 + 右侧详情（容器间距对齐 UIKit demo，见 DEMO_CONTAINER_CONFIG） -->
     <template v-if="!isMobileView">
-      <div class="contacts-page__sidebar">
+      <!-- 通讯录宽度可拖拽调整（240~480），宽度持久化到 UIKIT 内部配置存储 -->
+      <EmResizable
+        v-model="sidebarWidth"
+        :axis="DEMO_RESIZABLE_CONFIG.axis"
+        :min="SIDEBAR_MIN_WIDTH"
+        :max="SIDEBAR_MAX_WIDTH"
+        :handle-size="DEMO_RESIZABLE_CONFIG.handleSize"
+        class="contacts-page__sidebar"
+        @resize-end="persistSidebarWidth"
+      >
         <EmContactContainer
-          :show-home-search="true"
-          :show-contact-search="true"
-          :show-group-search="true"
+          :show-home-search="DEMO_CONTACT_CONFIG.showHomeSearch"
+          :show-contact-search="DEMO_CONTACT_CONFIG.showContactSearch"
+          :show-group-search="DEMO_CONTACT_CONFIG.showGroupSearch"
+          :show-blocklist="DEMO_CONTACT_CONFIG.showBlocklist"
           @view-change="onViewChange"
           @contact-click="onContactClick"
           @group-click="onGroupClick"
+          @blocklist-item-click="onContactClick"
+          @add-contact="showAddContactModal = true"
+          @create-group="showCreateGroupModal = true"
         />
-      </div>
+      </EmResizable>
       <div class="contacts-page__main">
         <EmContactDetail
           v-if="detailUserId"
@@ -76,7 +145,7 @@ function backToContactList() {
           :group-id="detailGroupId"
         />
         <div v-else class="contacts-page__empty">
-          <EmIcon name="person/list" :size="48" />
+          <EmIcon name="person/list" :size="DEMO_ICON_SIZE.empty" />
           <p>{{ t('contacts.empty') }}</p>
         </div>
       </div>
@@ -86,12 +155,16 @@ function backToContactList() {
     <template v-else>
       <div v-show="!detailUserId && !detailGroupId" class="contacts-page__mobile-list">
         <EmContactContainer
-          :show-home-search="true"
-          :show-contact-search="true"
-          :show-group-search="true"
+          :show-home-search="DEMO_CONTACT_CONFIG.showHomeSearch"
+          :show-contact-search="DEMO_CONTACT_CONFIG.showContactSearch"
+          :show-group-search="DEMO_CONTACT_CONFIG.showGroupSearch"
+          :show-blocklist="DEMO_CONTACT_CONFIG.showBlocklist"
           @view-change="onViewChange"
           @contact-click="onContactClick"
           @group-click="onGroupClick"
+          @blocklist-item-click="onContactClick"
+          @add-contact="showAddContactModal = true"
+          @create-group="showCreateGroupModal = true"
         />
       </div>
       <div v-show="!!detailUserId || !!detailGroupId" class="contacts-page__mobile-detail">
@@ -101,7 +174,7 @@ function backToContactList() {
             class="contacts-page__mobile-back"
             @click="backToContactList"
           >
-            <EmIcon name="arrow/left" :size="20" />
+            <EmIcon name="arrow/left" :size="DEMO_ICON_SIZE.back" />
             <span>{{ t('common.back') }}</span>
           </button>
           <span class="contacts-page__mobile-title">{{ detailTitle }}</span>
@@ -119,6 +192,10 @@ function backToContactList() {
         </div>
       </div>
     </template>
+
+    <!-- 加号弹窗：添加好友 / 创建群组（PC 与 H5 共用一份） -->
+    <EmAddContactModal v-model:show="showAddContactModal" />
+    <EmCreateGroupModal v-model:show="showCreateGroupModal" />
   </div>
 </template>
 
@@ -130,10 +207,21 @@ function backToContactList() {
   min-height: 0;
   background: var(--color-bg);
 
+  /* PC：容器间距对齐 UIKit demo（gap + padding 取 --demo-container-gap），次级色背景凸显容器卡片 */
+  &--pc {
+    gap: var(--demo-container-gap, 8px);
+    padding: var(--demo-container-padding, 8px);
+    box-sizing: border-box;
+    background: var(--color-bg-secondary);
+  }
+
   &__sidebar {
-    width: 320px;
     flex-shrink: 0;
-    border-right: 1px solid var(--color-border);
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    border-radius: var(--demo-component-radius, 8px);
   }
 
   &__main {
@@ -141,6 +229,9 @@ function backToContactList() {
     min-width: 0;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    border-radius: var(--demo-component-radius, 8px);
   }
 
   &__empty {

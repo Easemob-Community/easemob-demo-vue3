@@ -13,6 +13,13 @@ import {
 } from '@easemob/uikit-im'
 
 import { useMobileView } from '@/composables/useMobileView'
+import {
+  DEMO_CHAT_CONFIG,
+  DEMO_CONVERSATION_CONFIG,
+  DEMO_ICON_SIZE,
+  DEMO_RESIZABLE_CONFIG,
+  DEMO_SIDEBAR_CONFIG,
+} from '@/config/demo'
 
 defineOptions({ name: 'ChatPage' })
 
@@ -30,10 +37,7 @@ function backToConversationList() {
 
 /* ===== 会话列表宽度（参照 UIKit demo：EmResizable 拖拽调整 + localStorage 持久化） ===== */
 
-/** 默认宽度 / 最小 / 最大（与 UIKit demo 的侧边栏配置一致） */
-const SIDEBAR_DEFAULT_WIDTH = 400
-const SIDEBAR_MIN_WIDTH = 240
-const SIDEBAR_MAX_WIDTH = 480
+/** 默认宽度 / 最小 / 最大（来自 Demo 配置常量，与 UIKit demo 的侧边栏配置一致） */
 
 const { stores } = useUIKit()
 
@@ -42,15 +46,15 @@ const sidebarStorageKey = computed(() =>
   createUIKitStorageKey(stores.client.appKey, stores.client.currentUser, 'layout_sidebar_width'),
 )
 
-const sidebarWidth = ref(SIDEBAR_DEFAULT_WIDTH)
+const sidebarWidth = ref<number>(DEMO_SIDEBAR_CONFIG.defaultWidth)
 
 /** 读取持久化宽度（含边界钳制）；登录用户变化时重新读取 */
 function readStoredSidebarWidth() {
   const raw = localStorage.getItem(sidebarStorageKey.value)
   const parsed = raw ? Number.parseInt(raw, 10) : Number.NaN
   sidebarWidth.value = Number.isNaN(parsed)
-    ? SIDEBAR_DEFAULT_WIDTH
-    : Math.min(Math.max(parsed, SIDEBAR_MIN_WIDTH), SIDEBAR_MAX_WIDTH)
+    ? DEMO_SIDEBAR_CONFIG.defaultWidth
+    : Math.min(Math.max(parsed, DEMO_SIDEBAR_CONFIG.minWidth), DEMO_SIDEBAR_CONFIG.maxWidth)
 }
 
 watch(
@@ -67,30 +71,32 @@ function persistSidebarWidth(width: number) {
 </script>
 
 <template>
-  <div class="chat-page">
-    <!-- PC 端：左侧会话列表 + 右侧聊天窗口 -->
+  <div class="chat-page" :class="{ 'chat-page--pc': !isMobileView }">
+    <!-- PC 端：左侧会话列表 + 右侧聊天窗口（容器间距对齐 UIKit demo，见 DEMO_CONTAINER_CONFIG） -->
     <template v-if="!isMobileView">
       <!-- 会话列表宽度可拖拽调整（240~480），宽度持久化到 UIKIT 内部配置存储 -->
       <EmResizable
         v-model="sidebarWidth"
-        axis="horizontal"
-        :min="SIDEBAR_MIN_WIDTH"
-        :max="SIDEBAR_MAX_WIDTH"
-        :handle-size="10"
+        :axis="DEMO_RESIZABLE_CONFIG.axis"
+        :min="DEMO_SIDEBAR_CONFIG.minWidth"
+        :max="DEMO_SIDEBAR_CONFIG.maxWidth"
+        :handle-size="DEMO_RESIZABLE_CONFIG.handleSize"
         class="chat-page__sidebar"
         @resize-end="persistSidebarWidth"
       >
-        <EmConversationContainer :pull-refresh="isMobile" />
+        <EmConversationContainer
+          :pull-refresh="isMobile && DEMO_CONVERSATION_CONFIG.pullRefresh"
+        />
       </EmResizable>
       <div class="chat-page__main">
-        <EmChatContainer />
+        <EmChatContainer :config="DEMO_CHAT_CONFIG" />
       </div>
     </template>
 
     <!-- H5 端：单栏栈式（列表 → 聊天） -->
     <template v-else>
       <div v-show="!hasCurrentConversation" class="chat-page__mobile-list">
-        <EmConversationContainer :pull-refresh="true" />
+        <EmConversationContainer :pull-refresh="DEMO_CONVERSATION_CONFIG.pullRefresh" />
       </div>
       <div v-show="hasCurrentConversation" class="chat-page__mobile-chat">
         <div class="chat-page__mobile-header safe-area-top">
@@ -99,12 +105,12 @@ function persistSidebarWidth(width: number) {
             class="chat-page__mobile-back"
             @click="backToConversationList"
           >
-            <EmIcon name="arrow/left" :size="20" />
+            <EmIcon name="arrow/left" :size="DEMO_ICON_SIZE.back" />
             <span>{{ t('common.back') }}</span>
           </button>
         </div>
         <div class="chat-page__mobile-body">
-          <EmChatContainer />
+          <EmChatContainer :config="DEMO_CHAT_CONFIG" />
         </div>
       </div>
     </template>
@@ -119,12 +125,21 @@ function persistSidebarWidth(width: number) {
   min-height: 0;
   background: var(--color-bg);
 
+  /* PC：容器间距对齐 UIKit demo（gap + padding 取 --demo-container-gap），次级色背景凸显容器卡片 */
+  &--pc {
+    gap: var(--demo-container-gap, 8px);
+    padding: var(--demo-container-padding, 8px);
+    box-sizing: border-box;
+    background: var(--color-bg-secondary);
+  }
+
   &__sidebar {
     flex-shrink: 0;
     height: 100%;
     min-height: 0;
     overflow: hidden;
-    border-right: 1px solid var(--color-border);
+    border: 1px solid var(--color-border);
+    border-radius: var(--demo-component-radius, 8px);
   }
 
   &__main {
@@ -132,6 +147,9 @@ function persistSidebarWidth(width: number) {
     min-width: 0;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    border-radius: var(--demo-component-radius, 8px);
   }
 
   &__mobile-list,

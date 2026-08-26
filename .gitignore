@@ -14,6 +14,8 @@ dist-ssr
 .pnpm-store
 # 本地联调 uikit tgz 包（file: 依赖安装产物，不入库）
 *.tgz
+# 旧包备份文件（换 tgz 版本时的 .old 副本，不入库）
+*.tgz.old
 
 # Editor directories and files
 .vscode/*

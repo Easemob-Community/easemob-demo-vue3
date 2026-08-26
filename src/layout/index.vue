@@ -13,6 +13,7 @@ import {
 
 import { useMobileView } from '@/composables/useMobileView'
 import { useTheme } from '@/composables/useTheme'
+import { DEMO_AVATAR_CONFIG, DEMO_ICON_SIZE } from '@/config/demo'
 import { SUPPORT_LOCALES, type AppLocale } from '@/locales'
 
 defineOptions({ name: 'AppLayout' })
@@ -57,8 +58,8 @@ const pendingNoticeCount = computed(() => {
           :user-id="currentUser || 'Guest'"
           :src="avatarUrl"
           :name="displayName || currentUser || 'Guest'"
-          :size="40"
-          editable
+          :size="DEMO_AVATAR_CONFIG.size"
+          :editable="DEMO_AVATAR_CONFIG.editable"
         />
       </div>
 
@@ -75,16 +76,16 @@ const pendingNoticeCount = computed(() => {
             :count="totalUnread"
             class="app-layout__nav-badge"
           >
-            <EmIcon :name="tab.icon" :size="22" />
+            <EmIcon :name="tab.icon" :size="DEMO_ICON_SIZE.nav" />
           </EmBadge>
           <EmBadge
             v-else-if="tab.key === 'contacts' && pendingNoticeCount > 0"
             :count="pendingNoticeCount"
             class="app-layout__nav-badge"
           >
-            <EmIcon :name="tab.icon" :size="22" />
+            <EmIcon :name="tab.icon" :size="DEMO_ICON_SIZE.nav" />
           </EmBadge>
-          <EmIcon v-else :name="tab.icon" :size="22" />
+          <EmIcon v-else :name="tab.icon" :size="DEMO_ICON_SIZE.nav" />
         </router-link>
       </nav>
 
@@ -105,9 +106,9 @@ const pendingNoticeCount = computed(() => {
           :title="mode === 'auto' ? t('theme.auto') : isDark ? t('theme.light') : t('theme.dark')"
           @click="setMode(mode === 'light' ? 'dark' : mode === 'dark' ? 'auto' : 'light')"
         >
-          <EmIcon v-if="mode === 'auto'" name="monitor" :size="18" />
-          <EmIcon v-else-if="isDark" name="sun" :size="18" />
-          <EmIcon v-else name="moon" :size="18" />
+          <EmIcon v-if="mode === 'auto'" name="monitor" :size="DEMO_ICON_SIZE.tool" />
+          <EmIcon v-else-if="isDark" name="sun" :size="DEMO_ICON_SIZE.tool" />
+          <EmIcon v-else name="moon" :size="DEMO_ICON_SIZE.tool" />
         </button>
       </div>
     </aside>
@@ -131,16 +132,16 @@ const pendingNoticeCount = computed(() => {
           :count="totalUnread"
           class="app-layout__tab-badge"
         >
-          <EmIcon :name="tab.icon" :size="22" />
+          <EmIcon :name="tab.icon" :size="DEMO_ICON_SIZE.nav" />
         </EmBadge>
         <EmBadge
           v-else-if="tab.key === 'contacts' && pendingNoticeCount > 0"
           :count="pendingNoticeCount"
           class="app-layout__tab-badge"
         >
-          <EmIcon :name="tab.icon" :size="22" />
+          <EmIcon :name="tab.icon" :size="DEMO_ICON_SIZE.nav" />
         </EmBadge>
-        <EmIcon v-else :name="tab.icon" :size="22" />
+        <EmIcon v-else :name="tab.icon" :size="DEMO_ICON_SIZE.nav" />
         <span class="app-layout__tab-label">{{ tab.label }}</span>
       </router-link>
     </nav>

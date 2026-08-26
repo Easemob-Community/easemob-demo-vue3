@@ -5,19 +5,19 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  '@easemob/uikit-core': file:./easemob-uikit-core-1.1.0.tgz
-  '@easemob/uikit-im': file:./easemob-uikit-im-2.3.0.tgz
+  '@easemob/uikit-core': file:./easemob-uikit-core-1.3.0.tgz
+  '@easemob/uikit-im': file:./easemob-uikit-im-2.5.0.tgz
 
 importers:
 
   .:
     dependencies:
       '@easemob/uikit-core':
-        specifier: file:easemob-uikit-core-1.1.0.tgz
-        version: file:easemob-uikit-core-1.1.0.tgz(pinia@4.0.3(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.41(typescript@5.9.3)))(vue@3.5.41(typescript@5.9.3))
+        specifier: file:easemob-uikit-core-1.3.0.tgz
+        version: file:easemob-uikit-core-1.3.0.tgz(pinia@4.0.3(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.41(typescript@5.9.3)))(vue@3.5.41(typescript@5.9.3))
       '@easemob/uikit-im':
-        specifier: file:easemob-uikit-im-2.3.0.tgz
-        version: file:easemob-uikit-im-2.3.0.tgz(@floating-ui/dom@1.8.0)(@tiptap/core@3.30.3(@tiptap/pm@3.30.3))(@tiptap/pm@3.30.3)(pinia@4.0.3(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.41(typescript@5.9.3)))(vue@3.5.41(typescript@5.9.3))
+        specifier: file:easemob-uikit-im-2.5.0.tgz
+        version: file:easemob-uikit-im-2.5.0.tgz(@floating-ui/dom@1.8.0)(@tiptap/core@3.30.3(@tiptap/pm@3.30.3))(@tiptap/pm@3.30.3)(pinia@4.0.3(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.41(typescript@5.9.3)))(vue@3.5.41(typescript@5.9.3))
       '@vueuse/core':
         specifier: ^14.4.0
         version: 14.4.0(vue@3.5.41(typescript@5.9.3))
@@ -33,6 +33,9 @@ importers:
       pinia:
         specifier: ^4.0.3
         version: 4.0.3(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.41(typescript@5.9.3))
+      pinyin-pro:
+        specifier: ^3.29.3
+        version: 3.29.3
       vue:
         specifier: ^3.5.41
         version: 3.5.41(typescript@5.9.3)
@@ -138,16 +141,16 @@ packages:
     resolution: {integrity: sha512-eY+Yn3dCqTGmyiq2QRU66lA5FL8lqqqvecHt0fF3uHONIa7ToYsaCiWV8lOKqAs0Rb2SjixiKFROngnulPtt2g==}
     engines: {node: ^22.18.0 || >=24.11.0}
 
-  '@easemob/uikit-core@file:easemob-uikit-core-1.1.0.tgz':
-    resolution: {integrity: sha512-e7hGYQWnu5+NXsltLHcpsjMjn9MvTURTqNA+kAhra3hecnFouWKHoWRurqD4xVEJoFPlXNT6QHwcSduVF9A56g==, tarball: file:easemob-uikit-core-1.1.0.tgz}
-    version: 1.1.0
+  '@easemob/uikit-core@file:easemob-uikit-core-1.3.0.tgz':
+    resolution: {integrity: sha512-w6WotcFGZp4nlr103cL/UtupCgqTJrHegypLc0b/AJlo4/688Z3ft8+iwCuXEPps6uwRUCfevmyf7ZePWWORrQ==, tarball: file:easemob-uikit-core-1.3.0.tgz}
+    version: 1.3.0
     peerDependencies:
       pinia: ^2.1.0 || ^4.0.0
       vue: ^3.3.0
 
-  '@easemob/uikit-im@file:easemob-uikit-im-2.3.0.tgz':
-    resolution: {integrity: sha512-OTFXsQQHA3aIX6MVUi9na+WGH/YTKeah+ktjpQMk9txuCqnEWpSRukBnMLbx0piKG/cpn3RHfnYV/jtkqvJTxA==, tarball: file:easemob-uikit-im-2.3.0.tgz}
-    version: 2.3.0
+  '@easemob/uikit-im@file:easemob-uikit-im-2.5.0.tgz':
+    resolution: {integrity: sha512-iRE0vat8fwNztvtDx1g2WV7/sYvKqQEyinhAql2/nW/zVkVWwlvDZZ9F9YmJoZQw9KKIcJfsW8E8fuJfY5mVoA==, tarball: file:easemob-uikit-im-2.5.0.tgz}
+    version: 2.5.0
     peerDependencies:
       pinia: ^2.1.0 || ^4.0.0
       vue: ^3.3.0
@@ -1369,6 +1372,9 @@ packages:
       typescript:
         optional: true
 
+  pinyin-pro@3.29.3:
+    resolution: {integrity: sha512-+UU9bx6vfDw8amOJGHm0TE0rdQl8VPylsDWviQ5OOQ3e+on1xRP4OqDbiDuMT5OISgvfl/Y6ez1BBRaIP80GLQ==}
+
   pkg-types@1.3.1:
     resolution: {integrity: sha512-/Jm5M4RvtBFVkKWRu2BLUTNP8/M2a+UwuAX+ae4770q1qVGtfjG+WTCupoZixokjmHiry8uI+dlY8KXYV5HVVQ==}
 
@@ -1797,16 +1803,16 @@ snapshots:
       '@babel/helper-string-parser': 8.0.0
       '@babel/helper-validator-identifier': 8.0.4
 
-  '@easemob/uikit-core@file:easemob-uikit-core-1.1.0.tgz(pinia@4.0.3(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.41(typescript@5.9.3)))(vue@3.5.41(typescript@5.9.3))':
+  '@easemob/uikit-core@file:easemob-uikit-core-1.3.0.tgz(pinia@4.0.3(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.41(typescript@5.9.3)))(vue@3.5.41(typescript@5.9.3))':
     dependencies:
       '@vueuse/core': 14.4.0(vue@3.5.41(typescript@5.9.3))
       easemob-websdk: 5.1.0
       pinia: 4.0.3(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.41(typescript@5.9.3))
       vue: 3.5.41(typescript@5.9.3)
 
-  '@easemob/uikit-im@file:easemob-uikit-im-2.3.0.tgz(@floating-ui/dom@1.8.0)(@tiptap/core@3.30.3(@tiptap/pm@3.30.3))(@tiptap/pm@3.30.3)(pinia@4.0.3(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.41(typescript@5.9.3)))(vue@3.5.41(typescript@5.9.3))':
+  '@easemob/uikit-im@file:easemob-uikit-im-2.5.0.tgz(@floating-ui/dom@1.8.0)(@tiptap/core@3.30.3(@tiptap/pm@3.30.3))(@tiptap/pm@3.30.3)(pinia@4.0.3(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.41(typescript@5.9.3)))(vue@3.5.41(typescript@5.9.3))':
     dependencies:
-      '@easemob/uikit-core': file:easemob-uikit-core-1.1.0.tgz(pinia@4.0.3(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.41(typescript@5.9.3)))(vue@3.5.41(typescript@5.9.3))
+      '@easemob/uikit-core': file:easemob-uikit-core-1.3.0.tgz(pinia@4.0.3(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.41(typescript@5.9.3)))(vue@3.5.41(typescript@5.9.3))
       '@tiptap/extension-image': 3.30.3(@tiptap/core@3.30.3(@tiptap/pm@3.30.3))
       '@tiptap/starter-kit': 3.30.3
       '@tiptap/vue-3': 3.30.3(@floating-ui/dom@1.8.0)(@tiptap/core@3.30.3(@tiptap/pm@3.30.3))(@tiptap/pm@3.30.3)(vue@3.5.41(typescript@5.9.3))
@@ -2994,6 +3000,8 @@ snapshots:
       vue: 3.5.41(typescript@5.9.3)
     optionalDependencies:
       typescript: 5.9.3
+
+  pinyin-pro@3.29.3: {}
 
   pkg-types@1.3.1:
     dependencies:

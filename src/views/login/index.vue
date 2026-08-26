@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onUnmounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useDevMode } from '@/composables/useDevMode'
 import { DEMO_VERSION, SDK_VERSION, UIKIT_VERSION } from '@/config/version'
 import LoginHero from './components/LoginHero/index.vue'
 import LoginDevConfig from './components/LoginDevConfig/index.vue'
@@ -10,37 +11,40 @@ defineOptions({ name: 'LoginPage' })
 
 const { t } = useI18n()
 
-// 开发者模式：localhost/dev 环境下默认开启，单击右上角图标退出，双击重新进入
-const devMode = ref(import.meta.env.DEV)
-const devDblClickCount = ref(0)
+// 开发者模式：统一由 useDevMode 管理（dev 构建默认开启、生产默认关闭），单击退出、连点 7 次进入
+const { devEnabled, remaining, isHinting, registerTap, exitDevMode } = useDevMode()
 
-let devResetTimer: ReturnType<typeof setTimeout> | null = null
+// 连点提示 toast（分段反馈：前 4 次静默，之后提示「再点 X 次」）
+const devToast = ref('')
+const devToastVisible = ref(false)
+
+let devToastTimer: ReturnType<typeof setTimeout> | null = null
 
 onUnmounted(() => {
-  if (devResetTimer) clearTimeout(devResetTimer)
+  if (devToastTimer) clearTimeout(devToastTimer)
 })
 
+function showDevToast(message: string) {
+  devToast.value = message
+  devToastVisible.value = true
+  if (devToastTimer) clearTimeout(devToastTimer)
+  devToastTimer = setTimeout(() => {
+    devToastVisible.value = false
+  }, 2000)
+}
+
 const devIconTitle = computed(() => {
-  if (devMode.value) return t('login.devModeExitHint')
-  if (devDblClickCount.value === 1) return t('login.devModeEnterHint')
+  if (devEnabled.value) return t('login.devModeExitHint')
+  if (isHinting.value) return t('login.devModeHint', { count: remaining.value })
   return ''
 })
 
 function handleDevIconClick() {
-  if (devMode.value) devMode.value = false
-}
-
-function handleDevIconDblClick() {
-  if (devMode.value) return
-  devDblClickCount.value += 1
-  if (devDblClickCount.value >= 2) {
-    devMode.value = true
-    devDblClickCount.value = 0
-  } else {
-    if (devResetTimer) clearTimeout(devResetTimer)
-    devResetTimer = setTimeout(() => {
-      devDblClickCount.value = 0
-    }, 3000)
+  const result = registerTap()
+  if (result.status === 'hint') {
+    showDevToast(t('login.devModeHint', { count: result.remaining }))
+  } else if (result.status === 'enabled') {
+    showDevToast(t('login.devModeEnabled'))
   }
 }
 </script>
@@ -89,12 +93,11 @@ function handleDevIconDblClick() {
                 type="button"
                 class="login-page__dev-icon"
                 :class="{
-                  'login-page__dev-icon--active': devMode,
-                  'login-page__dev-icon--hint': devDblClickCount === 1,
+                  'login-page__dev-icon--active': devEnabled,
+                  'login-page__dev-icon--hint': isHinting,
                 }"
                 :title="devIconTitle"
                 @click="handleDevIconClick"
-                @dblclick="handleDevIconDblClick"
               >
                 &lt;/&gt;
               </button>
@@ -109,10 +112,10 @@ function handleDevIconDblClick() {
               </div>
 
               <!-- 开发者配置 -->
-              <LoginDevConfig v-show="devMode" @exit="devMode = false" />
+              <LoginDevConfig v-show="devEnabled" @exit="exitDevMode" />
 
               <!-- 登录表单 -->
-              <LoginForm :dev-mode="devMode" />
+              <LoginForm :dev-mode="devEnabled" />
             </div>
 
             <!-- 底部 shimmer 线 -->
@@ -136,6 +139,11 @@ function handleDevIconDblClick() {
         }}
       </button>
     </div>
+
+    <!-- 连点提示 toast -->
+    <Transition name="dev-toast">
+      <div v-if="devToastVisible" class="login-page__dev-toast">{{ devToast }}</div>
+    </Transition>
   </div>
 </template>
 

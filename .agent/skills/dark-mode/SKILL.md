@@ -22,4 +22,4 @@ description: 深色模式约定与使用方式。编写组件样式、新增主�
 
 ## 与 vue3-uikit 的约定
 
-UIKit 接入后遵循同一约定：监听 `html.dark` 类 + 复用同名 CSS 变量，Demo 侧切换主题时 UIKit 无需额外 API 调用即可联动。
+UIKit 的深色模式掌控在它自己的主题 store（`data-uikit-theme` 属性 + `--uikit-*` 变量），**并不监听 `html.dark`**，两者是独立变量体系。联动方式：在 `EmUIKitProvider` 上传 `:theme`（由 `src/composables/useUIKitConfig.ts` 的 `useUIKitConfig()` 提供），Demo 的 `isDark` 变化时 UIKit 通过响应式 `theme` prop 自动切换 `mode`。因此 Demo 侧切换主题**无需额外手动 API 调用**即可联动，`App.vue` 已接入。

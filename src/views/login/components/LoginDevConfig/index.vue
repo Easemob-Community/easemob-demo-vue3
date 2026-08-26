@@ -1,7 +1,13 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { getDevConfig, setDevConfig, type DevConfig } from '@/config/dev'
+import {
+  getDevConfig,
+  getPersistEnabled,
+  setDevConfig,
+  setPersistEnabled,
+  type DevConfig,
+} from '@/config/dev'
 
 defineOptions({ name: 'LoginDevConfig' })
 
@@ -11,6 +17,7 @@ const emit = defineEmits<{ exit: [] }>()
 
 const useCustomServer = ref(false)
 const usePrivateServer = ref(false)
+const persistEnabled = ref(false)
 const devAppKey = ref('')
 const devImServer = ref('')
 const devRestServer = ref('')
@@ -26,6 +33,7 @@ onMounted(() => {
   devRestServer.value = config.restServer
   useCustomServer.value = config.useCustomServer
   usePrivateServer.value = config.usePrivateServer
+  persistEnabled.value = getPersistEnabled()
 })
 
 onUnmounted(() => {
@@ -34,6 +42,11 @@ onUnmounted(() => {
 
 function isValidAppKey(value: string): boolean {
   return /^[^#\s]+#[^#\s]+$/.test(value.trim())
+}
+
+function handlePersistToggle() {
+  persistEnabled.value = !persistEnabled.value
+  setPersistEnabled(persistEnabled.value)
 }
 
 function handleDevSave() {
@@ -79,6 +92,18 @@ function handleDevSave() {
       <span />
       <span>{{ $t('login.devConfig') }}</span>
       <span />
+    </div>
+
+    <div class="login-page__dev-row">
+      <span>{{ $t('login.devPersistLabel') }}</span>
+      <button
+        type="button"
+        class="login-page__switch"
+        :class="{ 'login-page__switch--active': persistEnabled }"
+        @click="handlePersistToggle"
+      >
+        <span />
+      </button>
     </div>
 
     <div class="login-page__dev-row">
