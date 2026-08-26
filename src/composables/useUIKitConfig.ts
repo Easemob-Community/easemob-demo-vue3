@@ -33,9 +33,21 @@ export function useUIKitConfig() {
   const { isDark } = useTheme()
   const { setLocale } = useLocale()
 
-  // 容器间距对齐：以 Demo 常量作为 UIKit 容器间距（--uikit-container-gap，影响输入区等内部留白）的初始值
   const uikitThemeApi = useUIKitTheme()
+
+  // 容器间距对齐：
+  // 1. 以 Demo 常量初始化 UIKit 主题 store 的 containerGap。
+  // 2. 运行期特性开关改动 containerGap 时，把 --uikit-container-gap 同步回 --demo-container-gap，
+  //    让 Demo 布局（会话 / 通讯录 / 设置等外层卡片 gap/padding）与 UIKit 内部容器保持一致。
   uikitThemeApi.setContainerGap(DEMO_CONTAINER_CONFIG.gap)
+  watch(
+    uikitThemeApi.containerGap,
+    (gap) => {
+      document.documentElement.style.setProperty('--demo-container-gap', `${gap}px`)
+      document.documentElement.style.setProperty('--demo-container-padding', `${gap}px`)
+    },
+    { immediate: true },
+  )
 
   // 交互配置对齐：列表项（会话 / 联系人等）hover 与选中态使用圆角卡片模式，
   // 由 UIKit 主题 store 写入 --uikit-item-hover-radius / --uikit-item-active-radius 等变量驱动

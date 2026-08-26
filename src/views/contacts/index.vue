@@ -39,7 +39,11 @@ const { stores } = useUIKit()
 
 /** 存储 key：按 appKey + 用户隔离（与会话页共用同一套体系，key 独立互不影响） */
 const sidebarStorageKey = computed(() =>
-  createUIKitStorageKey(stores.client.appKey, stores.client.currentUser, 'layout_contacts_sidebar_width'),
+  createUIKitStorageKey(
+    stores.client.appKey,
+    stores.client.currentUser,
+    'layout_contacts_sidebar_width',
+  ),
 )
 
 const sidebarWidth = ref<number>(SIDEBAR_DEFAULT_WIDTH)
@@ -135,15 +139,8 @@ function backToContactList() {
         />
       </EmResizable>
       <div class="contacts-page__main">
-        <EmContactDetail
-          v-if="detailUserId"
-          :user-id="detailUserId"
-          @deleted="onDetailDeleted"
-        />
-        <EmGroupDetail
-          v-else-if="detailGroupId"
-          :group-id="detailGroupId"
-        />
+        <EmContactDetail v-if="detailUserId" :user-id="detailUserId" @deleted="onDetailDeleted" />
+        <EmGroupDetail v-else-if="detailGroupId" :group-id="detailGroupId" />
         <div v-else class="contacts-page__empty">
           <EmIcon name="person/list" :size="DEMO_ICON_SIZE.empty" />
           <p>{{ t('contacts.empty') }}</p>
@@ -169,26 +166,15 @@ function backToContactList() {
       </div>
       <div v-show="!!detailUserId || !!detailGroupId" class="contacts-page__mobile-detail">
         <div class="contacts-page__mobile-header safe-area-top">
-          <button
-            type="button"
-            class="contacts-page__mobile-back"
-            @click="backToContactList"
-          >
+          <button type="button" class="contacts-page__mobile-back" @click="backToContactList">
             <EmIcon name="arrow/left" :size="DEMO_ICON_SIZE.back" />
             <span>{{ t('common.back') }}</span>
           </button>
           <span class="contacts-page__mobile-title">{{ detailTitle }}</span>
         </div>
         <div class="contacts-page__mobile-body">
-          <EmContactDetail
-            v-if="detailUserId"
-            :user-id="detailUserId"
-            @deleted="onDetailDeleted"
-          />
-          <EmGroupDetail
-            v-else-if="detailGroupId"
-            :group-id="detailGroupId"
-          />
+          <EmContactDetail v-if="detailUserId" :user-id="detailUserId" @deleted="onDetailDeleted" />
+          <EmGroupDetail v-else-if="detailGroupId" :group-id="detailGroupId" />
         </div>
       </div>
     </template>
@@ -220,8 +206,15 @@ function backToContactList() {
     height: 100%;
     min-height: 0;
     overflow: hidden;
-    border: 1px solid var(--color-border);
     border-radius: var(--demo-component-radius, 8px);
+    background: var(--color-bg);
+    transition:
+      box-shadow 0.2s,
+      border-color 0.2s;
+
+    &:hover {
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
   }
 
   &__main {
@@ -230,8 +223,15 @@ function backToContactList() {
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    border: 1px solid var(--color-border);
     border-radius: var(--demo-component-radius, 8px);
+    background: var(--color-bg);
+    transition:
+      box-shadow 0.2s,
+      border-color 0.2s;
+
+    &:hover {
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
   }
 
   &__empty {

@@ -5,11 +5,23 @@ description: H5 移动端适配细则。编写移动端样式、处理 px 转 vw
 
 # H5 适配细则
 
-## px 转 vw
+## 样式与响应式（px 不转换）
 
-- 设计稿基准宽度 **375px**，样式直接写 px，构建时由 `postcss-px-to-viewport-8-plugin`（`postcss.config.js`）自动转 vw。
-- 个别不需要转换的元素，加 `keep-px` 类跳过（selectorBlackList）。
-- `node_modules` 默认排除不转换。若后续接入的 `vue3-uikit` 内部样式也是按 375 px 写的，删除 `postcss.config.js` 中的 `exclude` 项让其一并转换；若 uikit 自己处理适配则保持排除。
+- 本项目是**桌面 / H5 双模式响应式**：布局形态由 `useMobileView`（768px 断点，见 `src/composables/useMobileView.ts`）运行时切换，各模式内部用固定 px 布局。
+- 样式统一直接写 **px**，**不做 px→vw 转换**（已移除 `postcss-px-to-viewport` 及其 `postcss.config.js`）。写 px 就是 px，无需任何 exclude / keep-px 处理。
+- 若未来产品要求「375 设计稿在更宽手机上等比放大」的流式缩放，再按需引入方案并吸取下面的教训：
+  - [postcss-mobile-forever](https://github.com/wswmsword/postcss-mobile-forever)：px 同时产出移动端 vw + 桌面端 px（包在 `min-width` 媒体查询内），运行时按视口宽度切换；默认假设移动优先，桌面优先组件仍要逐个处理；
+  - [postcss-px-to-clamp](https://github.com/wangguangyou/postcss-px-to-clamp)：px → `clamp(min, vw, max)` 有界缩放，不是桌面固定；
+  - rem + 动态根字号：移动端根字号随视口、桌面端固定，需全量改写 px 为 rem。
+
+### 历史教训：全局 px→vw 与双模式响应式冲突（已移除的原因）
+
+曾用 `postcss-px-to-viewport-8-plugin`（375 设计稿基准）做全局转换，引发「特性抽屉控制面板异常大字」事故，最终整体移除。教训如下：
+
+- 该插件只对 **exclude 白名单之外** 的文件做 px→vw，且是**静默**的：目录不在白名单里的组件，其所有 px 都会被转成 vw，桌面优先固定像素布局在宽屏下会按视口等比放大（375 设计稿的 13px 转成 3.4667vw，在 1440px 视口下 ≈ 50px）。
+- 事故案例：`src/components/settings/SettingsAppearancePanel.vue`（挂在布局壳抽屉内的桌面优先面板）目录不在 exclude 内，抽屉框架正常、内部面板全部被转 vw。
+- 根本矛盾：px→vw 是为「纯 H5、永远铺满视口缩放」设计的；双模式响应式应用要么靠 exclude 白名单「保桌面、弃 H5 流式」，而白名单最终覆盖了全部文件（转换量为 0），插件名存实亡。
+- 结论：**双模式响应式项目不要引入全局 px→vw 转换**；若某页面确实需要流式缩放，用上面的按需方案（media query / clamp / rem）局部处理。
 
 ## 安全区（刘海屏 / Home 指示条）
 

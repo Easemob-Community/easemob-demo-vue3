@@ -32,6 +32,12 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/contacts/index.vue'),
         meta: { title: 'nav.contacts' },
       },
+      {
+        path: 'settings',
+        name: 'Settings',
+        component: () => import('@/views/settings/index.vue'),
+        meta: { title: 'nav.settings' },
+      },
     ],
   },
   {

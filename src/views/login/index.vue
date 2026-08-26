@@ -50,7 +50,7 @@ function handleDevIconClick() {
 </script>
 
 <template>
-  <div class="login-page keep-px">
+  <div class="login-page">
     <!-- 背景渐变 -->
     <div class="login-page__bg" />
 

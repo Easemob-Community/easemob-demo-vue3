@@ -2,12 +2,16 @@
 // 约定：组件颜色一律使用 var(--color-*)，不要写死色值，保证深色模式生效
 // vue3-uikit 接入后遵循同一约定（html.dark + 同名变量）
 :root {
-  --color-primary: #2563eb;
+  --color-primary: #009eff;
   --color-text: #1f2329;
   --color-text-secondary: #6b7280;
   --color-bg: #ffffff;
   --color-bg-secondary: #f5f6f7;
   --color-border: #e5e6eb;
+  --color-nav-icon-inactive: #b7c1c7;
+  --color-nav-icon-active: #0094fa;
+  --color-nav-icon-active-bg: #e6f6fe;
+  --color-badge-red: #ff4d4f;
 }
 
 html.dark {
@@ -17,4 +21,19 @@ html.dark {
   --color-bg: #141414;
   --color-bg-secondary: #1f1f1f;
   --color-border: #303030;
+  --color-nav-icon-inactive: #4b5563;
+  --color-nav-icon-active: #0094fa;
+  --color-nav-icon-active-bg: rgba(0, 148, 250, 0.12);
+  --color-badge-red: #ff4d4f;
 }
+
+// UIKit 主题变量覆写（仅明亮模式）：会话 / 联系人 / 设置 Cell 选中态背景 #EBF7FF。
+// 主色相关变量交由 UIKit 2.6.0+ 主题 store 管理（通过 useTheme setPrimaryColor），
+// 不再以 !important 覆写，避免与「特性开关-外观」取色器冲突。
+:root,
+[data-uikit-theme='light'] {
+  --uikit-bg-active: #ebf7ff;
+  --uikit-selection-bg: rgba(0, 158, 255, 0.12);
+}
+
+// 深色模式保持 UIKit 默认主题色，避免 #EBF7FF 背景过于刺眼。

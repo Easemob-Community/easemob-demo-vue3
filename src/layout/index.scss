@@ -1,0 +1,296 @@
+.app-layout {
+  display: flex;
+  height: 100vh;
+  background: var(--color-bg-secondary);
+
+  &--mobile {
+    flex-direction: column;
+  }
+
+  &__aside {
+    position: fixed;
+    top: 8px;
+    left: 8px;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 60px;
+    height: calc(100vh - 16px);
+    padding: 16px 0;
+    border-radius: 6px;
+    background: var(--color-bg);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    flex-shrink: 0;
+    user-select: none;
+  }
+
+  &__avatar {
+    margin-bottom: 16px;
+  }
+
+  &__nav {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__nav-item {
+    position: relative;
+    width: 54px;
+    height: 54px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    color: var(--color-nav-icon-inactive);
+    transition:
+      background-color 0.2s,
+      color 0.2s,
+      box-shadow 0.2s;
+
+    &:hover {
+      background: var(--color-bg-secondary);
+      color: var(--color-text);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    &.router-link-active {
+      color: var(--color-nav-icon-active);
+      background: var(--color-nav-icon-active-bg);
+    }
+  }
+
+  &__nav-badge {
+    display: inline-flex;
+  }
+
+  &__tools {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding-top: 12px;
+    border-top: 1px solid var(--color-border);
+  }
+
+  /* 特性入口容器：红点与广告弹层的定位基准 */
+  &__features-entry {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  /* 特性图标包裹：让红点直接相对于 20px 图标定位 */
+  &__feature-icon-wrap {
+    position: relative;
+    display: inline-flex;
+  }
+
+  /* 特性图标右下角的诱导红点：附着在 20px 图标的右下角，略微外凸 */
+  &__red-dot {
+    position: absolute;
+    right: -3px;
+    bottom: -3px;
+    width: 7px;
+    height: 7px;
+    border: 1.5px solid var(--color-bg);
+    border-radius: 50%;
+    background: var(--color-badge-red);
+    pointer-events: none;
+  }
+
+  /* 特性广告弹层：左侧 caret 直接附着在特性图标右侧 */
+  &__feature-promo {
+    position: absolute;
+    /* 入口容器宽 60px，20px 图标居中后右侧位于 40px，用 calc 把弹层左边缘拉到图标右侧 */
+    left: calc(100% - 20px);
+    top: 50%;
+    z-index: 20;
+    width: 240px;
+    /* caret 位于图片约 66% 高度处，对齐图标中心 */
+    transform: translateY(-66%);
+    cursor: pointer;
+    user-select: none;
+
+    img {
+      display: block;
+      width: 100%;
+    }
+
+    /* 鼠标移入时整体轻微上浮 + 呼吸缩放，引导点击 */
+    &:hover {
+      animation: feature-promo-breathe 1.6s ease-in-out infinite;
+    }
+  }
+
+  /* 广告弹层呼吸动画：上下浮动 5px 并伴随 3% 缩放 */
+  @keyframes feature-promo-breathe {
+    0%,
+    100% {
+      transform: translateY(-66%) scale(1);
+    }
+    50% {
+      transform: translateY(-66%) translateY(-5px) scale(1.03);
+    }
+  }
+
+  /* 关闭热区：覆盖在图片右上角内置的 X 按钮上 */
+  &__feature-promo-close {
+    position: absolute;
+    top: 4px;
+    right: 2px;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+  }
+
+  /* 广告弹层淡入淡出 */
+  .feature-promo-enter-active,
+  .feature-promo-leave-active {
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .feature-promo-enter-from,
+  .feature-promo-leave-to {
+    opacity: 0;
+    transform: translateY(-66%) scale(0.92);
+  }
+
+  &__tool-btn {
+    width: 54px;
+    height: 54px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: var(--color-nav-icon-inactive);
+    background: transparent;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      background: var(--color-bg-secondary);
+      color: var(--color-text);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    &.router-link-active,
+    &--active {
+      color: var(--color-nav-icon-active);
+      background: var(--color-nav-icon-active-bg);
+    }
+  }
+
+  /* 设置按钮自定义 tooltip：替代原生 title，hover 无延迟显示 */
+  &__tool-btn {
+    &[data-tooltip] {
+      &::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        left: calc(100% + 8px);
+        top: 50%;
+        transform: translateY(-50%);
+        padding: 4px 8px;
+        border-radius: 4px;
+        background: var(--color-text);
+        color: var(--color-bg);
+        font-size: 12px;
+        line-height: 1.5;
+        white-space: nowrap;
+        pointer-events: none;
+        opacity: 0;
+        visibility: hidden;
+        transition:
+          opacity 0.12s ease,
+          visibility 0.12s ease;
+        z-index: 100;
+      }
+
+      &:hover::after {
+        opacity: 1;
+        visibility: visible;
+      }
+    }
+  }
+
+  &__main {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+    margin-left: 68px;
+    overflow: hidden;
+    /* 次级底色：与各页 PC 卡片容器的衬底一致，让右侧设置抽屉的圆角卡片显现出来 */
+    background: var(--color-bg-secondary);
+  }
+
+  &--mobile &__main {
+    margin-left: 0;
+  }
+
+  &__content {
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+  }
+
+  /* 设置抽屉滑入/滑出：挤占式宽度动画（双类选择器提高优先级，压过组件自身的宽度与 transition） */
+  .settings-drawer.settings-drawer-enter-active,
+  .settings-drawer.settings-drawer-leave-active {
+    transition:
+      width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .settings-drawer.settings-drawer-enter-from,
+  .settings-drawer.settings-drawer-leave-to {
+    width: 0;
+    opacity: 0;
+  }
+
+  &__tabbar {
+    display: flex;
+    border-top: 1px solid var(--color-border);
+    background: var(--color-bg);
+  }
+
+  &__tab {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 8px 0;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    font-size: 11px;
+
+    &.router-link-active {
+      color: var(--color-primary);
+    }
+  }
+
+  &__tab-label {
+    line-height: 1;
+  }
+
+  &__tab-badge {
+    display: inline-flex;
+  }
+}

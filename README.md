@@ -15,7 +15,7 @@
 - [Sass](https://sass-lang.com/) 样式预处理
 - [Vitest](https://vitest.dev/) 单元测试（`pnpm test`，用例与被测模块同目录 `*.spec.ts`）
 - ESLint + Prettier 代码规范
-- H5 适配：postcss-px-to-viewport（375 设计稿基准，px 自动转 vw）+ 安全区样式 + eruda 调试面板（仅开发环境且移动端加载）
+- H5 适配：响应式布局（`useMobileView`，768px 断点切换桌面/H5 双模式，样式直接写 px 不做转换）+ 安全区样式 + eruda 调试面板（仅开发环境且移动端加载）
 - 深色模式：CSS 变量 + `useTheme`（浅色 / 深色 / 跟随系统，localStorage 持久化）
 
 ## 深色模式
@@ -28,12 +28,11 @@
 
 ## H5 适配说明
 
-- 设计稿按 **375 宽度** 出图，样式直接写 px，构建时自动转 vw（配置见 `postcss.config.js`）
-- 个别不需要转换的 px，给元素加 `keep-px` 类即可跳过
-- `node_modules` 默认不转换；若后续接入的 `vue3-uikit` 需要一并适配，删除 `postcss.config.js` 中的 `exclude` 项
+- 桌面 / H5 双模式响应式：布局、抽屉及会话/通讯录/设置页通过 `useMobileView`（768px 断点，基于 VueUse `useMediaQuery`）切换布局形态
+- 样式统一直接写 **px**，不做 px→vw 转换（曾用 postcss-px-to-viewport，因双模式响应式下会导致桌面优先组件在宽屏被异常放大、且 exclude 白名单覆盖全部文件后转换量为 0，已移除；历史背景见 `.agent/skills/h5-adaptation`）
 - 刘海屏 / Home 指示条使用全局工具类 `safe-area-top` / `safe-area-bottom`（`env(safe-area-inset-*)`）
 - 开发环境且移动端（按 UA 判断，见 `src/utils/env.ts`）自动加载 eruda 调试面板，PC 与生产构建不加载
-- 运行期切换交互/布局逻辑（响应窗口缩放、横竖屏）用 `src/composables/useMobileView.ts`（基于 VueUse `useMediaQuery`，768px 断点）；UA 判断是静态的，仅用于启动期决策
+- 运行期切换交互/布局逻辑（响应窗口缩放、横竖屏）用 `src/composables/useMobileView.ts`；UA 判断是静态的，仅用于启动期决策
 - `index.html` 的 viewport 已配置 `viewport-fit=cover` 并禁用用户缩放
 
 ## 环境要求

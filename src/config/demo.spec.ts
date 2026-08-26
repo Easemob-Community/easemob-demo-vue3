@@ -104,8 +104,14 @@ describe('applyDemoContainerConfig（容器配置处理入口）', () => {
   it('将容器配置写入 CSS 变量，供 SCSS 以 var(--demo-*) 消费', () => {
     applyDemoContainerConfig()
 
-    expect(rootStyle.getPropertyValue('--demo-container-gap')).toBe(`${DEMO_CONTAINER_CONFIG.gap}px`)
-    expect(rootStyle.getPropertyValue('--demo-container-padding')).toBe(`${DEMO_CONTAINER_CONFIG.padding}px`)
-    expect(rootStyle.getPropertyValue('--demo-component-radius')).toBe(`${DEMO_CONTAINER_CONFIG.radius}px`)
+    expect(rootStyle.getPropertyValue('--demo-container-gap')).toBe(
+      `${DEMO_CONTAINER_CONFIG.gap}px`,
+    )
+    expect(rootStyle.getPropertyValue('--demo-container-padding')).toBe(
+      `${DEMO_CONTAINER_CONFIG.padding}px`,
+    )
+    expect(rootStyle.getPropertyValue('--demo-component-radius')).toBe(
+      `${DEMO_CONTAINER_CONFIG.radius}px`,
+    )
   })
 })

@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { useClient } from '@easemob/uikit-im'
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/store/modules/user'
 import { getDevConfig, setDevConfig } from '@/config/dev'
+import { useFeaturePromo } from '@/composables/useFeaturePromo'
+import { useSmsCode } from '@/composables/useSmsCode'
+import { captchaConfig } from '@/config/captcha'
 import LoginCaptcha from '../LoginCaptcha/index.vue'
 
 interface Props {
@@ -27,11 +30,9 @@ const phone = ref('')
 const smsCode = ref('')
 const captchaInput = ref('')
 const agreed = ref(false)
-const smsCountdown = ref(0)
 const focused = ref<string | null>(null)
 const loginLoading = ref(false)
 const loginError = ref('')
-const smsLoading = ref(false)
 
 /** 开发者模式：userId + token */
 const devUserId = ref('')
@@ -39,11 +40,13 @@ const devToken = ref('')
 
 const captchaRef = ref<InstanceType<typeof LoginCaptcha> | null>(null)
 
-let timerId: ReturnType<typeof setInterval> | null = null
-
-onUnmounted(() => {
-  if (timerId) clearInterval(timerId)
-})
+// 短信验证码逻辑
+const {
+  countdown: smsCountdown,
+  loading: smsLoading,
+  error: smsError,
+  send: sendSms,
+} = useSmsCode('login')
 
 onMounted(() => {
   const config = getDevConfig()
@@ -59,6 +62,11 @@ watch(
     loginLoading.value = false
   },
 )
+
+// 监听短信发送错误，合并到登录错误提示
+watch(smsError, (msg) => {
+  if (msg) loginError.value = msg
+})
 
 const smsBtnText = computed(() => {
   if (smsLoading.value) return t('login.sending')
@@ -78,20 +86,26 @@ function onCaptchaInput(event: Event) {
   captchaInput.value = (event.target as HTMLInputElement).value.toUpperCase().slice(0, 5)
 }
 
-function handleGetSms() {
+async function handleGetSms() {
   if (smsCountdown.value > 0 || !phone.value || smsLoading.value) return
-  smsLoading.value = true
-  setTimeout(() => {
-    smsLoading.value = false
-    smsCountdown.value = 60
-    timerId = setInterval(() => {
-      smsCountdown.value -= 1
-      if (smsCountdown.value <= 1) {
-        if (timerId) clearInterval(timerId)
-        smsCountdown.value = 0
-      }
-    }, 1000)
-  }, 500)
+
+  // 生产环境且启用阿里云验证码 → 由阿里云 SDK 触发弹窗，验证通过后自动调接口
+  if (captchaConfig.enabled) {
+    // 阿里云验证码按钮 #captcha-button 需常驻 DOM，点击后由 SDK 接管
+    // 这里仅做前置校验
+    if (!phone.value) {
+      loginError.value = t('login.errorPhoneRequired')
+      return
+    }
+    loginError.value = ''
+    return
+  }
+
+  // 开发环境：直接调发送（模拟或真实接口）
+  const ok = await sendSms(phone.value)
+  if (!ok && smsError.value) {
+    loginError.value = smsError.value
+  }
 }
 
 function handleCaptchaRefresh() {
@@ -113,6 +127,8 @@ async function handleLogin() {
       await login({ user: trimmedUserId, accessToken: trimmedToken })
       userStore.setToken(trimmedToken)
       userStore.setUserId(trimmedUserId)
+      // 每次登录重置特性诱导展示（红点 + 广告弹层）
+      useFeaturePromo().resetOnLogin()
       setDevConfig({ ...getDevConfig(), devUserId: trimmedUserId, devToken: trimmedToken })
       await router.push('/chat')
     } catch (err) {

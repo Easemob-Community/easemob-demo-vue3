@@ -14,3 +14,27 @@
 .safe-area-bottom {
   padding-bottom: env(safe-area-inset-bottom);
 }
+
+// UIKit 列表项选中态：会话 / 联系人选中后文字与图标统一使用主题主色。
+// 设置页菜单项已在其组件内处理，此处覆盖 UIKit 内部组件的默认文字色。
+.conversation-item.is-active,
+.contact-item .uikit-cell.is-active,
+.contact-item-default.uikit-cell.is-active {
+  .uikit-cell__leading,
+  .uikit-cell__title,
+  .uikit-cell__subtitle,
+  .uikit-cell__meta,
+  .uikit-cell__trailing,
+  .uikit-icon,
+  .conversation-item__name,
+  .conversation-item__time,
+  .conversation-item__message,
+  .conversation-item__pin-badge,
+  .conversation-item__mute-badge,
+  .conversation-item__at-me-icon,
+  .conversation-item__draft-icon,
+  .conversation-item__at-me-prefix,
+  .conversation-item__typing-text {
+    color: var(--uikit-primary-color) !important;
+  }
+}

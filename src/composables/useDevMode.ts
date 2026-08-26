@@ -28,12 +28,7 @@ export type DevTapResult =
   | { status: 'enabled' }
 
 export function createDevMode(options: DevModeOptions = {}) {
-  const {
-    triggerCount = 7,
-    silentCount = 4,
-    resetWindow = 3000,
-    initialEnabled = false,
-  } = options
+  const { triggerCount = 7, silentCount = 4, resetWindow = 3000, initialEnabled = false } = options
 
   const devEnabled = ref(initialEnabled)
   const tapCount = ref(0)

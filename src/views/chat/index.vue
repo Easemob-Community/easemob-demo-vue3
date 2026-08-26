@@ -84,9 +84,7 @@ function persistSidebarWidth(width: number) {
         class="chat-page__sidebar"
         @resize-end="persistSidebarWidth"
       >
-        <EmConversationContainer
-          :pull-refresh="isMobile && DEMO_CONVERSATION_CONFIG.pullRefresh"
-        />
+        <EmConversationContainer :pull-refresh="isMobile && DEMO_CONVERSATION_CONFIG.pullRefresh" />
       </EmResizable>
       <div class="chat-page__main">
         <EmChatContainer :config="DEMO_CHAT_CONFIG" />
@@ -100,11 +98,7 @@ function persistSidebarWidth(width: number) {
       </div>
       <div v-show="hasCurrentConversation" class="chat-page__mobile-chat">
         <div class="chat-page__mobile-header safe-area-top">
-          <button
-            type="button"
-            class="chat-page__mobile-back"
-            @click="backToConversationList"
-          >
+          <button type="button" class="chat-page__mobile-back" @click="backToConversationList">
             <EmIcon name="arrow/left" :size="DEMO_ICON_SIZE.back" />
             <span>{{ t('common.back') }}</span>
           </button>
@@ -138,8 +132,15 @@ function persistSidebarWidth(width: number) {
     height: 100%;
     min-height: 0;
     overflow: hidden;
-    border: 1px solid var(--color-border);
     border-radius: var(--demo-component-radius, 8px);
+    background: var(--color-bg);
+    transition:
+      box-shadow 0.2s,
+      border-color 0.2s;
+
+    &:hover {
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
   }
 
   &__main {
@@ -148,8 +149,15 @@ function persistSidebarWidth(width: number) {
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    border: 1px solid var(--color-border);
     border-radius: var(--demo-component-radius, 8px);
+    background: var(--color-bg);
+    transition:
+      box-shadow 0.2s,
+      border-color 0.2s;
+
+    &:hover {
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
   }
 
   &__mobile-list,
