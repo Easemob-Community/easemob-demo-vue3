@@ -108,13 +108,13 @@
   /* 特性广告弹层：左侧 caret 直接附着在特性图标右侧 */
   &__feature-promo {
     position: absolute;
-    /* 入口容器宽 60px，20px 图标居中后右侧位于 40px，用 calc 把弹层左边缘拉到图标右侧 */
-    left: calc(100% - 20px);
+    /* 入口容器宽 60px，22px 图标居中后右侧位于 41px，用 calc 把弹层左边缘拉到图标右侧 */
+    left: calc(100% - 19px);
     top: 50%;
     z-index: 20;
     width: 240px;
-    /* caret 位于图片约 66% 高度处，对齐图标中心 */
-    transform: translateY(-66%);
+    /* caret 尖端位于图片约 81.5% 高度处，通过 translateY 把它对齐到图标中心 */
+    transform: translateY(-81.5%);
     cursor: pointer;
     user-select: none;
 
@@ -123,9 +123,11 @@
       width: 100%;
     }
 
-    /* 鼠标移入时整体轻微上浮 + 呼吸缩放，引导点击 */
+    /* 默认呼吸动效吸引注意，鼠标移入时暂停 */
+    animation: feature-promo-breathe 1.6s ease-in-out infinite;
+
     &:hover {
-      animation: feature-promo-breathe 1.6s ease-in-out infinite;
+      animation-play-state: paused;
     }
   }
 
@@ -133,10 +135,10 @@
   @keyframes feature-promo-breathe {
     0%,
     100% {
-      transform: translateY(-66%) scale(1);
+      transform: translateY(-81.5%) scale(1);
     }
     50% {
-      transform: translateY(-66%) translateY(-5px) scale(1.03);
+      transform: translateY(-81.5%) translateY(-5px) scale(1.03);
     }
   }
 
@@ -164,7 +166,7 @@
   .feature-promo-enter-from,
   .feature-promo-leave-to {
     opacity: 0;
-    transform: translateY(-66%) scale(0.92);
+    transform: translateY(-81.5%) scale(0.92);
   }
 
   &__tool-btn {
@@ -191,38 +193,6 @@
     &--active {
       color: var(--color-nav-icon-active);
       background: var(--color-nav-icon-active-bg);
-    }
-  }
-
-  /* 设置按钮自定义 tooltip：替代原生 title，hover 无延迟显示 */
-  &__tool-btn {
-    &[data-tooltip] {
-      &::after {
-        content: attr(data-tooltip);
-        position: absolute;
-        left: calc(100% + 8px);
-        top: 50%;
-        transform: translateY(-50%);
-        padding: 4px 8px;
-        border-radius: 4px;
-        background: var(--color-text);
-        color: var(--color-bg);
-        font-size: 12px;
-        line-height: 1.5;
-        white-space: nowrap;
-        pointer-events: none;
-        opacity: 0;
-        visibility: hidden;
-        transition:
-          opacity 0.12s ease,
-          visibility 0.12s ease;
-        z-index: 100;
-      }
-
-      &:hover::after {
-        opacity: 1;
-        visibility: visible;
-      }
     }
   }
 

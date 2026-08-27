@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   EmBadge,
+  EmIcon,
   EmPresenceAvatar,
   useClient,
   useContact,
@@ -13,7 +14,6 @@ import {
 import featurePromoImg from '@/assets/feature-promo.png'
 import ChatIcon from '@/components/icons/ChatIcon.vue'
 import ContactsIcon from '@/components/icons/ContactsIcon.vue'
-import FeaturesIcon from '@/components/icons/FeaturesIcon.vue'
 import SettingsIcon from '@/components/icons/SettingsIcon.vue'
 import { useFeaturePromo } from '@/composables/useFeaturePromo'
 import { useMobileView } from '@/composables/useMobileView'
@@ -118,12 +118,11 @@ function handlePromoClick() {
             type="button"
             class="app-layout__tool-btn"
             :class="{ 'app-layout__tool-btn--active': isSettingsDrawerOpen }"
-            :data-tooltip="t('nav.features')"
             :aria-label="t('nav.features')"
             @click="handleFeaturesClick"
           >
             <span class="app-layout__feature-icon-wrap">
-              <FeaturesIcon :size="20" />
+              <EmIcon name="console" :size="22" />
               <span v-if="showFeatureRedDot" class="app-layout__red-dot" />
             </span>
           </button>
@@ -147,7 +146,6 @@ function handlePromoClick() {
         <router-link
           class="app-layout__tool-btn"
           to="/settings"
-          :data-tooltip="t('nav.settings')"
           :aria-label="t('nav.settings')"
         >
           <SettingsIcon :size="18" />

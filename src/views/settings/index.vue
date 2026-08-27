@@ -1,11 +1,8 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { EmCell, EmResizable, createUIKitStorageKey, useUIKit } from '@easemob/uikit-im'
+import { EmCell, EmIcon, EmResizable, createUIKitStorageKey, useUIKit } from '@easemob/uikit-im'
 
-import AboutIcon from '@/components/icons/AboutIcon.vue'
-import AccountIcon from '@/components/icons/AccountIcon.vue'
-import GeneralIcon from '@/components/icons/GeneralIcon.vue'
 import { useMobileView } from '@/composables/useMobileView'
 import { DEMO_RESIZABLE_CONFIG, DEMO_SIDEBAR_CONFIG } from '@/config/demo'
 
@@ -24,22 +21,22 @@ const { stores } = useUIKit()
 const activeTab = ref<SettingsTab>('account')
 const showMobileDetail = ref(false)
 
-/** 设置菜单项：icon 为左侧图标组件（账户信息 / 通用 / 关于我们） */
+/** 设置菜单项：icon 为左侧图标组件或 EmIcon 名称（账户信息 / 通用 / 关于我们） */
 const menuItems = computed(() => [
   {
     key: 'account' as SettingsTab,
     label: t('settings.account.title'),
-    icon: AccountIcon,
+    icon: 'filled/person/single',
   },
   {
     key: 'general' as SettingsTab,
     label: t('settings.general.title'),
-    icon: GeneralIcon,
+    icon: 'flower',
   },
   {
     key: 'about' as SettingsTab,
     label: t('settings.about.title'),
-    icon: AboutIcon,
+    icon: 'rect/candle',
   },
 ])
 
@@ -118,7 +115,8 @@ function persistSidebarWidth(width: number) {
               @click="selectTab(item.key)"
             >
               <template #leading>
-                <component :is="item.icon" :size="20" />
+                <EmIcon v-if="typeof item.icon === 'string'" :name="item.icon" :size="20" />
+                <component :is="item.icon" v-else :size="20" />
               </template>
             </EmCell>
           </div>
@@ -147,7 +145,8 @@ function persistSidebarWidth(width: number) {
           @click="selectTab(item.key)"
         >
           <template #leading>
-            <component :is="item.icon" :size="20" />
+            <EmIcon v-if="typeof item.icon === 'string'" :name="item.icon" :size="20" />
+            <component :is="item.icon" v-else :size="20" />
           </template>
         </EmCell>
 
