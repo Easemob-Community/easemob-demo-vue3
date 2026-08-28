@@ -4,6 +4,8 @@ interface ImportMetaEnv {
   readonly VITE_API_BASE_URL: string
   /** 请求超时时间（毫秒），未配置时默认 15000 */
   readonly VITE_API_TIMEOUT?: string
+  /** 环信 Demo App Server 地址，用于头像上传、注销账户等接口 */
+  readonly VITE_APP_SERVER_URL?: string
   /** 阿里云验证码 2.0（仅生产环境，配置在 .env.production.local，不入库） */
   readonly VITE_CAPTCHA_SCENE_ID?: string
   readonly VITE_CAPTCHA_PREFIX?: string

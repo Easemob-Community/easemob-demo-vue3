@@ -1,6 +1,6 @@
 {
   "name": "easemob-demo-vue3",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "packageManager": "pnpm@10.24.0",
@@ -18,8 +18,8 @@
     "format": "prettier --write \"src/**/*.{ts,vue,css,scss}\""
   },
   "dependencies": {
-    "@easemob/uikit-core": "file:./easemob-uikit-core-1.4.0.tgz",
-    "@easemob/uikit-im": "file:./easemob-uikit-im-2.7.0.tgz",
+    "@easemob/uikit-core": "file:./easemob-uikit-core-1.5.2.tgz",
+    "@easemob/uikit-im": "file:./easemob-uikit-im-2.8.2.tgz",
     "@vueuse/core": "^14.4.0",
     "axios": "^1.19.0",
     "dayjs": "^1.11.23",
@@ -53,8 +53,8 @@
   },
   "pnpm": {
     "overrides": {
-      "@easemob/uikit-core": "file:./easemob-uikit-core-1.4.0.tgz",
-      "@easemob/uikit-im": "file:./easemob-uikit-im-2.7.0.tgz"
+      "@easemob/uikit-core": "file:./easemob-uikit-core-1.5.2.tgz",
+      "@easemob/uikit-im": "file:./easemob-uikit-im-2.8.2.tgz"
     }
   }
 }

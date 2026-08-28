@@ -12,24 +12,33 @@
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-08-28
+
+预生产发布阶段：在 0.1.0 脚手架基础上完成账户信息、消息通知、GIF 表情包、UIKIT 特性开关等核心 Demo 能力。
+
 ### 新增
 
-- 特性设置抽屉：layout 主区右侧滑出（挤占式布局，H5 占满主区），含外观面板（主题模式、主题色取色器、颜色微调、组件风格、一键重置），接入 UIKit 2.6.0 `useTheme`
+- 特性设置抽屉：layout 主区右侧滑出（挤占式布局，H5 占满主区），含外观面板（主题模式、主题色取色器、颜色微调、组件风格、一键重置），接入 UIKit `useTheme`
 - 特性诱导展示：navbar 特性图标诱导红点 + 右侧广告弹层，登录成功重置展示、关闭后下次登录再展示
 - 短信验证码登录链路：`src/api/sms.ts` 接口封装（登录 v2 / 注册重置 / 图片验证码三条链路，独立 axios 实例 + AES-GCM 加密）、`useSmsCode` 发送与倒计时组合式函数、登录页接入
 - 设置页 `src/views/settings/`（账号信息 / 通用设置 / 关于我们）
+- 账户信息页：昵称 / 签名编辑、ID 复制、头像上传与裁剪、`AvatarCropperModal` 组件、在线状态展示、账户注销
+- 设置 - 通用：消息通知总开关（与 UIKit `useNotification` 联动），默认关闭
+- 自定义 GIF 表情包：`src/assets/emojis/` 资源与 `stickerPacks` 注入，emoji picker sticker 标签页 4 列等比展示
 - 自定义 SVG 图标组件集 `src/components/icons/`
 
 ### 变更
 
 - **移除 px→vw 转换**：删除 `postcss-px-to-viewport-8-plugin` 依赖与 `postcss.config.js`，H5 适配回归纯响应式（768px 断点切换 + 固定 px 布局），样式一律直接写 px；约定与历史背景见 `.agent/skills/h5-adaptation`
-- uikit 升级：`@easemob/uikit-core` 1.3.0 → 1.4.0，`@easemob/uikit-im` 2.5.0 → 2.6.0（本地 tgz 方式）
+- uikit 升级：`@easemob/uikit-core` 1.3.0 → 1.5.2，`@easemob/uikit-im` 2.5.0 → 2.8.2（本地 tgz 方式）
+- 消息通知总开关默认状态由开启改为关闭
 - 登录页接入短信验证码（含生产环境阿里云验证码 2.0 配置项，见 `.env.production.local.example`）
 - 开发者模式相关组合式函数（`useDevMode` / `useUIKitConfig`）完善
 
 ### 修复
 
 - 修复特性抽屉外观面板被 postcss px→vw 静默转换导致的桌面端异常放大（字级/尺寸按视口等比放大数倍）
+- 修复 emoji picker 的 4 列 grid 样式误作用于「常用」普通 emoji 标签页，改为仅 sticker（GIF）标签页生效
 
 ### 文档
 

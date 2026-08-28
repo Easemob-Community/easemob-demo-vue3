@@ -58,14 +58,16 @@ describe('DEMO_CHAT_CONFIG（EmChatContainer 聊天页面配置，对齐 UIKit d
     expect(DEMO_CHAT_CONFIG.input.showSendButton).toBe(false)
   })
 
-  it('注入自定义 GIF 表情包到输入框（stickerPacks）', () => {
+  it('注入环信表情包到输入框（stickerPacks：预览 jpg + 实际 gif）', () => {
     expect(DEMO_CHAT_CONFIG.input.stickerPacks).toBe(DEMO_STICKER_PACKS)
     expect(DEMO_STICKER_PACKS).toHaveLength(1)
-    expect(DEMO_STICKER_PACKS[0].id).toBe('demo-gifs')
-    expect(DEMO_STICKER_PACKS[0].name).toBe('动图')
-    expect(DEMO_STICKER_PACKS[0].stickers).toHaveLength(12)
-    expect(DEMO_STICKER_PACKS[0].stickers[0].key).toBe('gif-1')
+    expect(DEMO_STICKER_PACKS[0].id).toBe('huanxin')
+    expect(DEMO_STICKER_PACKS[0].name).toBe('环信表情')
+    expect(DEMO_STICKER_PACKS[0].stickers).toHaveLength(13)
+    expect(DEMO_STICKER_PACKS[0].stickers[0].key).toBe('biubiu')
+    expect(DEMO_STICKER_PACKS[0].stickers[0].name).toBe('亮个相吧')
     expect(DEMO_STICKER_PACKS[0].stickers[0].url).toContain('.gif')
+    expect(DEMO_STICKER_PACKS[0].stickers[0].thumbUrl).toContain('.jpg')
   })
 })
 

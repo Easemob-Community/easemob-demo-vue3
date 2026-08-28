@@ -3,6 +3,7 @@ import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useUIKit } from '@easemob/uikit-im'
 
+import { useDemoSettings } from '@/composables/useDemoSettings'
 import { useTheme, type ThemeMode } from '@/composables/useTheme'
 
 defineOptions({ name: 'GeneralSettings' })
@@ -10,6 +11,7 @@ defineOptions({ name: 'GeneralSettings' })
 const { t, locale } = useI18n()
 const { mode: themeMode, setMode: setThemeMode } = useTheme()
 const { stores } = useUIKit()
+const { notificationEnable } = useDemoSettings()
 
 /** 显示输入状态：接入 UIKit 会话 store 的 typingEnabled */
 const showTyping = computed({
@@ -86,6 +88,15 @@ function selectThemeMode(value: ThemeMode) {
           </label>
         </div>
         <p class="general-settings__hint">{{ t('settings.general.showTypingHint') }}</p>
+
+        <div class="general-settings__row">
+          <span class="general-settings__label">{{ t('settings.general.messageNotification') }}</span>
+          <label class="general-settings__switch">
+            <input v-model="notificationEnable" type="checkbox" />
+            <span class="general-settings__switch-track" />
+          </label>
+        </div>
+        <p class="general-settings__hint">{{ t('settings.general.messageNotificationHint') }}</p>
 
         <div class="general-settings__popup-wrapper">
           <div class="general-settings__row general-settings__row--clickable">

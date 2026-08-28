@@ -107,7 +107,7 @@ function createDemoSettings() {
 
   /* ===== 新消息提醒配置（useNotification） ===== */
   /** 消息通知总开关 */
-  const notificationEnable = ref(true)
+  const notificationEnable = ref(false)
   /** 浏览器系统通知（页面在后台时优先） */
   const notificationBrowser = ref(true)
   /** 页内右上角弹窗（浏览器通知不可用时降级） */
@@ -335,7 +335,7 @@ function createDemoSettings() {
 
   /** 一键重置消息通知状态 */
   function resetNoticeSettings() {
-    notificationEnable.value = true
+    notificationEnable.value = false
     notificationBrowser.value = true
     notificationInApp.value = true
     notificationAutoRequest.value = true

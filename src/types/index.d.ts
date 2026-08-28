@@ -26,3 +26,8 @@ export interface LoginResult {
   nickname?: string
   avatar?: string
 }
+
+/** App Server 头像上传接口响应 */
+export interface AvatarUploadResult {
+  avatarUrl: string
+}

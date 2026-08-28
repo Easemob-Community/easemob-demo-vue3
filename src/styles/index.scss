@@ -39,9 +39,10 @@
   }
 }
 
-// 自定义 GIF 表情包 picker 布局：每行固定 4 个，等比放大（由 flex 改为 grid 强制列数）。
+// 自定义 GIF 表情包 picker 布局：仅在 sticker（GIF）标签页下每行固定 4 个、等比放大，
+// 避免影响「常用」等普通 emoji 标签页的默认排列。
 .emoji-picker {
-  .emoji-picker__body {
+  .emoji-picker__body:has(.emoji-picker__item--sticker) {
     display: grid !important;
     grid-template-columns: repeat(4, 1fr) !important;
     gap: 8px !important;

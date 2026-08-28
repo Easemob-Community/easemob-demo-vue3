@@ -9,7 +9,7 @@ describe('useDemoSettings（会话UIKIT特性开关）', () => {
     expect(settings.statusBannerEnabled.value).toBe(true)
     expect(settings.conversationTabsVisible.value).toBe(true)
     expect(settings.conversationTabsTakeover.value).toBe(false)
-    expect(settings.notificationEnable.value).toBe(true)
+    expect(settings.notificationEnable.value).toBe(false)
     expect(settings.conversationActiveTab.value).toBe('all')
     expect(settings.conversationTabs.value).toContain('all')
     expect(settings.conversationTabs.value).toContain('unread')
@@ -33,7 +33,7 @@ describe('useDemoSettings（会话UIKIT特性开关）', () => {
     expect(settings.contactShowBlocklistAddButton.value).toBe(true)
     expect(settings.aiMockReplyEnabled.value).toBe(false)
     expect(settings.noticeTone.value).toBe('default')
-    expect(settings.notificationEnable.value).toBe(true)
+    expect(settings.notificationEnable.value).toBe(false)
     expect(settings.notificationBrowser.value).toBe(true)
     expect(settings.notificationInApp.value).toBe(true)
     expect(settings.notificationAutoRequest.value).toBe(true)
@@ -178,7 +178,7 @@ describe('useDemoSettings（会话UIKIT特性开关）', () => {
 
   it('resetNoticeSettings 重置消息通知状态为默认值', () => {
     const settings = useDemoSettings()
-    settings.notificationEnable.value = false
+    settings.notificationEnable.value = true
     settings.notificationBrowser.value = false
     settings.notificationInApp.value = false
     settings.notificationAutoRequest.value = false
@@ -188,7 +188,7 @@ describe('useDemoSettings（会话UIKIT特性开关）', () => {
 
     settings.resetNoticeSettings()
 
-    expect(settings.notificationEnable.value).toBe(true)
+    expect(settings.notificationEnable.value).toBe(false)
     expect(settings.notificationBrowser.value).toBe(true)
     expect(settings.notificationInApp.value).toBe(true)
     expect(settings.notificationAutoRequest.value).toBe(true)

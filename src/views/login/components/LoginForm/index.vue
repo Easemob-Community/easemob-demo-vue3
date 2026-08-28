@@ -127,6 +127,11 @@ async function handleLogin() {
       await login({ user: trimmedUserId, accessToken: trimmedToken })
       userStore.setToken(trimmedToken)
       userStore.setUserId(trimmedUserId)
+      // dev 模式下没有独立 chatToken/accessToken 之分，复用传入 token
+      userStore.setChatToken(trimmedToken)
+      userStore.setAccessToken(trimmedToken)
+      userStore.setLoginMode('dev')
+      userStore.persistToStorage()
       // 每次登录重置特性诱导展示（红点 + 广告弹层）
       useFeaturePromo().resetOnLogin()
       setDevConfig({ ...getDevConfig(), devUserId: trimmedUserId, devToken: trimmedToken })

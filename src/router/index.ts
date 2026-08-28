@@ -57,6 +57,9 @@ router.beforeEach((to) => {
   NProgress.start()
 
   const userStore = useUserStore()
+  // 刷新页面后从 sessionStorage 恢复登录态，与 React Demo 保持一致
+  userStore.restoreFromStorage()
+
   const appTitle = i18n.global.t('app.title')
 
   // 未登录访问受保护页面 → 登录页，携带来源路径便于登录后回跳

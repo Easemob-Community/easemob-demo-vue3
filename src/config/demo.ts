@@ -144,29 +144,45 @@ export const DEMO_CUSTOM_CONTACTS: UiContact[] = [
 ]
 
 /**
- * 示例自定义 GIF 表情包（本地资源）。
- * 注入到 EmChatContainer 的 input.stickerPacks，用于演示自定义 GIF 表情发送。
- * 实际业务建议替换为 CDN 地址或按真实表情包分组。
+ * 环信内置表情包：key 语义标签映射。
+ * 文件名约定：{key}.gif 为实际动图、{key}-封面.jpg 为预览图。
+ */
+const HUANXIN_EMOJI_META: Array<{ key: string; name: string }> = [
+  { key: 'biubiu', name: '亮个相吧' },
+  { key: 'caffe', name: '辛苦啦' },
+  { key: 'debug', name: 'Bug终结者' },
+  { key: 'dont_wanna', name: '你说神嘛' },
+  { key: 'error', name: '报错了' },
+  { key: 'like', name: '真棒' },
+  { key: 'insane', name: '厉害' },
+  { key: 'jajaja', name: '笑死' },
+  { key: 'likes', name: '真棒棒' },
+  { key: 'success', name: '成功啦' },
+  { key: 'roll_out', name: '上线了' },
+  { key: 'OKDK', name: '好的收到' },
+  { key: 'thanks', name: '谢谢老板' },
+]
+
+/** 环信表情资源（glob：*.gif 为动图、*.jpg 为预览图，query ?url 得到资源地址） */
+const huanxinGifs = import.meta.glob('../assets/emojis/huanxin/*.gif', { eager: true, query: '?url', import: 'default' })
+const huanxinCovers = import.meta.glob('../assets/emojis/huanxin/*-封面.jpg', { eager: true, query: '?url', import: 'default' })
+
+/**
+ * 环信内置表情包（本地资源，预览 jpg + 实际动图 gif）。
+ * 注入到 EmChatContainer 的 input.stickerPacks，演示自定义 GIF 表情发送；
+ * hover 预览时默认展示 jpg，移出/实际发送走 gif。
  */
 export const DEMO_STICKER_PACKS: EmojiStickerPack[] = [
   {
-    id: 'demo-gifs',
-    name: '动图',
-    iconUrl: new URL('../assets/emojis/gif/c090e86d6886cfcb94183e2696d9614f.gif', import.meta.url).href,
-    stickers: [
-      { key: 'gif-1', name: '动图 1', url: new URL('../assets/emojis/gif/095b05168fb1492da412487a7aa89aaf.gif', import.meta.url).href },
-      { key: 'gif-2', name: '动图 2', url: new URL('../assets/emojis/gif/24f3a4e92a3a2ea59abfa388a3a54d25.gif', import.meta.url).href },
-      { key: 'gif-3', name: '动图 3', url: new URL('../assets/emojis/gif/36e638cd7d6c4f171259587c2168256d.gif', import.meta.url).href },
-      { key: 'gif-4', name: '动图 4', url: new URL('../assets/emojis/gif/44e4ce643a5b292d37e837b39cf5ffad.gif', import.meta.url).href },
-      { key: 'gif-5', name: '动图 5', url: new URL('../assets/emojis/gif/469ffa4999ba01348efbb4ade7f9abc9.gif', import.meta.url).href },
-      { key: 'gif-6', name: '动图 6', url: new URL('../assets/emojis/gif/485bbf83060c03f430a45679f4989479.gif', import.meta.url).href },
-      { key: 'gif-7', name: '动图 7', url: new URL('../assets/emojis/gif/5781ab9a6accfb990594d8becfeebcc6.gif', import.meta.url).href },
-      { key: 'gif-8', name: '动图 8', url: new URL('../assets/emojis/gif/65157921c0fa3ac91ec3ea8c46bf085d.gif', import.meta.url).href },
-      { key: 'gif-9', name: '动图 9', url: new URL('../assets/emojis/gif/c090e86d6886cfcb94183e2696d9614f.gif', import.meta.url).href },
-      { key: 'gif-10', name: '动图 10', url: new URL('../assets/emojis/gif/c5524a09f35f847e1d192cd01f5d78f4.gif', import.meta.url).href },
-      { key: 'gif-11', name: '动图 11', url: new URL('../assets/emojis/gif/d1ae6829d2e99eeb9c12594d421ad79e.gif', import.meta.url).href },
-      { key: 'gif-12', name: '动图 12', url: new URL('../assets/emojis/gif/db4fccdcf7d785b7e43390662ad72cd2.gif', import.meta.url).href },
-    ],
+    id: 'huanxin',
+    name: '环信表情',
+    iconUrl: huanxinCovers['../assets/emojis/huanxin/biubiu-封面.jpg'],
+    stickers: HUANXIN_EMOJI_META.map(({ key, name }) => ({
+      key,
+      name,
+      thumbUrl: huanxinCovers[`../assets/emojis/huanxin/${key}-封面.jpg`],
+      url: huanxinGifs[`../assets/emojis/huanxin/${key}.gif`] as string,
+    })),
   },
 ]
 
@@ -180,6 +196,10 @@ export const DEMO_CHAT_CONFIG = {
     showSendButton: false,
     /** 自定义 GIF 表情包，注入到 emoji picker 的 sticker 标签页 */
     stickerPacks: DEMO_STICKER_PACKS,
+    /** Emoji 面板配置：表情视图 tab 使用自定义图标（替换默认文字「表情」） */
+    emoji: {
+      emojiIcon: new URL('../assets/emojis/emoji-tab-icon.png', import.meta.url).href,
+    },
   },
 } as const
 

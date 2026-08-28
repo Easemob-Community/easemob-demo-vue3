@@ -1,24 +1,34 @@
 <script setup lang="ts">
-import { computed, nextTick, ref } from 'vue'
+import { computed, nextTick, onUnmounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
+import { useUserInfoStore } from '@easemob/uikit-core'
 import {
   EmAvatar,
   EmIcon,
   EmInput,
+  EmModal,
   EmPopup,
-  useClient,
+  useUIKit,
   useOwnUserInfo,
+  usePresence,
   useToast,
 } from '@easemob/uikit-im'
 
+import { deleteAccount, uploadAvatar } from '@/api/user'
 import { useUserStore } from '@/store/modules/user'
+
+import AvatarCropperModal from './AvatarCropperModal.vue'
 
 defineOptions({ name: 'AccountInfo' })
 
 const { t } = useI18n()
+const router = useRouter()
 const { success: showSuccess, error: showError } = useToast()
 const userStore = useUserStore()
-const { currentUser } = useClient()
+const userInfoStore = useUserInfoStore()
+const { client, logout } = useUIKit()
+const { subscribePresence, unsubscribePresence, get: getPresence } = usePresence()
 const {
   avatarUrl: userAvatarUrl,
   displayName,
@@ -27,13 +37,40 @@ const {
   updateOwnInfoByAttribute,
 } = useOwnUserInfo()
 
-// TODO：头像编辑待接入（需文件上传后调用 updateOwnInfo({ avatarUrl })）
 const nickname = computed(() => displayName.value || t('settings.account.defaultNickname'))
 const signature = computed(() => userInfo.value?.sign || t('settings.account.defaultSignature'))
 const userId = computed(
-  () => currentUser.value || userStore.userId || 'supercalifragilisticexpialidocious',
+  () => client.value?.currentUserId || userStore.userId || 'supercalifragilisticexpialidocious',
 )
 const avatarUrl = computed(() => userAvatarUrl.value || '')
+const appServerUrl = computed(() => import.meta.env.VITE_APP_SERVER_URL ?? '')
+
+/** 自身在线状态：优先从 UIKit presence 订阅读取，默认 online */
+const selfPresence = computed(() => getPresence(userId.value)?.value)
+const presenceStatus = computed(() => selfPresence.value?.status ?? 'online')
+
+// 订阅自身在线状态；服务端未开通或异常时静默降级
+watch(
+  userId,
+  async (id) => {
+    if (!id) return
+    try {
+      await subscribePresence([id])
+    } catch {
+      // 静默降级，避免无 presence 能力时影响账户信息展示
+    }
+  },
+  { immediate: true },
+)
+
+onUnmounted(() => {
+  const id = userId.value
+  if (id) {
+    unsubscribePresence([id]).catch(() => {
+      // 忽略未连接等异常
+    })
+  }
+})
 
 async function copyUserId() {
   try {
@@ -41,6 +78,137 @@ async function copyUserId() {
     showSuccess(t('common.copySuccess'))
   } catch {
     // 复制失败时静默降级，避免阻塞用户
+  }
+}
+
+/* ===== 头像编辑弹窗 ===== */
+
+const isAvatarModalOpen = ref(false)
+const isAvatarSaving = ref(false)
+
+function openAvatarModal() {
+  isAvatarModalOpen.value = true
+}
+
+function closeAvatarModal() {
+  isAvatarModalOpen.value = false
+}
+
+async function confirmAvatarUpdate(blob: Blob) {
+  if (isAvatarSaving.value) return
+  if (userStore.loginMode === 'dev') {
+    showError(t('settings.account.devModeAvatarDisabled'))
+    return
+  }
+  isAvatarSaving.value = true
+  try {
+    const accessToken = userStore.accessToken
+    const uid = userId.value
+    if (!appServerUrl.value) {
+      showError(t('settings.account.appServerRequired'))
+      return
+    }
+    if (!accessToken) {
+      showError(t('settings.account.avatarUploadFailed'))
+      return
+    }
+
+    // 1. 上传到 App Server
+    const { avatarUrl: uploadedUrl } = await uploadAvatar(uid, blob, accessToken)
+
+    // 2. 同步到 IM 用户属性（使其他用户可见）
+    const sdkClient = client.value
+    if (sdkClient?.userInfoManager) {
+      await sdkClient.userInfoManager.updateOwnInfoByAttribute('avatarUrl', uploadedUrl)
+    }
+
+    // 3. 更新本地用户资料缓存，页面即时刷新
+    const existing = userInfoStore.getUserInfo(uid)
+    userInfoStore.setUserInfo({
+      userId: uid,
+      avatarUrl: uploadedUrl,
+      nickname: existing?.nickname,
+      sign: existing?.sign,
+      mail: existing?.mail,
+      phone: existing?.phone,
+      gender: existing?.gender,
+      birth: existing?.birth,
+      ext: existing?.ext,
+    })
+
+    showSuccess(t('common.saveSuccess'))
+    closeAvatarModal()
+  } catch (err) {
+    console.error('upload avatar failed:', err)
+    showError(t('settings.account.avatarUploadFailed'))
+  } finally {
+    isAvatarSaving.value = false
+  }
+}
+
+/* ===== 退出登录确认弹窗 ===== */
+
+const isLogoutModalOpen = ref(false)
+const isLoggingOut = ref(false)
+
+function openLogoutModal() {
+  isLogoutModalOpen.value = true
+}
+
+function closeLogoutModal() {
+  isLogoutModalOpen.value = false
+}
+
+async function confirmLogout() {
+  if (isLoggingOut.value) return
+  isLoggingOut.value = true
+  try {
+    // UIKit logout 内部会关闭 SDK 连接并清理全局 store
+    await logout()
+    // 清理本地 Pinia 与 sessionStorage 凭证
+    userStore.reset()
+    await router.replace('/login')
+  } catch (err) {
+    showError(err instanceof Error ? err.message : t('common.saveFailed'))
+  } finally {
+    isLoggingOut.value = false
+    closeLogoutModal()
+  }
+}
+
+/* ===== 注销账户确认弹窗 ===== */
+
+const isDeleteAccountModalOpen = ref(false)
+const isDeletingAccount = ref(false)
+
+function openDeleteAccountModal() {
+  isDeleteAccountModalOpen.value = true
+}
+
+function closeDeleteAccountModal() {
+  isDeleteAccountModalOpen.value = false
+}
+
+async function confirmDeleteAccount() {
+  if (isDeletingAccount.value) return
+  const phoneNumber = userStore.phoneNumber
+  const chatToken = userStore.chatToken
+  if (!phoneNumber || !chatToken) {
+    showError(t('settings.account.deleteAccountUnavailable'))
+    return
+  }
+
+  isDeletingAccount.value = true
+  try {
+    await deleteAccount(phoneNumber, chatToken)
+    // 注销成功后复用退出登录的完整清理逻辑
+    await confirmLogout()
+  } catch (err) {
+    console.error('delete account failed:', err)
+    showError(err instanceof Error ? err.message : t('settings.account.deleteAccountFailed'))
+  } finally {
+    isDeletingAccount.value = false
+    closeDeleteAccountModal()
   }
 }
 
@@ -124,7 +292,7 @@ async function confirmEdit() {
           :src="avatarUrl"
           :name="nickname"
           shape="circle"
-          presence="online"
+          :presence="presenceStatus"
           class="account-info__avatar"
         />
         <h2 class="account-info__nickname">{{ nickname }}</h2>
@@ -172,6 +340,7 @@ async function confirmEdit() {
                 type="button"
                 class="account-info__avatar-edit"
                 :aria-label="t('common.edit')"
+                @click="openAvatarModal"
               >
                 <EmIcon name="rect_notched/pen" :size="16" />
               </button>
@@ -196,11 +365,16 @@ async function confirmEdit() {
       </div>
 
       <div class="account-info__actions">
-        <button type="button" class="account-info__btn">
+        <button
+          type="button"
+          class="account-info__btn account-info__btn--danger"
+          :disabled="!userStore.phoneNumber || !userStore.chatToken"
+          @click="openDeleteAccountModal"
+        >
           <EmIcon name="person/xmark" :size="18" class="account-info__btn-icon" />
           <span>{{ t('settings.account.deactivateAccount') }}</span>
         </button>
-        <button type="button" class="account-info__btn">
+        <button type="button" class="account-info__btn" @click="openLogoutModal">
           <EmIcon name="rect/rgtarrow" :size="18" class="account-info__btn-icon" />
           <span>{{ t('settings.account.logout') }}</span>
         </button>
@@ -250,6 +424,34 @@ async function confirmEdit() {
         </div>
       </div>
     </EmPopup>
+
+    <AvatarCropperModal v-model:show="isAvatarModalOpen" @confirm="confirmAvatarUpdate" />
+
+    <EmModal
+      v-model:show="isLogoutModalOpen"
+      :title="t('settings.account.logoutConfirmTitle')"
+      type="danger"
+      :confirm-text="t('settings.account.logout')"
+      :close-on-click-overlay="false"
+      @confirm="confirmLogout"
+      @cancel="closeLogoutModal"
+    >
+      <p class="account-info__logout-message">{{ t('settings.account.logoutConfirmMessage') }}</p>
+    </EmModal>
+
+    <EmModal
+      v-model:show="isDeleteAccountModalOpen"
+      :title="t('settings.account.deleteAccountConfirmTitle')"
+      type="danger"
+      :confirm-text="t('settings.account.deactivateAccount')"
+      :close-on-click-overlay="false"
+      @confirm="confirmDeleteAccount"
+      @cancel="closeDeleteAccountModal"
+    >
+      <p class="account-info__delete-message">
+        {{ t('settings.account.deleteAccountConfirmMessage') }}
+      </p>
+    </EmModal>
   </div>
 </template>
 
@@ -433,8 +635,23 @@ async function confirmEdit() {
       background-color 0.2s,
       border-color 0.2s;
 
-    &:hover {
+    &:hover:not(:disabled) {
       background: var(--color-border);
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+
+    &--danger {
+      color: var(--uikit-danger-color, #ee798c);
+      border-color: var(--uikit-danger-color, #ee798c);
+
+      &:hover:not(:disabled) {
+        color: #ffffff;
+        background: var(--uikit-danger-color, #ee798c);
+      }
     }
   }
 
@@ -510,6 +727,14 @@ async function confirmEdit() {
         background: var(--color-primary-hover, var(--color-primary));
       }
     }
+  }
+
+  &__logout-message,
+  &__delete-message {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--color-text-secondary);
   }
 }
 </style>
