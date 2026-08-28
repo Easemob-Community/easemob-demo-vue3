@@ -38,3 +38,19 @@
     color: var(--uikit-primary-color) !important;
   }
 }
+
+// 自定义 GIF 表情包 picker 布局：每行固定 4 个，等比放大（由 flex 改为 grid 强制列数）。
+.emoji-picker {
+  .emoji-picker__body {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 8px !important;
+  }
+
+  .emoji-picker__item--sticker {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 1 / 1 !important;
+    padding: 4px !important;
+  }
+}

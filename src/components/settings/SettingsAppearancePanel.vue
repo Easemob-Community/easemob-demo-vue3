@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /**
- * 特性开关 - 外观面板
+ * UIKIT特性开关 - 外观面板
  *
  * 按参考图片一比一布局，包含：
  * - 主题与颜色：主题模式、主题色取色器（2D 饱和度×亮度面板 + 色相条 + 明度条 + Hex/RGB/HSL/HSB 标签页）。
@@ -45,10 +45,16 @@ const {
   bubbleBgSelf,
   chatBg,
   inputBg,
+  hoverColor,
+  activeColor,
+  iconMutedColor,
   setPrimaryColor,
   setBubbleBg,
   setChatBg,
   setInputBg,
+  setHoverColor,
+  setActiveColor,
+  setIconMutedColor,
 } = uikitTheme
 
 /* ===== 取色器状态（HSL 为唯一数据源） ===== */
@@ -387,6 +393,9 @@ function resetAll() {
   setBubbleBg(null, null)
   setChatBg(undefined)
   setInputBg(undefined)
+  setHoverColor(undefined)
+  setActiveColor(undefined)
+  setIconMutedColor(undefined)
   inputVariant.value = 'default'
   setLocale('zh-CN')
 }
@@ -723,6 +732,67 @@ const currentColorStyle = computed(() => ({
           @input="(e: Event) => setChatBg((e.target as HTMLInputElement).value || undefined)"
         />
       </div>
+
+      <!-- 悬停 / 选中 / 弱化图标颜色（2.7.0+ 主题 API） -->
+      <div class="settings-appearance-panel__row settings-appearance-panel__row--bordered">
+        <span class="settings-appearance-panel__label">
+          {{ t('features.appearance.hoverColor') }}
+        </span>
+        <div class="settings-appearance-panel__right">
+          <input
+            type="color"
+            :value="hoverColor || '#e5e7eb'"
+            class="settings-appearance-panel__color-input"
+            @input="(e: Event) => setHoverColor((e.target as HTMLInputElement).value)"
+          />
+          <button class="settings-appearance-panel__text-btn" @click="setHoverColor(undefined)">
+            {{ t('features.appearance.restore') }}
+          </button>
+        </div>
+      </div>
+      <p class="settings-appearance-panel__desc">
+        {{ t('features.appearance.hoverColorDesc') }}
+      </p>
+
+      <div class="settings-appearance-panel__row settings-appearance-panel__row--bordered">
+        <span class="settings-appearance-panel__label">
+          {{ t('features.appearance.activeColor') }}
+        </span>
+        <div class="settings-appearance-panel__right">
+          <input
+            type="color"
+            :value="activeColor || '#33b1ff'"
+            class="settings-appearance-panel__color-input"
+            @input="(e: Event) => setActiveColor((e.target as HTMLInputElement).value)"
+          />
+          <button class="settings-appearance-panel__text-btn" @click="setActiveColor(undefined)">
+            {{ t('features.appearance.restore') }}
+          </button>
+        </div>
+      </div>
+      <p class="settings-appearance-panel__desc">
+        {{ t('features.appearance.activeColorDesc') }}
+      </p>
+
+      <div class="settings-appearance-panel__row settings-appearance-panel__row--bordered">
+        <span class="settings-appearance-panel__label">
+          {{ t('features.appearance.iconMutedColor') }}
+        </span>
+        <div class="settings-appearance-panel__right">
+          <input
+            type="color"
+            :value="iconMutedColor || '#b6b8bf'"
+            class="settings-appearance-panel__color-input"
+            @input="(e: Event) => setIconMutedColor((e.target as HTMLInputElement).value)"
+          />
+          <button class="settings-appearance-panel__text-btn" @click="setIconMutedColor(undefined)">
+            {{ t('features.appearance.restore') }}
+          </button>
+        </div>
+      </div>
+      <p class="settings-appearance-panel__desc">
+        {{ t('features.appearance.iconMutedColorDesc') }}
+      </p>
     </section>
 
     <!-- ===== 组件风格 ===== -->

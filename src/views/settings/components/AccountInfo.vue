@@ -1,20 +1,114 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, nextTick, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { EmAvatar } from '@easemob/uikit-im'
+import {
+  EmAvatar,
+  EmIcon,
+  EmInput,
+  EmPopup,
+  useClient,
+  useOwnUserInfo,
+  useToast,
+} from '@easemob/uikit-im'
 
 import { useUserStore } from '@/store/modules/user'
 
 defineOptions({ name: 'AccountInfo' })
 
 const { t } = useI18n()
+const { success: showSuccess, error: showError } = useToast()
 const userStore = useUserStore()
+const { currentUser } = useClient()
+const {
+  avatarUrl: userAvatarUrl,
+  displayName,
+  userInfo,
+  updateOwnInfo,
+  updateOwnInfoByAttribute,
+} = useOwnUserInfo()
 
-// TODO：后续接入真实用户信息与编辑能力
-const nickname = ref('烈焰威风')
-const signature = ref('人生活不止靠饼')
-const userId = computed(() => userStore.userId || 'supercalifragilisticexpialidocious')
-const avatarUrl = ref('')
+// TODO：头像编辑待接入（需文件上传后调用 updateOwnInfo({ avatarUrl })）
+const nickname = computed(() => displayName.value || t('settings.account.defaultNickname'))
+const signature = computed(() => userInfo.value?.sign || t('settings.account.defaultSignature'))
+const userId = computed(
+  () => currentUser.value || userStore.userId || 'supercalifragilisticexpialidocious',
+)
+const avatarUrl = computed(() => userAvatarUrl.value || '')
+
+async function copyUserId() {
+  try {
+    await navigator.clipboard.writeText(userId.value)
+    showSuccess(t('common.copySuccess'))
+  } catch {
+    // 复制失败时静默降级，避免阻塞用户
+  }
+}
+
+/* ===== 昵称 / 签名编辑弹窗 ===== */
+
+type EditField = 'nickname' | 'signature'
+
+const isEditModalOpen = ref(false)
+const editingField = ref<EditField | null>(null)
+const editValue = ref('')
+const editError = ref('')
+const isSaving = ref(false)
+const editInputRef = ref<{ inputRef?: HTMLInputElement | null } | null>(null)
+
+const editModalTitle = computed(() => {
+  if (editingField.value === 'nickname') return t('settings.account.editNickname')
+  if (editingField.value === 'signature') return t('settings.account.editSignature')
+  return ''
+})
+
+const editPlaceholder = computed(() => {
+  if (editingField.value === 'nickname') return t('settings.account.nicknamePlaceholder')
+  if (editingField.value === 'signature') return t('settings.account.signaturePlaceholder')
+  return ''
+})
+
+function openEditModal(field: EditField) {
+  editingField.value = field
+  editValue.value = field === 'nickname' ? nickname.value : signature.value
+  editError.value = ''
+  isEditModalOpen.value = true
+  nextTick(() => {
+    editInputRef.value?.inputRef?.focus()
+  })
+}
+
+function closeEditModal() {
+  isEditModalOpen.value = false
+  editingField.value = null
+  editValue.value = ''
+  editError.value = ''
+}
+
+async function confirmEdit() {
+  if (!editingField.value || isSaving.value) return
+
+  const trimmed = editValue.value.trim()
+
+  if (editingField.value === 'nickname' && !trimmed) {
+    editError.value = t('settings.account.nicknameRequired')
+    return
+  }
+
+  isSaving.value = true
+  try {
+    if (editingField.value === 'nickname') {
+      await updateOwnInfo({ nickname: trimmed })
+    } else {
+      await updateOwnInfoByAttribute('sign', trimmed)
+    }
+    showSuccess(t('common.saveSuccess'))
+    closeEditModal()
+  } catch (err) {
+    showError(err instanceof Error ? err.message : t('common.saveFailed'))
+  } finally {
+    isSaving.value = false
+  }
+}
 </script>
 
 <template>
@@ -36,23 +130,13 @@ const avatarUrl = ref('')
         <h2 class="account-info__nickname">{{ nickname }}</h2>
         <div class="account-info__user-id">
           <span>ID: {{ userId }}</span>
-          <button type="button" class="account-info__icon-btn" :aria-label="t('common.copy')">
-            <svg class="account-info__icon" viewBox="0 0 24 24" fill="none">
-              <rect
-                x="9"
-                y="9"
-                width="10"
-                height="10"
-                rx="2"
-                stroke="currentColor"
-                stroke-width="1.5"
-              />
-              <path
-                d="M15 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h3"
-                stroke="currentColor"
-                stroke-width="1.5"
-              />
-            </svg>
+          <button
+            type="button"
+            class="account-info__icon-btn"
+            :aria-label="t('common.copy')"
+            @click="copyUserId"
+          >
+            <EmIcon name="rects" :size="16" />
           </button>
         </div>
       </div>
@@ -62,15 +146,13 @@ const avatarUrl = ref('')
           <span class="account-info__label">{{ t('settings.account.nickname') }}</span>
           <div class="account-info__field">
             <span class="account-info__field-text">{{ nickname }}</span>
-            <button type="button" class="account-info__icon-btn" :aria-label="t('common.edit')">
-              <svg class="account-info__icon" viewBox="0 0 24 24" fill="none">
-                <path
-                  d="M13 3l8 8-9 9H4v-8L13 3z"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  stroke-linejoin="round"
-                />
-              </svg>
+            <button
+              type="button"
+              class="account-info__icon-btn"
+              :aria-label="t('common.edit')"
+              @click="openEditModal('nickname')"
+            >
+              <EmIcon name="rect_notched/pen" :size="16" />
             </button>
           </div>
         </div>
@@ -78,23 +160,22 @@ const avatarUrl = ref('')
         <div class="account-info__row">
           <span class="account-info__label">{{ t('settings.account.avatar') }}</span>
           <div class="account-info__field">
-            <EmAvatar
-              :size="32"
-              :src="avatarUrl"
-              :name="nickname"
-              shape="circle"
-              class="account-info__field-avatar"
-            />
-            <button type="button" class="account-info__icon-btn" :aria-label="t('common.edit')">
-              <svg class="account-info__icon" viewBox="0 0 24 24" fill="none">
-                <path
-                  d="M13 3l8 8-9 9H4v-8L13 3z"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            </button>
+            <div class="account-info__avatar-wrapper">
+              <EmAvatar
+                :size="40"
+                :src="avatarUrl"
+                :name="nickname"
+                shape="circle"
+                class="account-info__field-avatar"
+              />
+              <button
+                type="button"
+                class="account-info__avatar-edit"
+                :aria-label="t('common.edit')"
+              >
+                <EmIcon name="rect_notched/pen" :size="16" />
+              </button>
+            </div>
           </div>
         </div>
 
@@ -102,15 +183,13 @@ const avatarUrl = ref('')
           <span class="account-info__label">{{ t('settings.account.signature') }}</span>
           <div class="account-info__field">
             <span class="account-info__field-text">{{ signature }}</span>
-            <button type="button" class="account-info__icon-btn" :aria-label="t('common.edit')">
-              <svg class="account-info__icon" viewBox="0 0 24 24" fill="none">
-                <path
-                  d="M13 3l8 8-9 9H4v-8L13 3z"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  stroke-linejoin="round"
-                />
-              </svg>
+            <button
+              type="button"
+              class="account-info__icon-btn"
+              :aria-label="t('common.edit')"
+              @click="openEditModal('signature')"
+            >
+              <EmIcon name="rect_notched/pen" :size="16" />
             </button>
           </div>
         </div>
@@ -118,44 +197,59 @@ const avatarUrl = ref('')
 
       <div class="account-info__actions">
         <button type="button" class="account-info__btn">
-          <svg class="account-info__btn-icon" viewBox="0 0 24 24" fill="none">
-            <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.5" />
-            <path
-              d="M4 20c0-4 4-6 8-6s8 2 8 6"
-              stroke="currentColor"
-              stroke-width="1.5"
-              stroke-linecap="round"
-            />
-            <path
-              d="M17 11l4 4m0-4l-4 4"
-              stroke="currentColor"
-              stroke-width="1.5"
-              stroke-linecap="round"
-            />
-          </svg>
+          <EmIcon name="person/xmark" :size="18" class="account-info__btn-icon" />
           <span>{{ t('settings.account.deactivateAccount') }}</span>
         </button>
         <button type="button" class="account-info__btn">
-          <svg class="account-info__btn-icon" viewBox="0 0 24 24" fill="none">
-            <path
-              d="M10 16H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h4"
-              stroke="currentColor"
-              stroke-width="1.5"
-              stroke-linecap="round"
-            />
-            <path
-              d="M16 17l5-5m0 5l-5-5"
-              stroke="currentColor"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-            <path d="M21 12H9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-          </svg>
+          <EmIcon name="rect/rgtarrow" :size="18" class="account-info__btn-icon" />
           <span>{{ t('settings.account.logout') }}</span>
         </button>
       </div>
     </div>
+
+    <EmPopup
+      v-model:show="isEditModalOpen"
+      position="center"
+      :close-on-click-overlay="false"
+      :close-on-esc="false"
+      class="account-info__edit-popup"
+    >
+      <div class="account-info__edit-modal">
+        <div class="account-info__edit-modal-header">
+          <span class="account-info__edit-modal-title">{{ editModalTitle }}</span>
+        </div>
+        <div class="account-info__edit-modal-body">
+          <EmInput
+            ref="editInputRef"
+            v-model="editValue"
+            :placeholder="editPlaceholder"
+            :error="!!editError"
+            :error-message="editError"
+            :disabled="isSaving"
+            :maxlength="50"
+            @submit="confirmEdit"
+          />
+        </div>
+        <div class="account-info__edit-modal-footer">
+          <button
+            type="button"
+            class="account-info__edit-btn account-info__edit-btn--cancel"
+            :disabled="isSaving"
+            @click="closeEditModal"
+          >
+            {{ t('common.cancel') }}
+          </button>
+          <button
+            type="button"
+            class="account-info__edit-btn account-info__edit-btn--confirm"
+            :disabled="isSaving"
+            @click="confirmEdit"
+          >
+            {{ t('common.confirm') }}
+          </button>
+        </div>
+      </div>
+    </EmPopup>
   </div>
 </template>
 
@@ -204,7 +298,7 @@ const avatarUrl = ref('')
   &__nickname {
     margin: 16px 0 0;
     font-size: 18px;
-    font-weight: 500;
+    font-weight: 600;
     color: var(--color-text);
   }
 
@@ -264,6 +358,7 @@ const avatarUrl = ref('')
 
   &__label {
     font-size: 14px;
+    font-weight: 600;
     color: var(--color-text);
   }
 
@@ -281,6 +376,35 @@ const avatarUrl = ref('')
   &__field-avatar {
     font-size: 12px;
     font-weight: 500;
+  }
+
+  &__avatar-wrapper {
+    position: relative;
+    display: inline-flex;
+  }
+
+  &__avatar-edit {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    background: rgba(0, 0, 0, 0.2);
+    border: none;
+    border-radius: 50%;
+    transition:
+      color 0.2s,
+      background-color 0.2s;
+
+    &:hover {
+      color: var(--color-primary);
+      background: rgba(0, 0, 0, 0.3);
+    }
   }
 
   &__actions {
@@ -317,6 +441,75 @@ const avatarUrl = ref('')
   &__btn-icon {
     width: 18px;
     height: 18px;
+  }
+
+  &__edit-popup {
+    :deep(.uikit-popup__content) {
+      padding: 0;
+      border-radius: 12px;
+      background: var(--color-bg);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    }
+  }
+
+  &__edit-modal {
+    width: 320px;
+    padding: 20px;
+  }
+
+  &__edit-modal-header {
+    margin-bottom: 16px;
+  }
+
+  &__edit-modal-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  &__edit-modal-body {
+    margin-bottom: 20px;
+  }
+
+  &__edit-modal-footer {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+  }
+
+  &__edit-btn {
+    height: 36px;
+    padding: 0 16px;
+    font-size: 14px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition:
+      background-color 0.2s,
+      opacity 0.2s;
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    &--cancel {
+      color: var(--color-text);
+      background: var(--color-bg-secondary);
+
+      &:hover:not(:disabled) {
+        background: var(--color-border);
+      }
+    }
+
+    &--confirm {
+      color: #ffffff;
+      background: var(--color-primary);
+
+      &:hover:not(:disabled) {
+        background: var(--color-primary-hover, var(--color-primary));
+      }
+    }
   }
 }
 </style>

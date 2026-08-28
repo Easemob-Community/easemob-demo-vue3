@@ -29,7 +29,7 @@ html.dark {
 
 // UIKit 主题变量覆写（仅明亮模式）：会话 / 联系人 / 设置 Cell 选中态背景 #EBF7FF。
 // 主色相关变量交由 UIKit 2.6.0+ 主题 store 管理（通过 useTheme setPrimaryColor），
-// 不再以 !important 覆写，避免与「特性开关-外观」取色器冲突。
+// 不再以 !important 覆写，避免与「UIKIT特性开关-外观」取色器冲突。
 :root,
 [data-uikit-theme='light'] {
   --uikit-bg-active: #ebf7ff;

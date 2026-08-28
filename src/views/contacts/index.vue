@@ -14,10 +14,10 @@ import {
 } from '@easemob/uikit-im'
 import type { UiContact, UiGroup } from '@easemob/uikit-core'
 
+import { useDemoSettings } from '@/composables/useDemoSettings'
 import { useMobileView } from '@/composables/useMobileView'
 import {
   CONTACTS_SIDEBAR_WIDTH,
-  DEMO_CONTACT_CONFIG,
   DEMO_ICON_SIZE,
   DEMO_RESIZABLE_CONFIG,
   DEMO_SIDEBAR_CONFIG,
@@ -27,6 +27,18 @@ defineOptions({ name: 'ContactsPage' })
 
 const { t } = useI18n()
 const isMobileView = useMobileView()
+const {
+  contactShowHomeSearch,
+  contactShowContactSearch,
+  contactShowGroupSearch,
+  contactShowNotice,
+  contactShowContactEntry,
+  contactShowGroupEntry,
+  contactShowBlocklist,
+  contactShowContactAddButton,
+  contactShowGroupCreateButton,
+  contactShowBlocklistAddButton,
+} = useDemoSettings()
 
 /* ===== 通讯录侧边栏宽度（与会话页一致：EmResizable 拖拽调整 + localStorage 持久化） ===== */
 
@@ -126,10 +138,16 @@ function backToContactList() {
         @resize-end="persistSidebarWidth"
       >
         <EmContactContainer
-          :show-home-search="DEMO_CONTACT_CONFIG.showHomeSearch"
-          :show-contact-search="DEMO_CONTACT_CONFIG.showContactSearch"
-          :show-group-search="DEMO_CONTACT_CONFIG.showGroupSearch"
-          :show-blocklist="DEMO_CONTACT_CONFIG.showBlocklist"
+          :show-home-search="contactShowHomeSearch"
+          :show-contact-search="contactShowContactSearch"
+          :show-group-search="contactShowGroupSearch"
+          :show-notice="contactShowNotice"
+          :show-contact="contactShowContactEntry"
+          :show-group="contactShowGroupEntry"
+          :show-blocklist="contactShowBlocklist"
+          :show-contact-add-button="contactShowContactAddButton"
+          :show-group-create-button="contactShowGroupCreateButton"
+          :show-blocklist-add-button="contactShowBlocklistAddButton"
           @view-change="onViewChange"
           @contact-click="onContactClick"
           @group-click="onGroupClick"
@@ -152,10 +170,16 @@ function backToContactList() {
     <template v-else>
       <div v-show="!detailUserId && !detailGroupId" class="contacts-page__mobile-list">
         <EmContactContainer
-          :show-home-search="DEMO_CONTACT_CONFIG.showHomeSearch"
-          :show-contact-search="DEMO_CONTACT_CONFIG.showContactSearch"
-          :show-group-search="DEMO_CONTACT_CONFIG.showGroupSearch"
-          :show-blocklist="DEMO_CONTACT_CONFIG.showBlocklist"
+          :show-home-search="contactShowHomeSearch"
+          :show-contact-search="contactShowContactSearch"
+          :show-group-search="contactShowGroupSearch"
+          :show-notice="contactShowNotice"
+          :show-contact="contactShowContactEntry"
+          :show-group="contactShowGroupEntry"
+          :show-blocklist="contactShowBlocklist"
+          :show-contact-add-button="contactShowContactAddButton"
+          :show-group-create-button="contactShowGroupCreateButton"
+          :show-blocklist-add-button="contactShowBlocklistAddButton"
           @view-change="onViewChange"
           @contact-click="onContactClick"
           @group-click="onGroupClick"

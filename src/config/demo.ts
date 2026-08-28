@@ -1,3 +1,6 @@
+import type { EmojiStickerPack } from '@easemob/uikit-im'
+import type { UiContact } from '@easemob/uikit-core'
+
 /**
  * 项目 Demo 配置常量
  *
@@ -88,13 +91,84 @@ export const DEMO_CONVERSATION_CONFIG = {
 
 /** ===== 组件静态属性配置（uikit 组件模板里的静态值统一归入常量，不在视图写死） ===== */
 
-/** EmUIKitProvider 功能开关 */
+/**
+ * EmUIKitProvider 功能开关
+ *
+ * 与「UIKIT特性开关 - Provider」面板一一对应（默认全部开启，见面板说明「Provider 能力开关默认全部开启」）。
+ * 由 useDemoSettings 读取作为默认值，App.vue 绑定到 EmUIKitProvider；运行期改动即时反映为 Provider props。
+ */
 export const DEMO_PROVIDER_CONFIG = {
-  /** 是否启用在线状态（Presence）能力 */
-  enablePresence: true,
+  /** 是否启用好友体系（好友列表与好友事件） */
+  enableContact: true,
   /** 是否启用黑名单（Blocklist）能力：开启后通讯录首页出现「黑名单」入口，可查看/移出已拉黑用户 */
   enableBlocklist: true,
+  /** 是否启用在线状态（Presence）能力 */
+  enablePresence: true,
+  /** 是否启用会话列表草稿显示（enableDraft） */
+  enableDraft: true,
+  /**
+   * 是否启用 ＠我 消息提醒。
+   * 设计面板标签为 enableMotion，实际映射 UIKit Provider 的 `enableAtMe` prop。
+   */
+  enableAtMe: true,
+  /** 是否启用对方正在输入提示（enableTyping） */
+  enableTyping: true,
+  /**
+   * 是否使用自定义数据源接管拉取联系人（fetchContacts）。
+   * 开启后拉取好友走示例接口（返回 DEMO_CUSTOM_CONTACTS，Alice / Bob），否则走 SDK 默认。
+   */
+  enableFetchContacts: false,
+  /** 是否启用群组体系（群列表 / 群成员等群能力） */
+  enableGroup: true,
+  /** 是否启用用户资料（昵称/头像）展示与拉取 */
+  enableUserInfo: true,
+  /** 是否启用陌生人用户资料变更订阅（服务端未开通时自动熔断） */
+  enableUserInfoSubscription: true,
+  /** 好友列表是否过滤掉已拉黑用户（仅联系人子视图/好友列表生效，选人弹窗不受影响） */
+  filterBlockedContacts: true,
+  /** 是否启用内置 Toast 提示（关闭后可用 useToast() 自行渲染） */
+  enableToast: true,
+  /**
+   * 联系人拉取模式：'page' 分页（SDK 未暴露分页游标接口，实际按全量返回处理）｜'all' 一次性全量拉取。
+   */
+  contactFetchMode: 'page',
 } as const
+
+/**
+ * 自定义数据源示例联系人。
+ * 当 Provider 面板「自定义数据源 (fetchContacts)」开启时，拉取好友返回此演示数据（Alice / Bob）。
+ */
+export const DEMO_CUSTOM_CONTACTS: UiContact[] = [
+  { userId: 'alice', name: 'Alice', remark: 'Alice' },
+  { userId: 'bob', name: 'Bob', remark: 'Bob' },
+]
+
+/**
+ * 示例自定义 GIF 表情包（本地资源）。
+ * 注入到 EmChatContainer 的 input.stickerPacks，用于演示自定义 GIF 表情发送。
+ * 实际业务建议替换为 CDN 地址或按真实表情包分组。
+ */
+export const DEMO_STICKER_PACKS: EmojiStickerPack[] = [
+  {
+    id: 'demo-gifs',
+    name: '动图',
+    iconUrl: new URL('../assets/emojis/gif/c090e86d6886cfcb94183e2696d9614f.gif', import.meta.url).href,
+    stickers: [
+      { key: 'gif-1', name: '动图 1', url: new URL('../assets/emojis/gif/095b05168fb1492da412487a7aa89aaf.gif', import.meta.url).href },
+      { key: 'gif-2', name: '动图 2', url: new URL('../assets/emojis/gif/24f3a4e92a3a2ea59abfa388a3a54d25.gif', import.meta.url).href },
+      { key: 'gif-3', name: '动图 3', url: new URL('../assets/emojis/gif/36e638cd7d6c4f171259587c2168256d.gif', import.meta.url).href },
+      { key: 'gif-4', name: '动图 4', url: new URL('../assets/emojis/gif/44e4ce643a5b292d37e837b39cf5ffad.gif', import.meta.url).href },
+      { key: 'gif-5', name: '动图 5', url: new URL('../assets/emojis/gif/469ffa4999ba01348efbb4ade7f9abc9.gif', import.meta.url).href },
+      { key: 'gif-6', name: '动图 6', url: new URL('../assets/emojis/gif/485bbf83060c03f430a45679f4989479.gif', import.meta.url).href },
+      { key: 'gif-7', name: '动图 7', url: new URL('../assets/emojis/gif/5781ab9a6accfb990594d8becfeebcc6.gif', import.meta.url).href },
+      { key: 'gif-8', name: '动图 8', url: new URL('../assets/emojis/gif/65157921c0fa3ac91ec3ea8c46bf085d.gif', import.meta.url).href },
+      { key: 'gif-9', name: '动图 9', url: new URL('../assets/emojis/gif/c090e86d6886cfcb94183e2696d9614f.gif', import.meta.url).href },
+      { key: 'gif-10', name: '动图 10', url: new URL('../assets/emojis/gif/c5524a09f35f847e1d192cd01f5d78f4.gif', import.meta.url).href },
+      { key: 'gif-11', name: '动图 11', url: new URL('../assets/emojis/gif/d1ae6829d2e99eeb9c12594d421ad79e.gif', import.meta.url).href },
+      { key: 'gif-12', name: '动图 12', url: new URL('../assets/emojis/gif/db4fccdcf7d785b7e43390662ad72cd2.gif', import.meta.url).href },
+    ],
+  },
+]
 
 /**
  * EmChatContainer 聊天页面配置（对齐 UIKit demo 的 chatContainer 配置面板默认值）。
@@ -104,6 +178,8 @@ export const DEMO_CHAT_CONFIG = {
   input: {
     /** 输入框是否显示发送按钮：对齐 UIKit demo，默认关闭（回车发送） */
     showSendButton: false,
+    /** 自定义 GIF 表情包，注入到 emoji picker 的 sticker 标签页 */
+    stickerPacks: DEMO_STICKER_PACKS,
   },
 } as const
 
@@ -133,6 +209,12 @@ export const DEMO_ICON_SIZE = {
   back: 20,
   /** 空状态占位大图标尺寸（px） */
   empty: 48,
+} as const
+
+/** ===== UIKit 文档配置 ===== */
+export const DEMO_UIKIT_DOCS_CONFIG = {
+  /** UIKit 使用文档地址：「更多」面板跳转查看详细配置（官方文档，新标签页打开） */
+  url: 'https://doc.easemob.com/uikit/chatuikit/web/chatuikit_integrated_vue.html',
 } as const
 
 /** ===== 布局配置 ===== */

@@ -8,11 +8,19 @@ import {
   EmResizable,
   createUIKitStorageKey,
   useConversation,
+  useConversationTabs,
   useUIKit,
   useViewport,
 } from '@easemob/uikit-im'
+import type { ConversationTabKey, UiMessage } from '@easemob/uikit-im'
 
+import MarkdownStreamMessage from '@/components/ai/MarkdownStreamMessage.vue'
+import { useDemoSettings } from '@/composables/useDemoSettings'
 import { useMobileView } from '@/composables/useMobileView'
+import {
+  getMockAiReply,
+  simulateStreamMessage,
+} from '@/composables/useStreamDemo'
 import {
   DEMO_CHAT_CONFIG,
   DEMO_CONVERSATION_CONFIG,
@@ -29,6 +37,76 @@ const { isMobile } = useViewport()
 const { currentConversation, leaveConversation } = useConversation()
 
 const hasCurrentConversation = computed(() => !!currentConversation.value)
+
+/* ===== 会话UIKIT特性开关配置（由特性抽屉「会话」面板驱动） ===== */
+const {
+  statusBannerEnabled,
+  conversationTabs,
+  conversationTabsVisible,
+  conversationTabsTakeover,
+  conversationActiveTab,
+  // 聊天UIKIT特性开关
+  chatInputMode,
+  chatInputStyle,
+  chatInputFeatures,
+  chatInputAutoFocus,
+  chatInputFocusBorderColor,
+  chatInputCaretColor,
+  chatInputSelectionColor,
+  chatInputMaxLength,
+  groupReadReceiptEnabled,
+  groupReadReceiptMaxSize,
+  chatShowTime,
+  chatMessageSearchEnabled,
+  chatMessageServerSearchEnabled,
+  chatMessageListShowAvatar,
+  chatMessageShowSelfAvatar,
+  chatMessageStatusShowText,
+  chatMessageStatusDirection,
+  chatMessageStatusPosition,
+  chatMessageStatusStyle,
+  chatMessageAction,
+  // AI 流式演示
+  aiMockReplyEnabled,
+} = useDemoSettings()
+
+/** 完全接管模式：使用 useConversationTabs hook 自绘 tab 栏 */
+const {
+  tabs: takeoverTabs,
+  activeTab: takeoverActiveTab,
+  selectTab: takeoverSelectTab,
+} = useConversationTabs({
+  tabs: ['all', 'unread', 'single', 'group'],
+  activeTab: 'all',
+})
+
+/** 实际传给 EmConversationContainer 的 tabs（接管模式优先；普通模式按显隐开关置空） */
+const effectiveConversationTabs = computed(() =>
+  conversationTabsTakeover.value
+    ? takeoverTabs.value
+    : conversationTabsVisible.value
+      ? conversationTabs.value
+      : [],
+)
+
+/** 实际激活的 tab：接管模式用 hook 状态，普通模式用面板状态 */
+const effectiveConversationActiveTab = computed(() =>
+  conversationTabsTakeover.value ? takeoverActiveTab.value : conversationActiveTab.value,
+)
+
+function onConversationActiveTabChange(tab: ConversationTabKey) {
+  if (conversationTabsTakeover.value) takeoverSelectTab(tab)
+  else conversationActiveTab.value = tab
+}
+
+/** 接管模式下自绘 tab 按钮的文案 */
+const takeoverTabLabels = computed<Record<string, string>>(() => ({
+  all: t('features.conversation.tabLabels.all'),
+  unread: t('features.conversation.tabLabels.unread'),
+  atMe: t('features.conversation.tabLabels.atMe'),
+  single: t('features.conversation.tabLabels.single'),
+  group: t('features.conversation.tabLabels.group'),
+}))
 
 /** H5：返回会话列表 */
 function backToConversationList() {
@@ -68,6 +146,89 @@ function persistSidebarWidth(width: number) {
   sidebarWidth.value = width
   localStorage.setItem(sidebarStorageKey.value, String(width))
 }
+
+/* ===== 聊天UIKIT特性开关配置（由特性抽屉「聊天」面板驱动） ===== */
+const chatConfig = computed(() => ({
+  ...DEMO_CHAT_CONFIG,
+  groupReadReceipt: {
+    enabled: groupReadReceiptEnabled.value,
+    maxGroupSize: groupReadReceiptMaxSize.value,
+  },
+  input: {
+    ...DEMO_CHAT_CONFIG.input,
+    mode: chatInputMode.value,
+    style: chatInputStyle.value,
+    features: { ...chatInputFeatures.value },
+    autoFocus: chatInputAutoFocus.value,
+    ...(chatInputFocusBorderColor.value ? { focusBorderColor: chatInputFocusBorderColor.value } : {}),
+    ...(chatInputCaretColor.value ? { caretColor: chatInputCaretColor.value } : {}),
+    ...(chatInputSelectionColor.value ? { selectionColor: chatInputSelectionColor.value } : {}),
+    ...(chatInputMaxLength.value > 0 ? { maxLength: chatInputMaxLength.value } : {}),
+  },
+  messageList: {
+    showTime: chatShowTime.value,
+    showAvatar: chatMessageListShowAvatar.value,
+    showSelfAvatar: chatMessageShowSelfAvatar.value,
+    search: {
+      enabled: chatMessageSearchEnabled.value,
+      enableServerSearch: chatMessageServerSearchEnabled.value,
+    },
+    messageStatus: {
+      showText: chatMessageStatusShowText.value,
+      direction: chatMessageStatusDirection.value,
+      position: chatMessageStatusPosition.value,
+      style: chatMessageStatusStyle.value,
+    },
+  },
+  messageAction: { ...chatMessageAction.value },
+}))
+
+/* ===== AI 流式演示（mock） ===== */
+
+const aiRepliedMessageIds = new Set<string>()
+
+/**
+ * AI 应答（mock）：开启后自己发送文本消息，自动注入 mock AI 的 markdown 流式回复。
+ * 监听当前会话最后一条消息（isSelf 文本、非流式、非撤回）→ 延迟触发模拟器。
+ */
+watch(
+  () => {
+    const cvsId = stores.conversation.currentConversationId
+    if (!cvsId || !aiMockReplyEnabled.value) return ''
+    const msgs = stores.message.getMessages(cvsId)
+    const last = msgs[msgs.length - 1]
+    if (
+      !last ||
+      !last.isSelf ||
+      last.type !== 'text' ||
+      last.recalled ||
+      last.stream ||
+      aiRepliedMessageIds.has(last.msgLocalId || last.msgServerId)
+    ) {
+      return ''
+    }
+    return last.msgLocalId || last.msgServerId
+  },
+  (msgId) => {
+    if (!msgId) return
+    const cvs = stores.conversation.currentConversation
+    if (!cvs) return
+    const msgs = stores.message.getMessages(cvs.id)
+    const last = msgs[msgs.length - 1]
+    if (!last) return
+    aiRepliedMessageIds.add(msgId)
+    const question = (last.body as { content?: string }).content || ''
+    window.setTimeout(() => {
+      simulateStreamMessage(stores.message, {
+        conversationId: cvs.id,
+        conversationType: cvs.type,
+        to: stores.client.currentUser || '',
+        customType: 'markdown',
+        content: getMockAiReply(question),
+      })
+    }, 700)
+  },
+)
 </script>
 
 <template>
@@ -84,17 +245,63 @@ function persistSidebarWidth(width: number) {
         class="chat-page__sidebar"
         @resize-end="persistSidebarWidth"
       >
-        <EmConversationContainer :pull-refresh="isMobile && DEMO_CONVERSATION_CONFIG.pullRefresh" />
+        <EmConversationContainer
+          :pull-refresh="isMobile && DEMO_CONVERSATION_CONFIG.pullRefresh"
+          :tabs="effectiveConversationTabs"
+          :active-tab="effectiveConversationActiveTab"
+          :show-status-banner="statusBannerEnabled"
+          @update:active-tab="onConversationActiveTabChange"
+        >
+          <template v-if="conversationTabsTakeover" #tabs="{ tabs, activeTab, selectTab }">
+            <div class="chat-page__takeover-tabs">
+              <button
+                v-for="tab in tabs"
+                :key="tab"
+                type="button"
+                class="chat-page__takeover-tab"
+                :class="{ 'chat-page__takeover-tab--active': activeTab === tab }"
+                @click="selectTab(tab)"
+              >
+                {{ takeoverTabLabels[tab] || tab }}
+              </button>
+            </div>
+          </template>
+        </EmConversationContainer>
       </EmResizable>
       <div class="chat-page__main">
-        <EmChatContainer :config="DEMO_CHAT_CONFIG" />
+        <EmChatContainer :config="chatConfig">
+          <template #message-text="{ message }">
+            <MarkdownStreamMessage :message="message as UiMessage" />
+          </template>
+        </EmChatContainer>
       </div>
     </template>
 
     <!-- H5 端：单栏栈式（列表 → 聊天） -->
     <template v-else>
       <div v-show="!hasCurrentConversation" class="chat-page__mobile-list">
-        <EmConversationContainer :pull-refresh="DEMO_CONVERSATION_CONFIG.pullRefresh" />
+        <EmConversationContainer
+          :pull-refresh="DEMO_CONVERSATION_CONFIG.pullRefresh"
+          :tabs="effectiveConversationTabs"
+          :active-tab="effectiveConversationActiveTab"
+          :show-status-banner="statusBannerEnabled"
+          @update:active-tab="onConversationActiveTabChange"
+        >
+          <template v-if="conversationTabsTakeover" #tabs="{ tabs, activeTab, selectTab }">
+            <div class="chat-page__takeover-tabs">
+              <button
+                v-for="tab in tabs"
+                :key="tab"
+                type="button"
+                class="chat-page__takeover-tab"
+                :class="{ 'chat-page__takeover-tab--active': activeTab === tab }"
+                @click="selectTab(tab)"
+              >
+                {{ takeoverTabLabels[tab] || tab }}
+              </button>
+            </div>
+          </template>
+        </EmConversationContainer>
       </div>
       <div v-show="hasCurrentConversation" class="chat-page__mobile-chat">
         <div class="chat-page__mobile-header safe-area-top">
@@ -104,7 +311,11 @@ function persistSidebarWidth(width: number) {
           </button>
         </div>
         <div class="chat-page__mobile-body">
-          <EmChatContainer :config="DEMO_CHAT_CONFIG" />
+          <EmChatContainer :config="chatConfig">
+            <template #message-text="{ message }">
+              <MarkdownStreamMessage :message="message as UiMessage" />
+            </template>
+          </EmChatContainer>
         </div>
       </div>
     </template>
@@ -193,6 +404,33 @@ function persistSidebarWidth(width: number) {
   &__mobile-body {
     flex: 1;
     min-height: 0;
+  }
+
+  /* 完全接管 #tabs 插槽：下划线风格 */
+  &__takeover-tabs {
+    display: flex;
+    gap: 8px;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--color-border);
+    overflow-x: auto;
+  }
+
+  &__takeover-tab {
+    flex-shrink: 0;
+    padding: 6px 4px;
+    border: none;
+    border-bottom: 2px solid transparent;
+    background: transparent;
+    color: var(--color-text-secondary);
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.15s;
+
+    &--active {
+      color: var(--uikit-primary-color, var(--color-primary));
+      border-bottom-color: var(--uikit-primary-color, var(--color-primary));
+      font-weight: 500;
+    }
   }
 }
 </style>

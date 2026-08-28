@@ -1,7 +1,9 @@
 import { computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useLocale, useTheme as useUIKitTheme } from '@easemob/uikit-im'
+import { useLocale, useNotification, useTheme as useUIKitTheme } from '@easemob/uikit-im'
+import type { NotificationHandler } from '@easemob/uikit-im'
 
+import { useDemoSettings } from './useDemoSettings'
 import { useTheme } from './useTheme'
 import { DEMO_CONTAINER_CONFIG, DEMO_INTERACTION_CONFIG } from '@/config/demo'
 import type { AppLocale } from '@/locales'
@@ -34,10 +36,53 @@ export function useUIKitConfig() {
   const { setLocale } = useLocale()
 
   const uikitThemeApi = useUIKitTheme()
+  const { configureNotification, setNotificationHandler } = useNotification()
+  const {
+    notificationEnable,
+    notificationBrowser,
+    notificationInApp,
+    notificationAutoRequest,
+    notificationTriggerMode,
+    notificationSound,
+  } = useDemoSettings()
+
+  /**
+   * 文本语音播报（用于「新消息响铃」开关演示）。
+   * 使用浏览器原生 Web Speech API，收到通知时播报「您有一条新消息」。
+   * 首次播放需在用户手势后触发（点击面板/模拟按钮即为手势）。
+   */
+  function playVoiceNotification() {
+    if (!window.speechSynthesis) return
+    const utterance = new SpeechSynthesisUtterance('您有一条新消息')
+    utterance.lang = 'zh-CN'
+    utterance.rate = 1
+    window.speechSynthesis.speak(utterance)
+  }
+
+  /**
+   * 新消息通知配置同步到 UIKit 通知引擎。
+   * 任一开关变化时批量应用完整配置，避免多次 watch 回调。
+   */
+  watch(
+    [notificationEnable, notificationBrowser, notificationInApp, notificationAutoRequest, notificationTriggerMode],
+    ([enabled, browserEnabled, inAppEnabled, autoRequestPermission, triggerMode]) => {
+      configureNotification({ enabled, browserEnabled, inAppEnabled, autoRequestPermission, triggerMode })
+    },
+    { immediate: true },
+  )
+
+  // 新消息响铃：通过 setNotificationHandler 注册/注销送达回调
+  watch(
+    notificationSound,
+    (enabled) => {
+      setNotificationHandler(enabled ? (playVoiceNotification as NotificationHandler) : null)
+    },
+    { immediate: true },
+  )
 
   // 容器间距对齐：
   // 1. 以 Demo 常量初始化 UIKit 主题 store 的 containerGap。
-  // 2. 运行期特性开关改动 containerGap 时，把 --uikit-container-gap 同步回 --demo-container-gap，
+  // 2. 运行期UIKIT特性开关改动 containerGap 时，把 --uikit-container-gap 同步回 --demo-container-gap，
   //    让 Demo 布局（会话 / 通讯录 / 设置等外层卡片 gap/padding）与 UIKit 内部容器保持一致。
   uikitThemeApi.setContainerGap(DEMO_CONTAINER_CONFIG.gap)
   watch(

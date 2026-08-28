@@ -3,7 +3,15 @@ import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { EmIcon } from '@easemob/uikit-im'
 
+import SettingsAiPanel from '@/components/settings/SettingsAiPanel.vue'
 import SettingsAppearancePanel from '@/components/settings/SettingsAppearancePanel.vue'
+import SettingsChatPanel from '@/components/settings/SettingsChatPanel.vue'
+import SettingsContactsPanel from '@/components/settings/SettingsContactsPanel.vue'
+import SettingsConversationPanel from '@/components/settings/SettingsConversationPanel.vue'
+import SettingsLogPanel from '@/components/settings/SettingsLogPanel.vue'
+import SettingsMorePanel from '@/components/settings/SettingsMorePanel.vue'
+import SettingsNoticePanel from '@/components/settings/SettingsNoticePanel.vue'
+import SettingsProviderPanel from '@/components/settings/SettingsProviderPanel.vue'
 import { useMobileView } from '@/composables/useMobileView'
 import { useSettingsDrawer } from '@/composables/useSettingsDrawer'
 import { DEMO_ICON_SIZE } from '@/config/demo'
@@ -14,11 +22,10 @@ type CategoryKey =
   | 'chat'
   | 'contact'
   | 'ai'
-  | 'data'
   | 'notification'
-  | 'developer'
+  | 'logs'
   | 'provider'
-  | 'sdk'
+  | 'more'
 
 defineOptions({ name: 'SettingsDrawer' })
 
@@ -32,11 +39,10 @@ const categoryKeys: CategoryKey[] = [
   'chat',
   'contact',
   'ai',
-  'data',
   'notification',
-  'developer',
+  'logs',
   'provider',
-  'sdk',
+  'more',
 ]
 
 const categories = computed(() =>
@@ -87,6 +93,14 @@ function selectCategory(key: CategoryKey) {
       </nav>
       <div class="settings-drawer__content">
         <SettingsAppearancePanel v-if="activeCategory === 'appearance'" />
+        <SettingsConversationPanel v-else-if="activeCategory === 'conversation'" />
+        <SettingsChatPanel v-else-if="activeCategory === 'chat'" />
+        <SettingsContactsPanel v-else-if="activeCategory === 'contact'" />
+        <SettingsAiPanel v-else-if="activeCategory === 'ai'" />
+        <SettingsNoticePanel v-else-if="activeCategory === 'notification'" />
+        <SettingsLogPanel v-else-if="activeCategory === 'logs'" />
+        <SettingsProviderPanel v-else-if="activeCategory === 'provider'" />
+        <SettingsMorePanel v-else-if="activeCategory === 'more'" />
         <div v-else class="settings-drawer__placeholder">
           {{ t('features.placeholder', { label: activeCategoryLabel }) }}
         </div>
@@ -109,6 +123,14 @@ function selectCategory(key: CategoryKey) {
       </nav>
       <div class="settings-drawer__content">
         <SettingsAppearancePanel v-if="activeCategory === 'appearance'" />
+        <SettingsConversationPanel v-else-if="activeCategory === 'conversation'" />
+        <SettingsChatPanel v-else-if="activeCategory === 'chat'" />
+        <SettingsContactsPanel v-else-if="activeCategory === 'contact'" />
+        <SettingsAiPanel v-else-if="activeCategory === 'ai'" />
+        <SettingsNoticePanel v-else-if="activeCategory === 'notification'" />
+        <SettingsLogPanel v-else-if="activeCategory === 'logs'" />
+        <SettingsProviderPanel v-else-if="activeCategory === 'provider'" />
+        <SettingsMorePanel v-else-if="activeCategory === 'more'" />
         <div v-else class="settings-drawer__placeholder">
           {{ t('features.placeholder', { label: activeCategoryLabel }) }}
         </div>
@@ -197,7 +219,9 @@ function selectCategory(key: CategoryKey) {
 
   /* PC 左侧分类导航 */
   &__nav {
-    width: 104px;
+    width: auto;
+    min-width: 104px;
+    max-width: 160px;
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
@@ -210,18 +234,20 @@ function selectCategory(key: CategoryKey) {
   &__nav-item {
     display: flex;
     align-items: center;
-    height: 40px;
-    padding: 0 14px;
+    min-height: 40px;
+    padding: 8px 14px;
     border: none;
     border-radius: 8px;
     background: transparent;
     color: var(--color-text-secondary);
     font-size: 14px;
+    line-height: 1.3;
+    text-align: left;
     cursor: pointer;
     transition:
       background-color 0.15s,
       color 0.15s;
-    white-space: nowrap;
+    white-space: normal;
 
     &:hover {
       background-color: var(--color-bg-secondary);

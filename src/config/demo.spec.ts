@@ -7,12 +7,14 @@ import {
   DEMO_CONTAINER_CONFIG,
   DEMO_CONTACT_CONFIG,
   DEMO_CONVERSATION_CONFIG,
+  DEMO_CUSTOM_CONTACTS,
   DEMO_ICON_SIZE,
   DEMO_INTERACTION_CONFIG,
   DEMO_PROVIDER_CONFIG,
   DEMO_RESIZABLE_CONFIG,
   DEMO_SIDEBAR_CONFIG,
   DEMO_SPACING,
+  DEMO_STICKER_PACKS,
   applyDemoContainerConfig,
 } from './demo'
 
@@ -55,11 +57,37 @@ describe('DEMO_CHAT_CONFIG（EmChatContainer 聊天页面配置，对齐 UIKit d
   it('输入框发送按钮默认关闭（showSendButton=false，回车发送）', () => {
     expect(DEMO_CHAT_CONFIG.input.showSendButton).toBe(false)
   })
+
+  it('注入自定义 GIF 表情包到输入框（stickerPacks）', () => {
+    expect(DEMO_CHAT_CONFIG.input.stickerPacks).toBe(DEMO_STICKER_PACKS)
+    expect(DEMO_STICKER_PACKS).toHaveLength(1)
+    expect(DEMO_STICKER_PACKS[0].id).toBe('demo-gifs')
+    expect(DEMO_STICKER_PACKS[0].name).toBe('动图')
+    expect(DEMO_STICKER_PACKS[0].stickers).toHaveLength(12)
+    expect(DEMO_STICKER_PACKS[0].stickers[0].key).toBe('gif-1')
+    expect(DEMO_STICKER_PACKS[0].stickers[0].url).toContain('.gif')
+  })
 })
 
 describe('组件静态属性配置（uikit 组件模板中的静态值）', () => {
-  it('Provider 默认启用在线状态能力', () => {
+  it('Provider 能力开关默认全部开启，自定义数据源默认关闭', () => {
+    expect(DEMO_PROVIDER_CONFIG.enableContact).toBe(true)
+    expect(DEMO_PROVIDER_CONFIG.enableBlocklist).toBe(true)
     expect(DEMO_PROVIDER_CONFIG.enablePresence).toBe(true)
+    expect(DEMO_PROVIDER_CONFIG.enableDraft).toBe(true)
+    expect(DEMO_PROVIDER_CONFIG.enableAtMe).toBe(true)
+    expect(DEMO_PROVIDER_CONFIG.enableTyping).toBe(true)
+    expect(DEMO_PROVIDER_CONFIG.enableFetchContacts).toBe(false)
+    expect(DEMO_PROVIDER_CONFIG.enableGroup).toBe(true)
+    expect(DEMO_PROVIDER_CONFIG.enableUserInfo).toBe(true)
+    expect(DEMO_PROVIDER_CONFIG.enableUserInfoSubscription).toBe(true)
+    expect(DEMO_PROVIDER_CONFIG.filterBlockedContacts).toBe(true)
+    expect(DEMO_PROVIDER_CONFIG.enableToast).toBe(true)
+    expect(DEMO_PROVIDER_CONFIG.contactFetchMode).toBe('page')
+  })
+
+  it('自定义数据源示例联系人返回 Alice / Bob', () => {
+    expect(DEMO_CUSTOM_CONTACTS.map((c) => c.name)).toEqual(['Alice', 'Bob'])
   })
 
   it('EmResizable 为水平拖拽、手柄宽度 10px', () => {
