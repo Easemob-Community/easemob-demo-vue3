@@ -382,7 +382,7 @@ const inputDemoValue = ref('')
 /* ===== 一键重置 ===== */
 function resetAll() {
   setThemeMode('auto')
-  applyHsl({ h: 203, s: 100, l: 50 })
+  applyHsl({ h: 203, s: 100, l: 60 })
   setHoverStyle('default')
   setBubbleShape('ground')
   setContainerGap(8)

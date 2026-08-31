@@ -57,7 +57,7 @@ pnpm format      # Prettier 格式化 src 下的 ts/vue/css/scss
     ├── store/              # Pinia 实例（index.ts）与模块（modules/）
     ├── locales/            # vue-i18n 语言包与实例（index.ts / zh-CN.ts / en-US.ts）
     ├── layout/             # 主布局（index.vue，左侧导航 + router-view）
-    ├── views/              # 页面：login / chat / contacts / settings（含 components/ 子面板）/ error(404)
+    ├── views/              # 页面：login / chat / contacts（含 components/ 自研联系人、群组卡片）/ settings（含 components/ 子面板）/ error(404)
     ├── components/         # 公共组件（含 icons/ 自定义 SVG 图标组件）
     ├── composables/        # 组合式函数（空，含 .gitkeep）
     ├── utils/              # 工具函数（空，含 .gitkeep）

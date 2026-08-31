@@ -247,6 +247,13 @@
     -webkit-text-fill-color: transparent;
   }
 
+  /* 中文标题 SVG 图片（高度对齐原 40px 字号视觉尺寸） */
+  &__title-img {
+    display: block;
+    height: 44px;
+    width: auto;
+  }
+
   &__tagline {
     margin-top: 6px;
     font-size: 12px;

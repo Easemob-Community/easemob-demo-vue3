@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import { useClient } from '@easemob/uikit-im'
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/store/modules/user'
-import { getDevConfig, setDevConfig } from '@/config/dev'
+import { getDevConfig, getEffectiveAppKey, setDevConfig } from '@/config/dev'
 import { useFeaturePromo } from '@/composables/useFeaturePromo'
 import { useSmsCode } from '@/composables/useSmsCode'
 import { captchaConfig } from '@/config/captcha'
-import LoginCaptcha from '../LoginCaptcha/index.vue'
+import { initAliyunCaptcha, resetAliyunCaptcha } from '@/api/sms'
+import { loginByPhoneApi, mapPhoneLoginError } from '@/api/user'
+// import LoginCaptcha from '../LoginCaptcha/index.vue'
 
 interface Props {
   /** 开发者模式：展示 userId + token 登录，用于 dev 环境直接连接 UIKit */
@@ -24,11 +26,21 @@ defineOptions({ name: 'LoginForm' })
 const { t } = useI18n()
 const router = useRouter()
 const userStore = useUserStore()
-const { login } = useClient()
+const { init, login } = useClient()
+
+/** 确保 IM SDK 已初始化 */
+function initSDK() {
+  const appKey = getEffectiveAppKey()
+  if (!appKey) {
+    throw new Error('AppKey 未配置，无法初始化 IM SDK')
+  }
+  // UIKit init 配置类型未暴露 appKey，按实际运行时传参断言
+  init({ appKey } as Parameters<typeof init>[0])
+}
 
 const phone = ref('')
 const smsCode = ref('')
-const captchaInput = ref('')
+// const captchaInput = ref('')
 const agreed = ref(false)
 const focused = ref<string | null>(null)
 const loginLoading = ref(false)
@@ -38,7 +50,10 @@ const loginError = ref('')
 const devUserId = ref('')
 const devToken = ref('')
 
-const captchaRef = ref<InstanceType<typeof LoginCaptcha> | null>(null)
+// const captchaRef = ref<InstanceType<typeof LoginCaptcha> | null>(null)
+
+/** 阿里云验证码清理函数 */
+let destroyAliyunCaptcha: (() => void) | undefined
 
 // 短信验证码逻辑
 const {
@@ -52,6 +67,21 @@ onMounted(() => {
   const config = getDevConfig()
   devUserId.value = config.devUserId
   devToken.value = config.devToken
+
+  // 生产环境且启用阿里云验证码时，初始化滑块验证
+  destroyAliyunCaptcha = initAliyunCaptcha({
+    onVerify: async (captchaVerifyParam) => {
+      const ok = await sendSms(phone.value, undefined, captchaVerifyParam)
+      if (!ok && smsError.value) {
+        loginError.value = smsError.value
+        resetAliyunCaptcha()
+      }
+    },
+  })
+})
+
+onUnmounted(() => {
+  destroyAliyunCaptcha?.()
 })
 
 // 切换开发者模式时清空错误与 loading
@@ -82,9 +112,9 @@ function onSmsInput(event: Event) {
   smsCode.value = (event.target as HTMLInputElement).value.replace(/\D/g, '').slice(0, 6)
 }
 
-function onCaptchaInput(event: Event) {
-  captchaInput.value = (event.target as HTMLInputElement).value.toUpperCase().slice(0, 5)
-}
+// function onCaptchaInput(event: Event) {
+//   captchaInput.value = (event.target as HTMLInputElement).value.toUpperCase().slice(0, 5)
+// }
 
 async function handleGetSms() {
   if (smsCountdown.value > 0 || !phone.value || smsLoading.value) return
@@ -108,9 +138,9 @@ async function handleGetSms() {
   }
 }
 
-function handleCaptchaRefresh() {
-  captchaInput.value = ''
-}
+// function handleCaptchaRefresh() {
+//   captchaInput.value = ''
+// }
 
 async function handleLogin() {
   loginError.value = ''
@@ -124,6 +154,7 @@ async function handleLogin() {
     try {
       const trimmedUserId = devUserId.value.trim()
       const trimmedToken = devToken.value.trim()
+      initSDK()
       await login({ user: trimmedUserId, accessToken: trimmedToken })
       userStore.setToken(trimmedToken)
       userStore.setUserId(trimmedUserId)
@@ -148,15 +179,37 @@ async function handleLogin() {
     loginError.value = t('login.errorAgreeTerms')
     return
   }
-  if (captchaInput.value.toUpperCase() !== captchaRef.value?.text) {
-    loginError.value = t('login.errorCaptcha')
-    captchaRef.value?.refresh()
-    return
-  }
+
   loginLoading.value = true
-  setTimeout(() => {
+  try {
+    const { chatUserName: userId, token } = await loginByPhoneApi({
+      phoneNumber: phone.value,
+      smsCode: smsCode.value,
+    })
+
+    // 使用 Chat Token 登录 IM SDK
+    initSDK()
+    await login({ user: userId, accessToken: token })
+
+    userStore.setToken(token)
+    userStore.setUserId(userId)
+    userStore.setChatToken(token)
+    userStore.setAccessToken(token)
+    userStore.setPhoneNumber(phone.value)
+    userStore.setSmsCode(smsCode.value)
+    userStore.setLoginMode('phone')
+    userStore.persistToStorage()
+
+    // 每次登录重置特性诱导展示（红点 + 广告弹层）
+    useFeaturePromo().resetOnLogin()
+
+    await router.push('/chat')
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : ''
+    loginError.value = msg ? mapPhoneLoginError(msg, phone.value) : t('login.errorLoginFailed')
+  } finally {
     loginLoading.value = false
-  }, 1500)
+  }
 }
 </script>
 
@@ -226,6 +279,7 @@ async function handleLogin() {
           />
         </div>
         <button
+          id="captcha-button"
           type="button"
           class="login-page__sms-btn"
           :disabled="smsCountdown > 0 || !phone || smsLoading"
@@ -235,8 +289,11 @@ async function handleLogin() {
         </button>
       </div>
 
-      <!-- 图形验证码 -->
-      <div class="login-page__captcha-row">
+      <!-- 阿里云验证码弹出容器（popup 模式需要常驻 DOM，失败/关闭时隐藏即可） -->
+      <div id="captcha-element" class="login-page__captcha-element" />
+
+      <!-- 图形验证码：生产环境使用阿里云滑块验证，本地图片验证码暂时注释 -->
+      <!-- <div class="login-page__captcha-row">
         <div
           class="login-page__input"
           :class="{ 'login-page__input--focused': focused === 'captcha' }"
@@ -254,7 +311,7 @@ async function handleLogin() {
         </div>
         <LoginCaptcha ref="captchaRef" @refresh="handleCaptchaRefresh" />
       </div>
-      <p class="login-page__captcha-hint">{{ $t('login.captchaHint') }}</p>
+      <p class="login-page__captcha-hint">{{ $t('login.captchaHint') }}</p> -->
     </template>
 
     <!-- 错误提示 -->

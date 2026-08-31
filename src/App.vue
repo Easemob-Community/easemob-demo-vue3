@@ -1,16 +1,28 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { EmUIKitProvider } from '@easemob/uikit-im'
 import type { UIKitDataSource } from '@easemob/uikit-im'
 
+import AppInitializer from '@/components/AppInitializer.vue'
 import { DEMO_CUSTOM_CONTACTS } from '@/config/demo'
 import { getEffectiveAppKey } from '@/config/dev'
 import { useDemoSettings } from '@/composables/useDemoSettings'
 import { useUIKitConfig } from '@/composables/useUIKitConfig'
+import { useUserStore } from '@/store/modules/user'
 
 // UIKit 接入：appKey 优先取开发者本地配置，未配置时回退到环境变量；
 // 均无配置时 Provider 不自动初始化 SDK，待登录逻辑通过 useClient().init(config) 显式初始化
 const appKey = getEffectiveAppKey()
+
+const userStore = useUserStore()
+const router = useRouter()
+
+/** Token 过期：清理登录态并返回登录页 */
+function handleTokenExpired() {
+  userStore.reset()
+  router.replace('/login')
+}
 
 // UIKit 与 Demo 本体联动：语言（en-US → en）与主题（light/dark）
 const { uikitLocale, uikitTheme } = useUIKitConfig()
@@ -62,7 +74,8 @@ const providerDataSource = computed<UIKitDataSource | undefined>(() =>
 <template>
   <EmUIKitProvider
     :app-key="appKey"
-    :auto-init="!!appKey"
+    :auto-init="false"
+    :on-token-expired="handleTokenExpired"
     :locale="uikitLocale"
     :theme="uikitTheme"
     :enable-contact="providerEnableContact"
@@ -81,6 +94,8 @@ const providerDataSource = computed<UIKitDataSource | undefined>(() =>
     :notice-config="noticeConfig"
     :logger="loggerConfig"
   >
-    <router-view />
+    <AppInitializer :app-key="appKey">
+      <router-view />
+    </AppInitializer>
   </EmUIKitProvider>
 </template>

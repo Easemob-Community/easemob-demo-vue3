@@ -9,6 +9,8 @@ interface UserState {
   nickname: string
   /** 登录手机号，注销账户时使用 */
   phoneNumber: string
+  /** 短信验证码登录时使用的验证码，短期凭证随登录态一起持久化 */
+  smsCode: string
   /** IM 登录返回的 chatToken，注销账户鉴权使用 */
   chatToken: string
   /** SDK 登录后的 accessToken，用于头像上传等 REST 接口鉴权 */
@@ -39,6 +41,7 @@ export const useUserStore = defineStore('user', {
       userId: persisted.userId ?? '',
       nickname: persisted.nickname ?? '',
       phoneNumber: persisted.phoneNumber ?? '',
+      smsCode: persisted.smsCode ?? '',
       chatToken: persisted.chatToken ?? '',
       accessToken: persisted.accessToken ?? '',
       loginMode: (persisted.loginMode as UserState['loginMode']) ?? '',
@@ -57,6 +60,9 @@ export const useUserStore = defineStore('user', {
     setPhoneNumber(phoneNumber: string) {
       this.phoneNumber = phoneNumber
     },
+    setSmsCode(smsCode: string) {
+      this.smsCode = smsCode
+    },
     setChatToken(token: string) {
       this.chatToken = token
     },
@@ -74,6 +80,7 @@ export const useUserStore = defineStore('user', {
         userId: this.userId,
         nickname: this.nickname,
         phoneNumber: this.phoneNumber,
+        smsCode: this.smsCode,
         chatToken: this.chatToken,
         accessToken: this.accessToken,
         loginMode: this.loginMode,
@@ -87,6 +94,7 @@ export const useUserStore = defineStore('user', {
       this.userId = persisted.userId ?? ''
       this.nickname = persisted.nickname ?? ''
       this.phoneNumber = persisted.phoneNumber ?? ''
+      this.smsCode = persisted.smsCode ?? ''
       this.chatToken = persisted.chatToken ?? ''
       this.accessToken = persisted.accessToken ?? ''
       this.loginMode = (persisted.loginMode as UserState['loginMode']) ?? ''

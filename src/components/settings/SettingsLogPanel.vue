@@ -157,7 +157,7 @@ async function onClearLogs() {
   &__section {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 18px;
   }
 
   &__row,
@@ -176,13 +176,13 @@ async function onClearLogs() {
   }
 
   &__label {
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 500;
     color: var(--color-text);
   }
 
   &__level-label {
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 500;
     color: var(--color-text);
     flex-shrink: 0;
@@ -190,10 +190,11 @@ async function onClearLogs() {
   }
 
   &__desc {
-    margin: -4px 0 0;
+    margin: -10px 0 0;
     font-size: 12px;
     color: var(--color-text-secondary);
     line-height: 1.5;
+    text-align: right;
   }
 
   /* Toggle switch */

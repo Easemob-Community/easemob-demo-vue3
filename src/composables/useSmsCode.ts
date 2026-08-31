@@ -127,7 +127,10 @@ export function useSmsCode(scene: SmsScene) {
           }
           const encrypted = await encryptAES(captchaVerifyParam, captchaConfig.secret)
           const payload: SendLoginSmsPayload = { phoneNumber, captchaVerifyParam: encrypted }
-          await sendLoginSms(payload)
+          const loginSmsRes = await sendLoginSms(payload)
+          if (loginSmsRes.code !== 200) {
+            throw new Error('验证码发送失败')
+          }
         } else {
           // 开发环境：模拟发送，直接启动倒计时
           // TODO: 开发环境可接入 mock 接口或保持模拟行为
@@ -152,7 +155,10 @@ export function useSmsCode(scene: SmsScene) {
           imageId: imageId.value,
           imageCode: imageCode ?? '',
         }
-        await sendRegisterSms(payload)
+        const registerSmsRes = await sendRegisterSms(payload)
+        if (registerSmsRes.code !== 200) {
+          throw new Error('验证码发送失败')
+        }
       }
 
       startCountdown()

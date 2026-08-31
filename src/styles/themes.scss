@@ -15,7 +15,8 @@
 }
 
 html.dark {
-  --color-primary: #3b82f6;
+  // 对齐 UIKit 深色主色 hsl(203, 100%, 60%)，保持初始色相 203
+  --color-primary: #33b1ff;
   --color-text: #e5e7eb;
   --color-text-secondary: #9ca3af;
   --color-bg: #141414;
@@ -30,7 +31,8 @@ html.dark {
 // UIKit 主题变量覆写（仅明亮模式）：会话 / 联系人 / 设置 Cell 选中态背景 #EBF7FF。
 // 主色相关变量交由 UIKit 2.6.0+ 主题 store 管理（通过 useTheme setPrimaryColor），
 // 不再以 !important 覆写，避免与「UIKIT特性开关-外观」取色器冲突。
-:root,
+// 注意：不能并列 :root——它与 UIKit 的 [data-uikit-theme='dark'] 特异性相同且本文件加载在后，
+// 会把深色模式的选中态也覆盖成浅色 #EBF7FF（白字压亮底看不清）。
 [data-uikit-theme='light'] {
   --uikit-bg-active: #ebf7ff;
   --uikit-selection-bg: rgba(0, 158, 255, 0.12);

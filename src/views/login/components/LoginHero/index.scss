@@ -79,7 +79,8 @@
 
 .login-page__ring {
   position: absolute;
-  inset: 0;
+  /* 圆心对齐 Hero 人物主体（偏左上），而非 wrap 几何中心；尺寸用 % 随容器缩放，小屏不再溢出 */
+  inset: -6% 4% 6% -4%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -96,8 +97,8 @@
   }
 
   &--outer {
-    width: 520px;
-    height: 520px;
+    width: 90%;
+    aspect-ratio: 1;
     margin: auto;
     animation: spin-slow 28s linear infinite;
 
@@ -108,8 +109,8 @@
   }
 
   &--inner {
-    width: 360px;
-    height: 360px;
+    width: 62%;
+    aspect-ratio: 1;
     margin: auto;
     animation: spin-slow-reverse 20s linear infinite;
 
@@ -121,8 +122,8 @@
   }
 
   &--third {
-    width: 660px;
-    height: 660px;
+    width: 114%;
+    aspect-ratio: 1;
     margin: auto;
     animation: spin-slow 44s linear infinite;
 
@@ -134,8 +135,8 @@
   }
 
   &--fourth {
-    width: 430px;
-    height: 430px;
+    width: 74%;
+    aspect-ratio: 1;
     margin: auto;
     animation: spin-slow-reverse 34s linear infinite;
 
@@ -149,13 +150,14 @@
 
 .login-page__pulse-ring {
   position: absolute;
-  inset: 0;
+  /* 与代码环同一圆心（偏左上），尺寸随容器缩放 */
+  inset: -6% 4% 6% -4%;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: auto;
-  width: 270px;
-  height: 270px;
+  width: 46.5%;
+  aspect-ratio: 1;
   border-radius: 50%;
   border: 1px solid rgba(0, 158, 255, 0.2);
   box-shadow:
@@ -198,6 +200,8 @@
     left: -32px;
     width: 192px;
     border: 1px solid rgba(108, 99, 255, 0.3);
+    /* 设计稿要求压在 Hero 图中的笔记本上方（hero-image 为 z-index 30） */
+    z-index: 40;
   }
 
   &-header {

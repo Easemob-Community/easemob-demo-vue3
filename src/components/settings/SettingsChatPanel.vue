@@ -538,7 +538,7 @@ const MESSAGE_ACTION_KEYS = [
   &__section {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 18px;
   }
 
   &__section-title {
@@ -576,7 +576,7 @@ const MESSAGE_ACTION_KEYS = [
   }
 
   &__label {
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 500;
     color: var(--color-text);
 
@@ -586,10 +586,11 @@ const MESSAGE_ACTION_KEYS = [
   }
 
   &__desc {
-    margin: -4px 0 0;
+    margin: -10px 0 0;
     font-size: 12px;
     color: var(--color-text-secondary);
     line-height: 1.5;
+    text-align: right;
   }
 
   /* Segmented options */

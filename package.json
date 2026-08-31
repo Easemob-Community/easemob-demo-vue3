@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@easemob/uikit-core": "file:./easemob-uikit-core-1.5.2.tgz",
-    "@easemob/uikit-im": "file:./easemob-uikit-im-2.8.2.tgz",
+    "@easemob/uikit-im": "file:./easemob-uikit-im-2.8.6.tgz",
     "@vueuse/core": "^14.4.0",
     "axios": "^1.19.0",
     "dayjs": "^1.11.23",
@@ -54,7 +54,7 @@
   "pnpm": {
     "overrides": {
       "@easemob/uikit-core": "file:./easemob-uikit-core-1.5.2.tgz",
-      "@easemob/uikit-im": "file:./easemob-uikit-im-2.8.2.tgz"
+      "@easemob/uikit-im": "file:./easemob-uikit-im-2.8.6.tgz"
     }
   }
 }

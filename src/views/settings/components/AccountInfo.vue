@@ -367,7 +367,7 @@ async function confirmEdit() {
       <div class="account-info__actions">
         <button
           type="button"
-          class="account-info__btn account-info__btn--danger"
+          class="account-info__btn"
           :disabled="!userStore.phoneNumber || !userStore.chatToken"
           @click="openDeleteAccountModal"
         >
@@ -430,7 +430,6 @@ async function confirmEdit() {
     <EmModal
       v-model:show="isLogoutModalOpen"
       :title="t('settings.account.logoutConfirmTitle')"
-      type="danger"
       :confirm-text="t('settings.account.logout')"
       :close-on-click-overlay="false"
       @confirm="confirmLogout"
@@ -642,16 +641,6 @@ async function confirmEdit() {
     &:disabled {
       cursor: not-allowed;
       opacity: 0.5;
-    }
-
-    &--danger {
-      color: var(--uikit-danger-color, #ee798c);
-      border-color: var(--uikit-danger-color, #ee798c);
-
-      &:hover:not(:disabled) {
-        color: #ffffff;
-        background: var(--uikit-danger-color, #ee798c);
-      }
     }
   }
 

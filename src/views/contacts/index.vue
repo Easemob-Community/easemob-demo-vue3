@@ -1,15 +1,16 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 import {
+  CONVERSATION_TYPE,
   EmAddContactModal,
   EmContactContainer,
-  EmContactDetail,
   EmCreateGroupModal,
-  EmGroupDetail,
   EmIcon,
   EmResizable,
   createUIKitStorageKey,
+  useConversation,
   useUIKit,
 } from '@easemob/uikit-im'
 import type { UiContact, UiGroup } from '@easemob/uikit-core'
@@ -22,6 +23,9 @@ import {
   DEMO_RESIZABLE_CONFIG,
   DEMO_SIDEBAR_CONFIG,
 } from '@/config/demo'
+
+import ContactCard from './components/ContactCard.vue'
+import GroupCard from './components/GroupCard.vue'
 
 defineOptions({ name: 'ContactsPage' })
 
@@ -111,8 +115,66 @@ function onViewChange() {
   detailTitle.value = ''
 }
 
-function onDetailDeleted() {
+/* ===== 联系人/群组卡片「发送消息」：自研卡片（ContactCard/GroupCard）emit send-message，跳转与会话创建由页面接管 ===== */
+
+const router = useRouter()
+const { selectConversation } = useConversation()
+
+/**
+ * selectConversation 只对会话列表中已存在的会话生效（找不到则空操作），
+ * 因此对从未聊过天的对象需先 addConversation 建一条本地会话，再选中并跳转聊天页。
+ */
+function gotoConversation(
+  id: string,
+  type: (typeof CONVERSATION_TYPE)[keyof typeof CONVERSATION_TYPE],
+  name: string,
+  avatar?: string,
+) {
+  if (!stores.conversation.conversationList.find((cvs) => cvs.id === id)) {
+    stores.conversation.addConversation({
+      id,
+      name,
+      avatar,
+      type,
+      unreadCount: 0,
+      lastMessageText: '',
+      isPinned: false,
+      isMuted: false,
+      marks: [],
+    })
+  }
+  selectConversation(id)
+  router.push('/chat')
+}
+
+function onSendMessageToUser(userId: string) {
+  const contact = stores.contact.getContact(userId)
+  gotoConversation(
+    userId,
+    CONVERSATION_TYPE.SINGLECHAT,
+    contact?.remark || contact?.name || userId,
+    contact?.avatar,
+  )
+}
+
+function onSendMessageToGroup(groupId: string) {
+  const group = stores.group.getGroupById(groupId)
+  gotoConversation(
+    groupId,
+    CONVERSATION_TYPE.GROUPCHAT,
+    group?.groupName || groupId,
+    group?.avatar,
+  )
+}
+
+/** 删除联系人/退出/解散群组后，关闭右侧详情回到列表 */
+function onContactDeleted() {
   detailUserId.value = null
+  detailTitle.value = ''
+}
+
+function onGroupClosed() {
+  detailGroupId.value = null
   detailTitle.value = ''
 }
 
@@ -157,8 +219,19 @@ function backToContactList() {
         />
       </EmResizable>
       <div class="contacts-page__main">
-        <EmContactDetail v-if="detailUserId" :user-id="detailUserId" @deleted="onDetailDeleted" />
-        <EmGroupDetail v-else-if="detailGroupId" :group-id="detailGroupId" />
+        <ContactCard
+          v-if="detailUserId"
+          :user-id="detailUserId"
+          @send-message="onSendMessageToUser"
+          @deleted="onContactDeleted"
+        />
+        <GroupCard
+          v-else-if="detailGroupId"
+          :group-id="detailGroupId"
+          @send-message="onSendMessageToGroup"
+          @left="onGroupClosed"
+          @destroyed="onGroupClosed"
+        />
         <div v-else class="contacts-page__empty">
           <EmIcon name="person/list" :size="DEMO_ICON_SIZE.empty" />
           <p>{{ t('contacts.empty') }}</p>
@@ -197,8 +270,19 @@ function backToContactList() {
           <span class="contacts-page__mobile-title">{{ detailTitle }}</span>
         </div>
         <div class="contacts-page__mobile-body">
-          <EmContactDetail v-if="detailUserId" :user-id="detailUserId" @deleted="onDetailDeleted" />
-          <EmGroupDetail v-else-if="detailGroupId" :group-id="detailGroupId" />
+          <ContactCard
+            v-if="detailUserId"
+            :user-id="detailUserId"
+            @send-message="onSendMessageToUser"
+            @deleted="onContactDeleted"
+          />
+          <GroupCard
+            v-else-if="detailGroupId"
+            :group-id="detailGroupId"
+            @send-message="onSendMessageToGroup"
+            @left="onGroupClosed"
+            @destroyed="onGroupClosed"
+          />
         </div>
       </div>
     </template>

@@ -9,7 +9,7 @@ import LoginForm from './components/LoginForm/index.vue'
 
 defineOptions({ name: 'LoginPage' })
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 
 // 开发者模式：统一由 useDevMode 管理（dev 构建默认开启、生产默认关闭），单击退出、连点 7 次进入
 const { devEnabled, remaining, isHinting, registerTap, exitDevMode } = useDevMode()
@@ -107,7 +107,16 @@ function handleDevIconClick() {
               <!-- 标题 -->
               <div class="login-page__titles">
                 <p class="login-page__subtitle">{{ $t('login.subtitle') }}</p>
-                <h2 class="login-page__title">{{ $t('login.mainTitle') }}</h2>
+                <h2 class="login-page__title">
+                  <!-- 中文标题使用设计稿 SVG（仅含中文「环信即时通讯云」），其他语言回退文字 -->
+                  <img
+                    v-if="locale === 'zh-CN'"
+                    class="login-page__title-img"
+                    src="/login-assets/title.svg"
+                    :alt="$t('login.mainTitle')"
+                  />
+                  <template v-else>{{ $t('login.mainTitle') }}</template>
+                </h2>
                 <p class="login-page__tagline">{{ $t('login.tagline') }}</p>
               </div>
 

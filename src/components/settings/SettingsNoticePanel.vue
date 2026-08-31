@@ -367,7 +367,7 @@ function simulateNewMessage() {
   &__section {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 18px;
   }
 
   &__section-title {
@@ -398,14 +398,14 @@ function simulateNewMessage() {
   }
 
   &__label {
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 500;
     color: var(--color-text);
 
     &--sub {
-      font-size: 14px;
+      font-size: 15px;
       font-weight: 400;
-      color: var(--color-text-secondary);
+      color: var(--color-text);
     }
   }
 
@@ -415,16 +415,17 @@ function simulateNewMessage() {
   }
 
   &__desc {
-    margin: -4px 0 0;
+    margin: -10px 0 0;
     font-size: 12px;
     color: var(--color-text-secondary);
     line-height: 1.5;
+    text-align: right;
   }
 
   &__sub-list {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 18px;
     padding-left: 12px;
     border-left: 2px solid var(--color-border);
   }
