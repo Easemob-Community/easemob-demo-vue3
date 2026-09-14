@@ -145,14 +145,14 @@ packages:
     engines: {node: ^22.18.0 || >=24.11.0}
 
   '@easemob/uikit-core@file:easemob-uikit-core-1.5.2.tgz':
-    resolution: {integrity: sha512-OkJBo3AbgaekJzpX70V6vxGYbEkSRQV1yHXugSzXkySb17tcWXnYqpdP2dMC2C3it4jK5Dir55I/Ie7vXnRozw==, tarball: file:easemob-uikit-core-1.5.2.tgz}
+    resolution: {integrity: sha512-VZODHWqwPn8O7ZqTcA72FM1luDhY9ov2r6IuJtfA3X3e6PknqmwRbIVEacITggk7kCiOY+kzhjFDky9FEDWCgA==, tarball: file:easemob-uikit-core-1.5.2.tgz}
     version: 1.5.2
     peerDependencies:
       pinia: ^2.1.0 || ^4.0.0
       vue: ^3.3.0
 
   '@easemob/uikit-im@file:easemob-uikit-im-2.8.6.tgz':
-    resolution: {integrity: sha512-BMZv87gzYO5orNQLHDygLql1kB8yjmw2NextEHFtv8qz9nYY5Hz5oJMXCfcRq04YOogY4UUOb7rSTsnWS6q5JQ==, tarball: file:easemob-uikit-im-2.8.6.tgz}
+    resolution: {integrity: sha512-40FHGWLW78bFMlwWbTP10N+iiCynR6GwETG/J6y8cdf05jWdytbkGWT2awwaFTInNh9KyaIRekVlBp7lHe0bAg==, tarball: file:easemob-uikit-im-2.8.6.tgz}
     version: 2.8.6
     peerDependencies:
       pinia: ^2.1.0 || ^4.0.0
