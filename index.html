@@ -7,6 +7,11 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
     />
+    <!-- 内容安全策略：限制资源加载来源，防止 XSS 和数据注入 -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' https://o.alicdn.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://a1.easemob.com https://appserver.easesdk.com wss:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
+    />
     <!-- H5 状态栏主题色，随深色模式由 useTheme 动态更新 -->
     <meta name="theme-color" content="#ffffff" />
     <!-- 首帧同步主题，避免深色模式（或跟随系统）下首屏闪烁；localStorage key 与 useTheme 保持一致 -->

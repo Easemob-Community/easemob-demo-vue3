@@ -18,6 +18,8 @@ describe('user store', () => {
     expect(store.chatToken).toBe('')
     expect(store.accessToken).toBe('')
     expect(store.loginMode).toBe('')
+    // smsCode 不应被持久化到存储（安全考虑）
+    expect('smsCode' in store).toBe(false)
   })
 
   it('setToken 写入 token', () => {

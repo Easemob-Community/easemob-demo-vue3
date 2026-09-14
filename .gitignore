@@ -11,6 +11,9 @@ node_modules
 dist
 dist-ssr
 *.local
+# 敏感配置备份文件（防止 .env.production.local.bak 等被提交）
+*.bak
+*.local.bak
 .pnpm-store
 # 本地联调 uikit tgz 包（file: 依赖安装产物，不入库）
 *.tgz

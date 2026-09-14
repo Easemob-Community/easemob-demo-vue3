@@ -41,6 +41,13 @@ const isStreamError = computed(() =>
 /** markdown-it 实例：html 关闭（防 XSS），linkify 开启 URL 识别，breaks 开启换行。 */
 const md = new MarkdownIt({ html: false, linkify: true, breaks: true })
 
+// 过滤危险 URL 协议（javascript:、data:、vbscript: 等），防止钓鱼/脚本注入
+const safeLinkValidator = (url: string) => {
+  const normalized = url.trim().toLowerCase()
+  return !normalized.startsWith('javascript:') && !normalized.startsWith('data:') && !normalized.startsWith('vbscript:')
+}
+md.validateLink = safeLinkValidator
+
 /** 渲染后的 markdown HTML */
 const renderedHtml = computed(() => {
   const content = (props.message.body as { content?: string }).content || ''

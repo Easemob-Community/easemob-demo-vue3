@@ -196,7 +196,6 @@ async function handleLogin() {
     userStore.setChatToken(token)
     userStore.setAccessToken(token)
     userStore.setPhoneNumber(phone.value)
-    userStore.setSmsCode(smsCode.value)
     userStore.setLoginMode('phone')
     userStore.persistToStorage()
 
