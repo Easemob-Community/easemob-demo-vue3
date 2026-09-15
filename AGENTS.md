@@ -19,7 +19,7 @@
 - NProgress（路由进度条）
 - Sass（样式预处理）
 - eruda（H5 真机调试面板，仅开发环境且移动端加载）
-- Vitest 4（单元测试，环境 happy-dom，配置见 `vitest.config.ts`，用例与被测模块同目录 `*.spec.ts`）
+- Vitest 4（单元测试，环境 happy-dom，配置见 `vitest.config.ts`，用例统一放 `tests/unit/` 并与 `src/` 镜像，详见 skill `unit-testing`）
 - ESLint 10（flat config）+ Prettier 3
 
 ## 常用命令
@@ -34,20 +34,23 @@ pnpm test:watch  # 运行单元测试（watch 模式）
 pnpm lint        # ESLint 检查
 pnpm lint:fix    # ESLint 自动修复
 pnpm format      # Prettier 格式化 src 下的 ts/vue/css/scss
+pnpm release     # 正式打版：node scripts/release.mjs <major|minor|patch>（见 skill release）
 ```
 
-**注意**：提交代码前以 `pnpm build`（含类型检查）、`pnpm lint`、`pnpm test` 全部通过为准；改动 `src/api`、`src/store` 等被测试覆盖的模块时，同步补充/更新对应 `*.spec.ts`。
+**注意**：提交代码前以 `pnpm build`（含类型检查）、`pnpm lint`、`pnpm test` 全部通过为准；改动 `src/api`、`src/store`、`src/composables`、`src/utils`、`src/config` 等被测试覆盖的模块时，必须同步补充/更新 `tests/unit/` 下对应测试。
 
 ## 目录结构
 
 ```
 ├── index.html
 ├── vite.config.ts          # alias @、dev server proxy、环境变量加载
-├── vitest.config.ts        # Vitest 单元测试配置（happy-dom 环境、@ 别名）
+├── vitest.config.ts        # Vitest 单元测试配置（happy-dom 环境、@ 别名、include 只扫 tests/）
 ├── .env.development        # 开发环境变量（VITE_API_BASE_URL、VITE_PROXY_TARGET、VITE_API_TIMEOUT）
 ├── .env.production         # 生产环境变量（VITE_API_BASE_URL、VITE_API_TIMEOUT）
 ├── eslint.config.js        # ESLint flat config
 ├── .prettierrc             # Prettier 配置
+├── tests/
+│   └── unit/               # 单元测试（Vitest，*.spec.ts），目录结构与 src/ 镜像，导入被测模块用 @/ 别名
 └── src/
     ├── main.ts             # 入口，挂载 pinia / router，引入全局样式
     ├── App.vue
@@ -59,8 +62,8 @@ pnpm format      # Prettier 格式化 src 下的 ts/vue/css/scss
     ├── layout/             # 主布局（index.vue，左侧导航 + router-view）
     ├── views/              # 页面：login / chat / contacts（含 components/ 自研联系人、群组卡片）/ settings（含 components/ 子面板）/ error(404)
     ├── components/         # 公共组件（含 icons/ 自定义 SVG 图标组件）
-    ├── composables/        # 组合式函数（空，含 .gitkeep）
-    ├── utils/              # 工具函数（空，含 .gitkeep）
+    ├── composables/        # 组合式函数（useTheme/useMobileView/useDemoSettings 聚合层等，各域实现见 demo-settings/）
+    ├── utils/              # 工具函数（env.ts、pinyin.ts、color.ts、uikit.ts）
     ├── styles/             # 全局样式：index.scss / reset.scss / themes.scss(主题 CSS 变量) / variables.scss
     └── types/              # 共享业务类型（index.d.ts：ApiResult / PageQuery / PageResult / LoginResult）
 ```
@@ -110,3 +113,5 @@ pnpm format      # Prettier 格式化 src 下的 ts/vue/css/scss
 - `i18n`：多语言使用与扩展流程（新增文案 key、新增语言）
 - `dark-mode`：深色模式约定与使用（CSS 变量、useTheme、uikit 主题联动约定）
 - `uikit-tgz-integration`：uikit tgz 换版流程、vite 预打包缓存坑与防呆（新功能/样式不生效时优先查）
+- `unit-testing`：单元测试目录约定（tests/unit/ 与 src/ 镜像）、Vitest 用法、改代码必须同步更新测试的硬性约束
+- `release`：提交规范（Conventional Commits 中文描述）与打版发布流程（`pnpm release`、CHANGELOG 纪律）
