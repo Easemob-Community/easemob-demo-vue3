@@ -136,6 +136,7 @@ describe('useDemoSettings（会话UIKIT特性开关）', () => {
     expect(settings.chatMessageListShowAvatar.value).toBe(true)
     expect(settings.chatMessageShowSelfAvatar.value).toBe(true)
     expect(settings.chatMessageStatusStyle.value).toBe('classic')
+    expect(settings.chatMessageStatusPosition.value).toBe('inline')
     expect(settings.chatMessageAction.value.enableQuote).toBe(true)
     expect(settings.chatMessageAction.value.enablePin).toBe(true)
   })

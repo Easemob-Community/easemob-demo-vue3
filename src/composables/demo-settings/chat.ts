@@ -42,7 +42,7 @@ function createChatSettings() {
   const chatMessageShowSelfAvatar = ref(true)
   const chatMessageStatusShowText = ref(false)
   const chatMessageStatusDirection = ref<'horizontal' | 'vertical'>('horizontal')
-  const chatMessageStatusPosition = ref<'below' | 'inline'>('below')
+  const chatMessageStatusPosition = ref<'below' | 'inline'>('inline')
   const chatMessageStatusStyle = ref<'classic' | 'capsule'>('classic')
 
   /* ===== 消息操作菜单配置 ===== */
@@ -87,7 +87,7 @@ function createChatSettings() {
     chatMessageShowSelfAvatar.value = true
     chatMessageStatusShowText.value = false
     chatMessageStatusDirection.value = 'horizontal'
-    chatMessageStatusPosition.value = 'below'
+    chatMessageStatusPosition.value = 'inline'
     chatMessageStatusStyle.value = 'classic'
     chatMessageAction.value = {
       enableQuote: true,
