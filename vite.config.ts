@@ -5,6 +5,8 @@ import { fileURLToPath, URL } from 'node:url'
 import vue from '@vitejs/plugin-vue'
 import { defineConfig, loadEnv } from 'vite'
 
+import { resolveWebsdkVersion } from './scripts/resolve-websdk-version.mjs'
+
 /**
  * 防呆：vue3-uikit 以本地 tgz 方式联调（file:./easemob-uikit-*.tgz）。
  * vite 会把依赖预打包缓存到 node_modules/.vite；换新 tgz + pnpm install 后，
@@ -46,6 +48,10 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [vue()],
+    define: {
+      // 注入实际安装的 easemob-websdk 版本号（「关于我们 / 登录页」展示用，见 src/config/version.ts）
+      __SDK_VERSION__: JSON.stringify(resolveWebsdkVersion()),
+    },
     resolve: {
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url)),

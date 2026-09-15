@@ -1,5 +1,8 @@
 /// <reference types="vite/client" />
 
+/** 构建注入：当前实际安装的 easemob-websdk 版本号（vite/vitest config 的 define 注入，见 scripts/resolve-websdk-version.mts） */
+declare const __SDK_VERSION__: string
+
 interface ImportMetaEnv {
   readonly VITE_API_BASE_URL: string
   /** 请求超时时间（毫秒），未配置时默认 15000 */

@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 
+import { DEMO_VERSION, SDK_VERSION, UIKIT_VERSION } from '@/config/version'
+
 defineOptions({ name: 'AboutUs' })
 
 const { t } = useI18n()
 
 const versionInfo = [
-  { label: t('settings.about.sdkVersion'), value: '5.1.1' },
-  { label: t('settings.about.uikitVersion'), value: 'VUE 1.0.0' },
-  { label: t('settings.about.demoVersion'), value: '2.0.0' },
+  { label: t('settings.about.sdkVersion'), value: SDK_VERSION },
+  { label: t('settings.about.uikitVersion'), value: UIKIT_VERSION },
+  { label: t('settings.about.demoVersion'), value: DEMO_VERSION },
 ]
 
 const contactList = [
