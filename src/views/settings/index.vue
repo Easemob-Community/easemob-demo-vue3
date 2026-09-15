@@ -199,13 +199,13 @@ const { sidebarWidth, persistSidebarWidth } = useSidebarWidth(
     height: 100%;
   }
 
+  /* 与 UIKit 会话列表头部对齐（conversation-list__header）：48px + 12px/16px 内边距、无底线 */
   &__header {
     flex-shrink: 0;
     display: flex;
     align-items: center;
-    height: 56px;
-    padding: 0 16px;
-    border-bottom: 1px solid var(--color-border);
+    min-height: 48px;
+    padding: 12px 16px;
   }
 
   &__title {
@@ -268,7 +268,6 @@ const { sidebarWidth, persistSidebarWidth } = useSidebarWidth(
     justify-content: center;
     height: 48px;
     padding: 0 12px;
-    border-bottom: 1px solid var(--color-border);
     background: var(--color-bg);
   }
 
@@ -300,7 +299,6 @@ const { sidebarWidth, persistSidebarWidth } = useSidebarWidth(
     gap: 12px;
     height: 48px;
     padding: 0 12px;
-    border-bottom: 1px solid var(--color-border);
     background: var(--color-bg);
   }
 

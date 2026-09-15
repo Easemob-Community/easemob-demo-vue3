@@ -194,13 +194,13 @@ function selectThemeMode(value: ThemeMode) {
   min-height: 0;
   background: var(--color-bg);
 
+  /* 与左侧设置列表头部同高（48px），无底线 */
   &__header {
     flex-shrink: 0;
     display: flex;
     align-items: center;
-    height: 56px;
-    padding: 0 24px;
-    border-bottom: 1px solid var(--color-border);
+    min-height: 48px;
+    padding: 12px 24px;
   }
 
   &__title {
