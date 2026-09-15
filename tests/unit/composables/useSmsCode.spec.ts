@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
 
-import { useSmsCode } from './useSmsCode'
+import { useSmsCode } from '@/composables/useSmsCode'
 
 // 模拟 sms API 模块
 vi.mock('@/api/sms', async (importOriginal) => {

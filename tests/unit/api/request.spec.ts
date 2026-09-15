@@ -5,7 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import router from '@/router'
 import { useUserStore } from '@/store/modules/user'
 
-import request, { http } from './request'
+import request, { http } from '@/api/request'
 
 describe('request 封装', () => {
   let mock: MockAdapter

@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { createDevMode } from './useDevMode'
+import { createDevMode } from '@/composables/useDevMode'
 
 describe('useDevMode 状态机', () => {
   beforeEach(() => {

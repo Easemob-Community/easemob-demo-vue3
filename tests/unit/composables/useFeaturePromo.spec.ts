@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
-import { useFeaturePromo } from './useFeaturePromo'
+import { useFeaturePromo } from '@/composables/useFeaturePromo'
 
 describe('useFeaturePromo', () => {
   beforeEach(() => {

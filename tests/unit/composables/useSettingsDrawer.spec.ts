@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
-import { useSettingsDrawer } from './useSettingsDrawer'
+import { useSettingsDrawer } from '@/composables/useSettingsDrawer'
 
 describe('useSettingsDrawer', () => {
   beforeEach(() => {

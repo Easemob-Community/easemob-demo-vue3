@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { toUIKitLocale } from './useUIKitConfig'
+import { toUIKitLocale } from '@/composables/useUIKitConfig'
 
 describe('toUIKitLocale（Demo 语言 → UIKit 语言）', () => {
   it('Demo zh-CN 映射为 uikit zh-CN', () => {

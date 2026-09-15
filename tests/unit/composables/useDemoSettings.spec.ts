@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { useDemoSettings } from './useDemoSettings'
+import { useDemoSettings } from '@/composables/useDemoSettings'
 
 describe('useDemoSettings（会话UIKIT特性开关）', () => {
   it('首次调用创建单例，状态为默认值', () => {

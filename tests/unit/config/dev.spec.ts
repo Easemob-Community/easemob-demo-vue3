@@ -6,7 +6,7 @@ import {
   getPersistEnabled,
   setDevConfig,
   setPersistEnabled,
-} from './dev'
+} from '@/config/dev'
 
 const CONFIG_KEY = 'easemob-demo-dev-config'
 const PERSIST_KEY = 'easemob-demo-dev-persist'

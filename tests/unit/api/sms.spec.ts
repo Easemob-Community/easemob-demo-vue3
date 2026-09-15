@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { encryptAES, mapLoginSmsError, mapRegisterSmsError, PHONE_REGEX } from './sms'
+import { encryptAES, mapLoginSmsError, mapRegisterSmsError, PHONE_REGEX } from '@/api/sms'
 
 describe('sms 工具函数', () => {
   describe('PHONE_REGEX', () => {

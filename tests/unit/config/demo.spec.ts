@@ -16,7 +16,7 @@ import {
   DEMO_SPACING,
   DEMO_STICKER_PACKS,
   applyDemoContainerConfig,
-} from './demo'
+} from '@/config/demo'
 
 describe('DEMO_CONTAINER_CONFIG（容器配置，对齐 UIKit demo）', () => {
   it('容器间距取间距阶梯窄档（8px），对应 UIKit --uikit-container-gap', () => {
