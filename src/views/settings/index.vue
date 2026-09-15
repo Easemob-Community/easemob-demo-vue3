@@ -85,7 +85,7 @@ const { sidebarWidth, persistSidebarWidth } = useSidebarWidth(
               :key="item.key"
               :title="item.label"
               :active="activeTab === item.key"
-              size="normal"
+              auto-height
               class="settings-page__menu-cell"
               @click="selectTab(item.key)"
             >
@@ -115,7 +115,7 @@ const { sidebarWidth, persistSidebarWidth } = useSidebarWidth(
           :key="item.key"
           :title="item.label"
           :active="activeTab === item.key"
-          size="normal"
+          auto-height
           class="settings-page__menu-cell"
           @click="selectTab(item.key)"
         >
