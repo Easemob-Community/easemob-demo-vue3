@@ -66,21 +66,21 @@ const footerLinks = [
             <span class="about-us__link-value">{{ item.value }}</span>
           </a>
         </div>
-      </div>
-    </div>
 
-    <div class="about-us__footer">
-      <div class="about-us__footer-links">
-        <a
-          v-for="item in footerLinks"
-          :key="item.label"
-          class="about-us__footer-link"
-          :href="item.href"
-        >
-          {{ item.label }}
-        </a>
+        <div class="about-us__footer">
+          <div class="about-us__footer-links">
+            <a
+              v-for="item in footerLinks"
+              :key="item.label"
+              class="about-us__footer-link"
+              :href="item.href"
+            >
+              {{ item.label }}
+            </a>
+          </div>
+          <p class="about-us__copyright">{{ t('settings.about.copyright') }}</p>
+        </div>
       </div>
-      <p class="about-us__copyright">{{ t('settings.about.copyright') }}</p>
     </div>
   </div>
 </template>
@@ -196,9 +196,10 @@ const footerLinks = [
     color: var(--color-primary);
   }
 
+  // 页脚（隐私政策 / 服务条款等）随正文一起滚动，不固定在视口底部
   &__footer {
-    flex-shrink: 0;
-    padding: 40px 24px 24px;
+    margin-top: 40px;
+    padding: 24px 0 8px;
     text-align: center;
     border-top: 1px solid var(--color-border);
   }
