@@ -164,7 +164,7 @@ packages:
         optional: true
 
   '@easemob/uikit-im@file:easemob-uikit-im-3.5.0.tgz':
-    resolution: {integrity: sha512-jgGpZdkoU2drbt8+CPLgOwd27/5UoKCKw2Ci0EgSXAkR1QyFIVF1k6eXLWw9sUg+PvxH9uBvjjObCbgqNXk4bg==, tarball: file:easemob-uikit-im-3.5.0.tgz}
+    resolution: {integrity: sha512-3lr552y969oBRr+I4B9RJt8Sp3sbjgC7w28gmQae4MZoOQp/QnubS35tUSIvoGdgwVCPuOtMFWMPx85xOpWNLg==, tarball: file:easemob-uikit-im-3.5.0.tgz}
     version: 3.5.0
     peerDependencies:
       '@easemob/uikit-sdk-webim4': ^1.2.2
