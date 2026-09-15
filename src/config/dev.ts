@@ -7,7 +7,6 @@ export interface DevConfig {
   appKey: string
   imServer: string
   restServer: string
-  useCustomServer: boolean
   usePrivateServer: boolean
   /** 开发者模式登录凭据 */
   devUserId: string
@@ -28,7 +27,6 @@ function normalizeConfig(parsed: Partial<DevConfig>): DevConfig {
     appKey: parsed.appKey ?? '',
     imServer: parsed.imServer ?? '',
     restServer: parsed.restServer ?? '',
-    useCustomServer: parsed.useCustomServer ?? false,
     usePrivateServer: parsed.usePrivateServer ?? false,
     devUserId: parsed.devUserId ?? '',
     devToken: parsed.devToken ?? '',

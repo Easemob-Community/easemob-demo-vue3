@@ -459,7 +459,7 @@ export default {
     devModeEnabled: '已进入开发者模式',
     devConfig: '开发者配置',
     devPersistLabel: '持久化配置',
-    useCustomServer: '使用自定义服务器',
+    useCustomAppKey: '使用自定义 AppKey',
     usePrivateServer: '使用私有服务器',
     appKeyPlaceholder: 'xxxx#xxxx',
     imServerLabel: 'IM 服务器地址',

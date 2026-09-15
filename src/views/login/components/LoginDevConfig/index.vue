@@ -15,7 +15,6 @@ const { t } = useI18n()
 
 const emit = defineEmits<{ exit: [] }>()
 
-const useCustomServer = ref(false)
 const usePrivateServer = ref(false)
 const persistEnabled = ref(false)
 const devAppKey = ref('')
@@ -31,7 +30,6 @@ onMounted(() => {
   devAppKey.value = config.appKey
   devImServer.value = config.imServer
   devRestServer.value = config.restServer
-  useCustomServer.value = config.useCustomServer
   usePrivateServer.value = config.usePrivateServer
   persistEnabled.value = getPersistEnabled()
 })
@@ -66,7 +64,6 @@ function handleDevSave() {
       appKey,
       imServer,
       restServer,
-      useCustomServer: useCustomServer.value,
       usePrivateServer: usePrivateServer.value,
     }
     setDevConfig(config)
@@ -107,15 +104,7 @@ function handleDevSave() {
     </div>
 
     <div class="login-page__dev-row">
-      <span>{{ $t('login.useCustomServer') }}</span>
-      <button
-        type="button"
-        class="login-page__switch"
-        :class="{ 'login-page__switch--active': useCustomServer }"
-        @click="useCustomServer = !useCustomServer"
-      >
-        <span />
-      </button>
+      <span>{{ $t('login.useCustomAppKey') }}</span>
     </div>
 
     <div class="login-page__dev-field">
@@ -146,7 +135,7 @@ function handleDevSave() {
       </button>
     </div>
 
-    <div class="login-page__dev-field">
+    <div v-if="usePrivateServer" class="login-page__dev-field">
       <label>{{ $t('login.imServerLabel') }}</label>
       <div class="login-page__input" :class="{ 'login-page__input--focused': focused === 'devIm' }">
         <input
@@ -159,7 +148,7 @@ function handleDevSave() {
       </div>
     </div>
 
-    <div class="login-page__dev-field">
+    <div v-if="usePrivateServer" class="login-page__dev-field">
       <label>{{ $t('login.restServerLabel') }}</label>
       <div
         class="login-page__input"

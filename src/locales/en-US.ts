@@ -469,7 +469,7 @@ export default {
     devModeEnabled: 'Developer mode enabled',
     devConfig: 'Developer Config',
     devPersistLabel: 'Persist config',
-    useCustomServer: 'Use custom server',
+    useCustomAppKey: 'Use custom AppKey',
     usePrivateServer: 'Use private server',
     appKeyPlaceholder: 'xxxx#xxxx',
     imServerLabel: 'IM Server',
