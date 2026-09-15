@@ -12,6 +12,35 @@
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-09-15
+
+UIKit 接入后的首轮结构优化：消除复制样板、拆分巨型组件、测试体系独立成目录，并建立提交规范与自动打版流程。
+
+### 新增
+
+- 组合式函数：`useSidebarWidth`（侧边栏宽度持久化）、`usePresenceSubscription`（presence 订阅/退订）、`initUIKit`（`src/utils/uikit.ts`，统一 SDK 初始化入口）
+- 颜色工具 `src/utils/color.ts`（hsl/rgb/hsb/hex 互转纯函数）与取色器组件组 `src/components/settings/color-picker/`（2D 饱和度面板、色相条、明度条、取色器容器）
+- `src/composables/demo-settings/`：useDemoSettings 按域拆分为 chat / conversation / contacts / notice / logger / ai / provider 七个单域单例 composable
+- 账户信息子组件组 `src/views/settings/components/account/`（ProfileDisplay / ProfileEditor / AvatarSection / DangerZone）
+- 单元测试独立目录 `tests/unit/`（与 `src/` 镜像，导入用 `@/` 别名）与项目 skill `unit-testing`（改被测模块必须同步更新测试的硬性约束）
+- 提交规范与打版流程：skill `release` + `scripts/release.mjs`（`pnpm release <major|minor|patch>`：全量检查 → 升版本 → 归档 CHANGELOG → 提交打 tag）
+
+### 变更
+
+- **拆分巨型组件**：SettingsAppearancePanel 1420 → 838 行（颜色工具与取色器外移）、AccountInfo 726 → 85 行（薄编排层 + 四个子组件）
+- **消除复制样板**：三处侧边栏宽度持久化逻辑收敛为 `useSidebarWidth`；ContactCard/AccountInfo 的 presence 订阅样板收敛为 `usePresenceSubscription`；AppInitializer/LoginForm 的 init 断言收敛为 `initUIKit`；SettingsDrawer 的 PC/H5 重复面板链收敛为动态组件
+- **测试迁移**：16 个 spec 从 src/ 迁至 `tests/unit/` 镜像目录，`vitest.config.ts` 只扫 tests/，`tsconfig.app.json` 纳入 tests 保持类型检查
+- 开发者配置移除 `useCustomServer` 开关，私有服务器（imServer/restServer）字段仅在开启 `usePrivateServer` 时显示
+
+### 修复
+
+- 修复 AppInitializer 初始化 IM SDK 未 `await` 的潜在时序问题
+
+### 文档
+
+- AGENTS.md 同步目录结构（tests/unit、composables、utils 实际内容）、Skills 列表新增 `unit-testing` 与 `release`
+
+
 ## [0.2.0] - 2026-08-28
 
 预生产发布阶段：在 0.1.0 脚手架基础上完成账户信息、消息通知、GIF 表情包、UIKIT 特性开关等核心 Demo 能力。
