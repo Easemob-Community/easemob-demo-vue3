@@ -9,7 +9,7 @@ const preferredDark = usePreferredDark()
 
 const isDark = computed(() => (mode.value === 'auto' ? preferredDark.value : mode.value === 'dark'))
 
-// 模块加载即生效：同步 <html class="dark">、color-scheme 与 H5 状态栏主题色
+// 模块加载即生效：同步 <html class="dark">、color-scheme、H5 状态栏主题色与 favicon
 watch(
   isDark,
   (dark) => {
@@ -19,6 +19,9 @@ watch(
     document
       .querySelector('meta[name="theme-color"]')
       ?.setAttribute('content', dark ? '#141414' : '#ffffff')
+    document
+      .querySelector<HTMLLinkElement>('link[rel="icon"]')
+      ?.setAttribute('href', dark ? '/favicon-dark.ico' : '/favicon.ico')
   },
   { immediate: true },
 )

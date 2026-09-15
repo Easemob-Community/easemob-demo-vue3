@@ -6,6 +6,8 @@ import router from './router'
 import pinia from './store'
 
 import UIKit from '@easemob/uikit-im'
+// SDK5 默认适配器注册入口（uikit-im 3.x 双 adapter 架构）：import 即注册，Provider 不传 adapter 时使用
+import '@easemob/uikit-im/websdk5'
 import '@easemob/uikit-im/theme'
 
 import { applyDemoContainerConfig } from './config/demo'

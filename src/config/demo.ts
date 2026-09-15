@@ -58,14 +58,14 @@ export const DEMO_CONTAINER_CONFIG = {
 
 /**
  * 列表项（会话 / 联系人 / 群组 / Cell 等）的 hover 与选中态圆角模式，
- * 对齐 UIKit demo「外观」面板的 Hover 风格设置：
+ * 对齐 UIKit demo 的默认配置（即 UIKit 主题 store 的出厂值，「外观」面板重置后也是该档）：
+ * - 'default'：整行高亮模式，无左右缩进（UIKit demo 默认）
  * - 'rounded'：圆角卡片模式，hover / 激活态带 8px 圆角与左右缩进
  *   （UIKit 通过 --uikit-item-hover-radius / --uikit-item-active-radius 等变量驱动）
- * - 'default'：整行直角高亮模式
  */
 export const DEMO_INTERACTION_CONFIG = {
-  /** hover / 选中态圆角模式：'rounded' 圆角卡片 | 'default' 直角整行 */
-  hoverStyle: 'rounded',
+  /** hover / 选中态圆角模式：'default' 整行高亮（UIKit demo 默认） | 'rounded' 圆角卡片 */
+  hoverStyle: 'default',
 } as const
 
 /** ===== 通讯录容器配置（对齐 UIKit demo 设置抽屉的「搜索控制」） ===== */

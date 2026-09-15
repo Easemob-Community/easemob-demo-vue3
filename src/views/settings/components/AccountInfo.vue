@@ -117,10 +117,7 @@ async function confirmAvatarUpdate(blob: Blob) {
     const { avatarUrl: uploadedUrl } = await uploadAvatar(uid, blob, accessToken)
 
     // 2. 同步到 IM 用户属性（使其他用户可见）
-    const sdkClient = client.value
-    if (sdkClient?.userInfoManager) {
-      await sdkClient.userInfoManager.updateOwnInfoByAttribute('avatarUrl', uploadedUrl)
-    }
+    await updateOwnInfoByAttribute('avatarUrl', uploadedUrl)
 
     // 3. 更新本地用户资料缓存，页面即时刷新
     const existing = userInfoStore.getUserInfo(uid)

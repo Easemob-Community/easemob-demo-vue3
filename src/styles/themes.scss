@@ -36,6 +36,8 @@ html.dark {
 [data-uikit-theme='light'] {
   --uikit-bg-active: #ebf7ff;
   --uikit-selection-bg: rgba(0, 158, 255, 0.12);
+  // 聊天背景保持 UIKit 默认（--uikit-bg-base 纯白），与 UIKit 内置 Demo 一致：
+  // 层次由灰底页面 + 卡片细边框体现；需要灰色聊天背景时可经「外观-聊天背景」设置
 }
 
 // 深色模式保持 UIKit 默认主题色，避免 #EBF7FF 背景过于刺眼。

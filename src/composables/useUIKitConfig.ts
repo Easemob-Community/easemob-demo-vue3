@@ -94,7 +94,7 @@ export function useUIKitConfig() {
     { immediate: true },
   )
 
-  // 交互配置对齐：列表项（会话 / 联系人等）hover 与选中态使用圆角卡片模式，
+  // 交互配置对齐：列表项（会话 / 联系人等）hover 与选中态跟随 UIKit demo 默认配置（整行高亮），
   // 由 UIKit 主题 store 写入 --uikit-item-hover-radius / --uikit-item-active-radius 等变量驱动
   uikitThemeApi.setHoverStyle(DEMO_INTERACTION_CONFIG.hoverStyle)
 

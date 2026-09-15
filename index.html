@@ -2,15 +2,21 @@
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <!-- favicon 默认为浅色模式图标，深色模式下由 useTheme 切换为 favicon-dark.ico -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
     />
-    <!-- 内容安全策略：限制资源加载来源，防止 XSS 和数据注入 -->
+    <!-- 内容安全策略：核心防线（script-src / object-src / default-src）保持收紧，防 XSS 与数据注入。
+         connect-src 对 demo 整体放宽（http:/https:/ws:/wss: 任意主机）：环信 SDK 5.x DNS 服务发现会下发任意 POP 接入点，
+         且部分环境（如内网/测试集群）走 ws:// 明文，逐一加白名单不可维护；生产环境应按实际部署收紧。
+         media-src / img-src 放行 blob:/data:/http:：语音、视频消息播放与缩略图使用 blob URL，测试集群附件地址为 http:// 明文。
+         script-src 的 sha256 对应下方「首帧同步主题」内联脚本，改脚本内容后需重新计算（内容变化则 hash 失效、脚本静默不执行）；
+         frame-ancestors 经 meta 下发会被浏览器忽略，故不下发，生产环境请改用 HTTP 响应头 -->
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self' https://o.alicdn.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://a1.easemob.com https://appserver.easesdk.com wss:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
+      content="default-src 'self'; script-src 'self' 'sha256-srrM7rkwcelunNjhOT0qFH9wpHG9OBGw5rEV3gMVGFY=' https://o.alicdn.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: http: https:; media-src 'self' data: blob: http: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' http: https: ws: wss:; object-src 'none'; base-uri 'self'; form-action 'self'"
     />
     <!-- H5 状态栏主题色，随深色模式由 useTheme 动态更新 -->
     <meta name="theme-color" content="#ffffff" />

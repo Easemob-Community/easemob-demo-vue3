@@ -34,8 +34,8 @@ describe('DEMO_CONTAINER_CONFIG（容器配置，对齐 UIKit demo）', () => {
 })
 
 describe('DEMO_INTERACTION_CONFIG（hover / 选中态圆角模式）', () => {
-  it('使用圆角卡片模式（rounded），而非直角整行模式（default）', () => {
-    expect(DEMO_INTERACTION_CONFIG.hoverStyle).toBe('rounded')
+  it('使用 UIKit demo 默认的整行高亮模式（default），不做个性化', () => {
+    expect(DEMO_INTERACTION_CONFIG.hoverStyle).toBe('default')
   })
 })
 

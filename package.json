@@ -18,8 +18,10 @@
     "format": "prettier --write \"src/**/*.{ts,vue,css,scss}\""
   },
   "dependencies": {
-    "@easemob/uikit-core": "file:./easemob-uikit-core-1.5.2.tgz",
-    "@easemob/uikit-im": "file:./easemob-uikit-im-2.8.6.tgz",
+    "@easemob/uikit-core": "file:./easemob-uikit-core-2.6.0.tgz",
+    "@easemob/uikit-im": "file:./easemob-uikit-im-3.5.0.tgz",
+    "@easemob/uikit-sdk-contract": "file:./easemob-uikit-sdk-contract-1.2.0.tgz",
+    "@easemob/uikit-sdk-websdk5": "file:./easemob-uikit-sdk-websdk5-1.2.2.tgz",
     "@vueuse/core": "^14.4.0",
     "axios": "^1.19.0",
     "dayjs": "^1.11.23",
@@ -53,8 +55,10 @@
   },
   "pnpm": {
     "overrides": {
-      "@easemob/uikit-core": "file:./easemob-uikit-core-1.5.2.tgz",
-      "@easemob/uikit-im": "file:./easemob-uikit-im-2.8.6.tgz"
+      "@easemob/uikit-core": "file:./easemob-uikit-core-2.6.0.tgz",
+      "@easemob/uikit-im": "file:./easemob-uikit-im-3.5.0.tgz",
+      "@easemob/uikit-sdk-contract": "file:./easemob-uikit-sdk-contract-1.2.0.tgz",
+      "@easemob/uikit-sdk-websdk5": "file:./easemob-uikit-sdk-websdk5-1.2.2.tgz"
     }
   }
 }

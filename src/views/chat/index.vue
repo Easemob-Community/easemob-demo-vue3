@@ -150,6 +150,9 @@ function persistSidebarWidth(width: number) {
 /* ===== 聊天UIKIT特性开关配置（由特性抽屉「聊天」面板驱动） ===== */
 const chatConfig = computed(() => ({
   ...DEMO_CHAT_CONFIG,
+  // 抽屉挤出模式（对齐 UIKit demo 默认档）：好友 / 群信息面板作为独立平面区域挤压聊天区，
+  // 与聊天主区之间的间隙透出外层灰底；'overlay' 则为遮挡式浮层
+  drawer: { mode: 'push' as const },
   groupReadReceipt: {
     enabled: groupReadReceiptEnabled.value,
     maxGroupSize: groupReadReceiptMaxSize.value,
@@ -269,7 +272,9 @@ watch(
         </EmConversationContainer>
       </EmResizable>
       <div class="chat-page__main">
-        <EmChatContainer :config="chatConfig">
+        <!-- card 档位（对齐 UIKit demo）：圆角卡片壳（细边框 + 圆角 + 底色）由容器自绘，
+             宿主壳退化为纯定位容器，避免双层卡片 -->
+        <EmChatContainer variant="card" :config="chatConfig">
           <template #message-text="{ message }">
             <MarkdownStreamMessage :message="message as UiMessage" />
           </template>
@@ -354,21 +359,17 @@ watch(
     }
   }
 
+  /* 宿主壳退化为纯定位容器（对齐 UIKit demo demo-layout__main--bare）：
+     card 档位的卡片壳（细边框 + 圆角 + 底色）由 EmChatContainer variant="card" 自绘，
+     此处不再叠边框/圆角/阴影，避免双层卡片；
+     push 抽屉挤出时容器变透明壳（chat-container--drawer-push），此处透出外层灰底 */
   &__main {
     flex: 1;
     min-width: 0;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    border-radius: var(--demo-component-radius, 8px);
-    background: var(--color-bg);
-    transition:
-      box-shadow 0.2s,
-      border-color 0.2s;
-
-    &:hover {
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    }
+    background: transparent;
   }
 
   &__mobile-list,
