@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 import { useClient } from '@easemob/uikit-im'
 
 import { useUserStore } from '@/store/modules/user'
+import { initUIKit } from '@/utils/uikit'
 
 interface Props {
   /** 环信 AppKey，由外层 App.vue 传入 */
@@ -14,7 +15,7 @@ const props = defineProps<Props>()
 
 defineOptions({ name: 'AppInitializer' })
 
-const { init, login } = useClient()
+const { login } = useClient()
 const userStore = useUserStore()
 const router = useRouter()
 
@@ -22,8 +23,7 @@ const router = useRouter()
 async function autoLoginToSDK() {
   if (!userStore.token || !userStore.userId || !props.appKey) return
   try {
-    // UIKit init 配置类型未暴露 appKey，按实际运行时传参断言
-    init({ appKey: props.appKey } as Parameters<typeof init>[0])
+    await initUIKit(props.appKey)
     await login({ user: userStore.userId, accessToken: userStore.token })
   } catch (err) {
     console.error('[AppInitializer] 自动登录 IM SDK 失败', err)

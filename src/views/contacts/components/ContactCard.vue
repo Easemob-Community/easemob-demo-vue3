@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onUnmounted, ref, watch } from 'vue'
+import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   EmAvatar,
@@ -7,10 +7,11 @@ import {
   EmModal,
   useBlocklist,
   useContact,
-  usePresence,
   useToast,
   useUserInfo,
 } from '@easemob/uikit-im'
+
+import { usePresenceSubscription } from '@/composables/usePresenceSubscription'
 
 interface Props {
   userId: string
@@ -27,7 +28,6 @@ defineOptions({ name: 'ContactCard' })
 
 const { t } = useI18n()
 const { success: showSuccess, error: showError } = useToast()
-const { subscribePresence, unsubscribePresence, get: getPresence } = usePresence()
 const { isBlocked, addBlock, removeBlock } = useBlocklist()
 const { deleteContact } = useContact()
 
@@ -36,31 +36,8 @@ const { contact, displayName, avatarUrl, userInfo } = useUserInfo(() => props.us
 
 const signature = computed(() => userInfo.value?.sign || t('contacts.card.defaultSignature'))
 
-/** 联系人在线状态：优先从 UIKit presence 订阅读取，默认 online */
-const presenceStatus = computed(() => getPresence(props.userId)?.value?.status ?? 'online')
-
-// 订阅在线状态；服务端未开通或异常时静默降级
-watch(
-  () => props.userId,
-  async (id) => {
-    if (!id) return
-    try {
-      await subscribePresence([id])
-    } catch {
-      // 静默降级，避免无 presence 能力时影响卡片展示
-    }
-  },
-  { immediate: true },
-)
-
-onUnmounted(() => {
-  const id = props.userId
-  if (id) {
-    unsubscribePresence([id]).catch(() => {
-      // 忽略未连接等异常
-    })
-  }
-})
+/** 联系人在线状态：订阅由 usePresenceSubscription 托管（含静默降级与卸载退订），默认 online */
+const { presenceStatus } = usePresenceSubscription(() => props.userId)
 
 async function copyUserId() {
   try {

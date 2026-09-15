@@ -10,6 +10,7 @@ import { useSmsCode } from '@/composables/useSmsCode'
 import { captchaConfig } from '@/config/captcha'
 import { initAliyunCaptcha, resetAliyunCaptcha } from '@/api/sms'
 import { loginByPhoneApi, mapPhoneLoginError } from '@/api/user'
+import { initUIKit } from '@/utils/uikit'
 // import LoginCaptcha from '../LoginCaptcha/index.vue'
 
 interface Props {
@@ -26,16 +27,11 @@ defineOptions({ name: 'LoginForm' })
 const { t } = useI18n()
 const router = useRouter()
 const userStore = useUserStore()
-const { init, login } = useClient()
+const { login } = useClient()
 
-/** 确保 IM SDK 已初始化 */
-function initSDK() {
-  const appKey = getEffectiveAppKey()
-  if (!appKey) {
-    throw new Error('AppKey 未配置，无法初始化 IM SDK')
-  }
-  // UIKit init 配置类型未暴露 appKey，按实际运行时传参断言
-  init({ appKey } as Parameters<typeof init>[0])
+/** 确保 IM SDK 已初始化（appKey 未配置时抛错） */
+async function initSDK() {
+  await initUIKit(getEffectiveAppKey())
 }
 
 const phone = ref('')
@@ -154,7 +150,7 @@ async function handleLogin() {
     try {
       const trimmedUserId = devUserId.value.trim()
       const trimmedToken = devToken.value.trim()
-      initSDK()
+      await initSDK()
       await login({ user: trimmedUserId, accessToken: trimmedToken })
       userStore.setToken(trimmedToken)
       userStore.setUserId(trimmedUserId)
@@ -188,7 +184,7 @@ async function handleLogin() {
     })
 
     // 使用 Chat Token 登录 IM SDK
-    initSDK()
+    await initSDK()
     await login({ user: userId, accessToken: token })
 
     userStore.setToken(token)
