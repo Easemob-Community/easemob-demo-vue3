@@ -15,7 +15,7 @@ const props = defineProps<Props>()
 
 defineOptions({ name: 'AppInitializer' })
 
-const { login } = useClient()
+const { login, init: initClient } = useClient()
 const userStore = useUserStore()
 const router = useRouter()
 
@@ -23,7 +23,7 @@ const router = useRouter()
 async function autoLoginToSDK() {
   if (!userStore.token || !userStore.userId || !props.appKey) return
   try {
-    await initUIKit(props.appKey)
+    await initUIKit(initClient, props.appKey)
     await login({ user: userStore.userId, accessToken: userStore.token })
   } catch (err) {
     console.error('[AppInitializer] 自动登录 IM SDK 失败', err)

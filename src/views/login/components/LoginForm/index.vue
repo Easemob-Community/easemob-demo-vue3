@@ -27,11 +27,11 @@ defineOptions({ name: 'LoginForm' })
 const { t } = useI18n()
 const router = useRouter()
 const userStore = useUserStore()
-const { login } = useClient()
+const { login, init: initClient } = useClient()
 
 /** 确保 IM SDK 已初始化（appKey 未配置时抛错） */
 async function initSDK() {
-  await initUIKit(getEffectiveAppKey())
+  await initUIKit(initClient, getEffectiveAppKey())
 }
 
 const phone = ref('')
