@@ -90,8 +90,10 @@ const { sidebarWidth, persistSidebarWidth } = useSidebarWidth(
               @click="selectTab(item.key)"
             >
               <template #leading>
-                <EmIcon v-if="typeof item.icon === 'string'" :name="item.icon" :size="20" />
-                <component :is="item.icon" v-else :size="20" />
+                <span class="settings-page__menu-icon">
+                  <EmIcon v-if="typeof item.icon === 'string'" :name="item.icon" :size="22" />
+                  <component :is="item.icon" v-else :size="22" />
+                </span>
               </template>
             </EmCell>
           </div>
@@ -120,8 +122,10 @@ const { sidebarWidth, persistSidebarWidth } = useSidebarWidth(
           @click="selectTab(item.key)"
         >
           <template #leading>
-            <EmIcon v-if="typeof item.icon === 'string'" :name="item.icon" :size="20" />
-            <component :is="item.icon" v-else :size="20" />
+            <span class="settings-page__menu-icon">
+              <EmIcon v-if="typeof item.icon === 'string'" :name="item.icon" :size="22" />
+              <component :is="item.icon" v-else :size="22" />
+            </span>
           </template>
         </EmCell>
 
@@ -214,6 +218,16 @@ const { sidebarWidth, persistSidebarWidth } = useSidebarWidth(
     flex: 1;
     min-height: 0;
     overflow-y: auto;
+  }
+
+  /* 菜单 leading 图标：40px 头像尺寸，与会话 / 联系人列表项的行高（40 + 2×--uikit-cell-padding-y）对齐 */
+  &__menu-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
   }
 
   /* 菜单项选中态：图标与文字高亮为主题色（背景高亮由 EmCell active 态自带） */
