@@ -251,9 +251,6 @@ export const DEMO_SIDEBAR_CONFIG = {
   maxWidth: 480,
 } as const
 
-/** 通讯录页侧边栏默认宽度（px），对齐 UIKit demo 的 EmResizable 可拖拽范围（240~480） */
-export const CONTACTS_SIDEBAR_WIDTH = 320
-
 /**
  * 将容器配置写入 CSS 变量（处理入口）。
  * 应用启动时调用一次，SCSS 侧统一以 var(--demo-container-*) / var(--demo-component-*) 消费，

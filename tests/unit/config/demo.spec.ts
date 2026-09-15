@@ -1,7 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 import {
-  CONTACTS_SIDEBAR_WIDTH,
   DEMO_AVATAR_CONFIG,
   DEMO_CHAT_CONFIG,
   DEMO_CONTAINER_CONFIG,
@@ -111,14 +110,10 @@ describe('组件静态属性配置（uikit 组件模板中的静态值）', () =
 })
 
 describe('DEMO_SIDEBAR_CONFIG（侧边栏宽度，对齐 UIKit demo 的 EmResizable 范围）', () => {
-  it('会话侧边栏默认 400 / 最小 240 / 最大 480', () => {
+  it('会话/通讯录侧边栏共用默认 400 / 最小 240 / 最大 480', () => {
     expect(DEMO_SIDEBAR_CONFIG.defaultWidth).toBe(400)
     expect(DEMO_SIDEBAR_CONFIG.minWidth).toBe(240)
     expect(DEMO_SIDEBAR_CONFIG.maxWidth).toBe(480)
-  })
-
-  it('通讯录侧边栏默认宽度 320', () => {
-    expect(CONTACTS_SIDEBAR_WIDTH).toBe(320)
   })
 })
 

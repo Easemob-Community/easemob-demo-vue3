@@ -6,7 +6,9 @@ import {
   CONVERSATION_TYPE,
   EmAddContactModal,
   EmContactContainer,
+  EmContactDetail,
   EmCreateGroupModal,
+  EmGroupDetail,
   EmIcon,
   EmResizable,
   useConversation,
@@ -15,17 +17,14 @@ import {
 import type { UiContact, UiGroup } from '@easemob/uikit-core'
 
 import { useDemoSettings } from '@/composables/useDemoSettings'
+import { useContactSearch } from '@/composables/useContactSearch'
 import { useMobileView } from '@/composables/useMobileView'
 import { useSidebarWidth } from '@/composables/useSidebarWidth'
 import {
-  CONTACTS_SIDEBAR_WIDTH,
   DEMO_ICON_SIZE,
   DEMO_RESIZABLE_CONFIG,
   DEMO_SIDEBAR_CONFIG,
 } from '@/config/demo'
-
-import ContactCard from './components/ContactCard.vue'
-import GroupCard from './components/GroupCard.vue'
 
 defineOptions({ name: 'ContactsPage' })
 
@@ -45,15 +44,15 @@ const {
   contactShowBlocklistAddButton,
 } = useDemoSettings()
 
-/* ===== 通讯录侧边栏宽度（与会话页一致：EmResizable 拖拽调整 + localStorage 持久化） ===== */
+/* ===== 通讯录侧边栏宽度（与会话页完全共用：同一存储 key + 同一默认宽度，保证两页宽度始终一致） ===== */
 
-/** 最小 / 最大宽度与 UIKit demo 的侧边栏配置一致（默认宽度来自 Demo 配置常量） */
+/** 最小 / 最大宽度与 UIKit demo 的侧边栏配置一致（默认宽度取会话页同一常量） */
 const SIDEBAR_MIN_WIDTH = DEMO_SIDEBAR_CONFIG.minWidth
 const SIDEBAR_MAX_WIDTH = DEMO_SIDEBAR_CONFIG.maxWidth
 
 const { sidebarWidth, persistSidebarWidth } = useSidebarWidth(
-  'layout_contacts_sidebar_width',
-  CONTACTS_SIDEBAR_WIDTH,
+  'layout_sidebar_width',
+  DEMO_SIDEBAR_CONFIG.defaultWidth,
 )
 
 /** 当前选中的联系人/群组详情 ID */
@@ -67,6 +66,10 @@ const detailTitle = ref('')
  */
 const showAddContactModal = ref(false)
 const showCreateGroupModal = ref(false)
+
+/* ===== 添加好友弹窗：注入手机号搜索（App Server 置换 userId）与已是好友前置拦截 ===== */
+
+const { searchContacts, addContactWithCheck } = useContactSearch()
 
 function onContactClick(contact: UiContact) {
   detailUserId.value = contact.userId
@@ -86,7 +89,7 @@ function onViewChange() {
   detailTitle.value = ''
 }
 
-/* ===== 联系人/群组卡片「发送消息」：自研卡片（ContactCard/GroupCard）emit send-message，跳转与会话创建由页面接管 ===== */
+/* ===== 联系人/群组详情「发送消息」：内置卡片（EmContactDetail/EmGroupDetail）emit send-message，跳转与会话创建由页面接管 ===== */
 
 const router = useRouter()
 const { selectConversation } = useConversation()
@@ -190,17 +193,17 @@ function backToContactList() {
         />
       </EmResizable>
       <div class="contacts-page__main">
-        <ContactCard
+        <EmContactDetail
           v-if="detailUserId"
           :user-id="detailUserId"
           @send-message="onSendMessageToUser"
           @deleted="onContactDeleted"
         />
-        <GroupCard
+        <EmGroupDetail
           v-else-if="detailGroupId"
           :group-id="detailGroupId"
           @send-message="onSendMessageToGroup"
-          @left="onGroupClosed"
+          @leaved="onGroupClosed"
           @destroyed="onGroupClosed"
         />
         <div v-else class="contacts-page__empty">
@@ -241,25 +244,29 @@ function backToContactList() {
           <span class="contacts-page__mobile-title">{{ detailTitle }}</span>
         </div>
         <div class="contacts-page__mobile-body">
-          <ContactCard
+          <EmContactDetail
             v-if="detailUserId"
             :user-id="detailUserId"
             @send-message="onSendMessageToUser"
             @deleted="onContactDeleted"
           />
-          <GroupCard
+          <EmGroupDetail
             v-else-if="detailGroupId"
             :group-id="detailGroupId"
             @send-message="onSendMessageToGroup"
-            @left="onGroupClosed"
+            @leaved="onGroupClosed"
             @destroyed="onGroupClosed"
           />
         </div>
       </div>
     </template>
 
-    <!-- 加号弹窗：添加好友 / 创建群组（PC 与 H5 共用一份） -->
-    <EmAddContactModal v-model:show="showAddContactModal" />
+    <!-- 加号弹窗：添加好友（支持手机号搜索，UIKit 内只认 userId）/ 创建群组（PC 与 H5 共用一份） -->
+    <EmAddContactModal
+      v-model:show="showAddContactModal"
+      :search-fn="searchContacts"
+      :add-fn="addContactWithCheck"
+    />
     <EmCreateGroupModal v-model:show="showCreateGroupModal" />
   </div>
 </template>

@@ -98,6 +98,32 @@ export function mapPhoneLoginError(info: string, phoneNumber?: string): string {
   return info || '登录失败，请重试'
 }
 
+/** 手机号查询用户响应 */
+export interface PhoneUserLookupResult {
+  /** 业务码，200 表示查询成功 */
+  code: number
+  /** 手机号对应的环信用户 ID */
+  chatUserName: string
+}
+
+/**
+ * 通过手机号查询环信用户 ID（手机号搜索添加好友时使用）。
+ *
+ * GET {appServer}/inside/app/user/{phoneNumber}?operator={operator}
+ * 鉴权：IM 登录返回的 chatToken（Bearer）。
+ */
+export function getUserByPhoneApi(phoneNumber: string, operator: string, chatToken: string) {
+  if (!appServerUrl) {
+    return Promise.reject(new Error('App Server 地址未配置'))
+  }
+  return axios
+    .get<PhoneUserLookupResult>(`${appServerUrl}/inside/app/user/${phoneNumber}`, {
+      params: { operator },
+      headers: { Authorization: `Bearer ${chatToken}` },
+    })
+    .then((response) => response.data)
+}
+
 /**
  * 注销账户。
  *
