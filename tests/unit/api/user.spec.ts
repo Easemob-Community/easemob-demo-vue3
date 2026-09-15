@@ -1,41 +1,78 @@
-import MockAdapter from 'axios-mock-adapter'
-import axios from 'axios'
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 
-describe('user 接口', () => {
-  let mock: MockAdapter
+const mocks = vi.hoisted(() => ({
+  get: vi.fn(),
+  post: vi.fn(),
+  delete: vi.fn(),
+}))
 
-  beforeEach(() => {
-    vi.stubEnv('VITE_APP_SERVER_URL', 'https://appserver.example.com')
-    mock = new MockAdapter(axios)
-  })
+vi.mock('axios', () => ({
+  default: {
+    create: vi.fn(() => ({
+      get: mocks.get,
+      post: mocks.post,
+      delete: mocks.delete,
+      interceptors: {
+        request: { use: vi.fn() },
+        response: { use: vi.fn() },
+      },
+      defaults: {},
+    })),
+  },
+}))
 
+describe('user 接口模块', () => {
   afterEach(() => {
-    mock.restore()
     vi.unstubAllEnvs()
     vi.resetModules()
+    vi.clearAllMocks()
   })
 
-  it('通过手机号查询用户：携带 operator 与 chatToken，返回 chatUserName', async () => {
-    mock.onGet('https://appserver.example.com/inside/app/user/13800138000').reply((config) => {
-      expect(config.params?.operator).toBe('user-1')
-      expect(config.headers?.Authorization).toBe('Bearer chat-token')
-      return [200, { code: 200, chatUserName: 'abc123' }]
+  describe('getUserByPhoneApi', () => {
+    it('App Server 地址未配置时拒绝调用', async () => {
+      vi.stubEnv('VITE_APP_SERVER_URL', '')
+      const { getUserByPhoneApi } = await import('@/api/user')
+
+      await expect(getUserByPhoneApi('13800138000', 'token', 'me')).rejects.toThrow(
+        'App Server 地址未配置',
+      )
+      expect(mocks.get).not.toHaveBeenCalled()
     })
 
-    const { getUserByPhoneApi } = await import('@/api/user')
-    const result = await getUserByPhoneApi('13800138000', 'user-1', 'chat-token')
+    it('以 Bearer accessToken 请求 GET /inside/app/user/{phone} 并携带 operator', async () => {
+      vi.stubEnv('VITE_APP_SERVER_URL', 'https://appserver.easesdk.com')
+      mocks.get.mockResolvedValue({ chatUserName: 'abc123' })
+      const { getUserByPhoneApi } = await import('@/api/user')
 
-    expect(result).toEqual({ code: 200, chatUserName: 'abc123' })
+      const result = await getUserByPhoneApi('13800138000', 'access-token', 'me')
+
+      expect(mocks.get).toHaveBeenCalledWith(
+        'https://appserver.easesdk.com/inside/app/user/13800138000',
+        { headers: { Authorization: 'Bearer access-token' }, params: { operator: 'me' } },
+      )
+      expect(result).toEqual({ chatUserName: 'abc123' })
+    })
   })
 
-  it('App Server 地址未配置时直接拒绝', async () => {
-    vi.stubEnv('VITE_APP_SERVER_URL', '')
+  describe('mapPhoneQueryError', () => {
+    it('映射用户不存在（需提供手机号才会匹配）', async () => {
+      vi.stubEnv('VITE_APP_SERVER_URL', 'https://appserver.example.com')
+      const { mapPhoneQueryError } = await import('@/api/user')
 
-    const { getUserByPhoneApi } = await import('@/api/user')
+      expect(mapPhoneQueryError('UserId 13800138000 does not exist.', '13800138000')).toBe(
+        '用户不存在',
+      )
+      expect(mapPhoneQueryError('UserId 13800138000 does not exist.')).toBe(
+        'UserId 13800138000 does not exist.',
+      )
+    })
 
-    await expect(getUserByPhoneApi('13800138000', 'user-1', 'chat-token')).rejects.toThrow(
-      'App Server 地址未配置',
-    )
+    it('映射手机号非法，空文案兜底为查询失败', async () => {
+      vi.stubEnv('VITE_APP_SERVER_URL', 'https://appserver.example.com')
+      const { mapPhoneQueryError } = await import('@/api/user')
+
+      expect(mapPhoneQueryError('phone number illegal', '13800138000')).toBe('请输入正确的手机号码')
+      expect(mapPhoneQueryError('')).toBe('查询失败，请重试')
+    })
   })
 })

@@ -11,6 +11,7 @@ import '@easemob/uikit-im/websdk5'
 import '@easemob/uikit-im/theme'
 
 import { applyDemoContainerConfig } from './config/demo'
+import { applyUIKitLocaleOverrides } from './config/uikit-locale'
 import { useDevMode } from './composables/useDevMode'
 import { useTheme } from './composables/useTheme'
 import { isMobile } from './utils/env'
@@ -24,6 +25,9 @@ useTheme()
 
 // 应用 Demo 容器配置（间距 / 圆角 → CSS 变量），与 UIKit demo 的容器间距对齐
 applyDemoContainerConfig()
+
+// 覆盖 UIKit 内置文案（添加联系人弹窗输入框支持手机号或用户 ID）
+applyUIKitLocaleOverrides()
 
 // 注入拼音适配器（请在 app.use(UIKit) 之前调用，实现见 src/utils/pinyin.ts）
 setupPinyinAdapter()

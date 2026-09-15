@@ -4,7 +4,6 @@ import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import {
   CONVERSATION_TYPE,
-  EmAddContactModal,
   EmContactContainer,
   EmContactDetail,
   EmCreateGroupModal,
@@ -16,15 +15,11 @@ import {
 } from '@easemob/uikit-im'
 import type { UiContact, UiGroup } from '@easemob/uikit-core'
 
+import AddContactModal from '@/components/contact/AddContactModal.vue'
 import { useDemoSettings } from '@/composables/useDemoSettings'
-import { useContactSearch } from '@/composables/useContactSearch'
 import { useMobileView } from '@/composables/useMobileView'
 import { useSidebarWidth } from '@/composables/useSidebarWidth'
-import {
-  DEMO_ICON_SIZE,
-  DEMO_RESIZABLE_CONFIG,
-  DEMO_SIDEBAR_CONFIG,
-} from '@/config/demo'
+import { DEMO_ICON_SIZE, DEMO_RESIZABLE_CONFIG, DEMO_SIDEBAR_CONFIG } from '@/config/demo'
 
 defineOptions({ name: 'ContactsPage' })
 
@@ -67,9 +62,7 @@ const detailTitle = ref('')
 const showAddContactModal = ref(false)
 const showCreateGroupModal = ref(false)
 
-/* ===== 添加好友弹窗：注入手机号搜索（App Server 置换 userId）与已是好友前置拦截 ===== */
-
-const { searchContacts, addContactWithCheck } = useContactSearch()
+/* ===== 添加好友弹窗：UIKit 内置 EmAddContactModal（手机号 / 用户 ID 单输入框），由页面接管弹出 ===== */
 
 function onContactClick(contact: UiContact) {
   detailUserId.value = contact.userId
@@ -133,12 +126,7 @@ function onSendMessageToUser(userId: string) {
 
 function onSendMessageToGroup(groupId: string) {
   const group = stores.group.getGroupById(groupId)
-  gotoConversation(
-    groupId,
-    CONVERSATION_TYPE.GROUPCHAT,
-    group?.groupName || groupId,
-    group?.avatar,
-  )
+  gotoConversation(groupId, CONVERSATION_TYPE.GROUPCHAT, group?.groupName || groupId, group?.avatar)
 }
 
 /** 删除联系人/退出/解散群组后，关闭右侧详情回到列表 */
@@ -261,12 +249,8 @@ function backToContactList() {
       </div>
     </template>
 
-    <!-- 加号弹窗：添加好友（支持手机号搜索，UIKit 内只认 userId）/ 创建群组（PC 与 H5 共用一份） -->
-    <EmAddContactModal
-      v-model:show="showAddContactModal"
-      :search-fn="searchContacts"
-      :add-fn="addContactWithCheck"
-    />
+    <!-- 加号弹窗：添加好友（手机号 / 用户 ID）/ 创建群组（PC 与 H5 共用一份） -->
+    <AddContactModal v-model:show="showAddContactModal" />
     <EmCreateGroupModal v-model:show="showCreateGroupModal" />
   </div>
 </template>

@@ -14,6 +14,11 @@ export default {
     saveFailed: '保存失败，请重试',
     saveSuccess: '保存成功',
   },
+  autoLogin: {
+    loading: '正在自动登录…',
+    failed: '自动登录失败',
+    relogin: '重新登录',
+  },
   nav: {
     chat: '会话',
     contacts: '通讯录',
@@ -91,6 +96,11 @@ export default {
     empty: '选择联系人或群组查看详情',
     userNotExist: '此用户不存在',
     alreadyFriend: '此联系人已存在',
+    addSelfError: '不能添加自己为好友',
+    addContact: {
+      addSuccess: '好友申请已发送',
+      errorRequired: '请输入手机号或用户 ID',
+    },
   },
   features: {
     title: 'UIKIT特性开关',
@@ -194,11 +204,13 @@ export default {
       inputMode: '输入框模式',
       inputModeSimple: '简洁',
       inputModeRich: '富文本',
-      inputModeDesc: '简洁：纯文本输入 + 工具栏按钮；富文本：支持加粗、斜体、列表、＠提及等排版能力',
+      inputModeDesc:
+        '简洁：纯文本输入 + 工具栏按钮；富文本：支持加粗、斜体、列表、＠提及等排版能力',
       toolbarPosition: '功能栏位置',
       toolbarPositionBottom: '底部',
       toolbarPositionTop: '顶部',
-      toolbarPositionDesc: '切换输入框功能栏位置：底部（工具栏在输入框下方）、顶部（快捷栏在输入区上方）',
+      toolbarPositionDesc:
+        '切换输入框功能栏位置：底部（工具栏在输入框下方）、顶部（快捷栏在输入区上方）',
       inputFeatures: '输入框功能',
       inputFeatureLabels: {
         emoji: 'Emoji',
@@ -224,7 +236,8 @@ export default {
       groupReadReceiptMaxSizePlaceholder: '200',
       messageList: '消息列表',
       showMessageAvatar: '显示消息头像',
-      showMessageAvatarDesc: '总开关：关闭后消息列表中己方与对方头像均隐藏；己方头像可单独用「显示自己头像」控制',
+      showMessageAvatarDesc:
+        '总开关：关闭后消息列表中己方与对方头像均隐藏；己方头像可单独用「显示自己头像」控制',
       showSelfAvatar: '显示自己头像',
       showSelfAvatarDesc: '关闭后仅隐藏己方消息头像，对方头像照常显示（微信/QQ 式）',
       enableMessageSearch: '启用消息搜索',
@@ -266,8 +279,7 @@ export default {
         contact: '展示联系人子视图搜索框',
         group: '展示群组子视图搜索框',
       },
-      searchControlDesc:
-        '独立控制各视图搜索框显隐。全关则使用 :show-search="false" 统一关闭。',
+      searchControlDesc: '独立控制各视图搜索框显隐。全关则使用 :show-search="false" 统一关闭。',
       entryVisibility: '通讯录入口显隐',
       showEntry: {
         notice: '展示通知入口',
@@ -358,8 +370,7 @@ export default {
           '① 级别是「收集范围」：低于所选级别的日志直接丢弃（不序列化、不落库），调低级别后立即生效；',
         productionSuggestion:
           '② 生产建议 UIKit=info、SDK=warn；排查时临时调 debug 复现，导完改回，避免心跳等高频日志冲刷缓冲；',
-        exportFormat:
-          '③ 导出的 .log 每行格式：[时间] [级别] [来源:命名空间] 消息 参数。',
+        exportFormat: '③ 导出的 .log 每行格式：[时间] [级别] [来源:命名空间] 消息 参数。',
       },
     },
     provider: {
@@ -379,15 +390,13 @@ export default {
       contactFetchMode: '联系人拉取模式 (contactFetchMode)',
       contactFetchModePage: '分页',
       contactFetchModeAll: '全量',
-      contactFetchModeDesc:
-        'page：SDK 未暴露分页游标接口，实际按全量返回处理；all：一次性全量拉取',
+      contactFetchModeDesc: 'page：SDK 未暴露分页游标接口，实际按全量返回处理；all：一次性全量拉取',
       notes: {
         afterEnable: '开启后：',
         defaultAllOn: 'Provider 能力开关默认全部开启。关闭后对应功能不再拉取 / 渲染 / 发送。',
         readOnMount:
           '注意：开关在 Provider 挂载时读取，登录后修改需重新登录（或刷新页面）才能完整生效。',
-        customDataSource:
-          '启用自定义数据源后，拉取好友将走示例接口（返回 Alice / Bob）而非 SDK。',
+        customDataSource: '启用自定义数据源后，拉取好友将走示例接口（返回 Alice / Bob）而非 SDK。',
       },
       resetAll: '一键重置',
     },

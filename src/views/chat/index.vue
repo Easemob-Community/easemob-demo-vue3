@@ -14,13 +14,11 @@ import {
 import type { ConversationTabKey, UiMessage } from '@easemob/uikit-im'
 
 import MarkdownStreamMessage from '@/components/ai/MarkdownStreamMessage.vue'
+import AddContactModal from '@/components/contact/AddContactModal.vue'
 import { useDemoSettings } from '@/composables/useDemoSettings'
 import { useMobileView } from '@/composables/useMobileView'
 import { useSidebarWidth } from '@/composables/useSidebarWidth'
-import {
-  getMockAiReply,
-  simulateStreamMessage,
-} from '@/composables/useStreamDemo'
+import { getMockAiReply, simulateStreamMessage } from '@/composables/useStreamDemo'
 import {
   DEMO_CHAT_CONFIG,
   DEMO_CONVERSATION_CONFIG,
@@ -137,7 +135,9 @@ const chatConfig = computed(() => ({
     style: chatInputStyle.value,
     features: { ...chatInputFeatures.value },
     autoFocus: chatInputAutoFocus.value,
-    ...(chatInputFocusBorderColor.value ? { focusBorderColor: chatInputFocusBorderColor.value } : {}),
+    ...(chatInputFocusBorderColor.value
+      ? { focusBorderColor: chatInputFocusBorderColor.value }
+      : {}),
     ...(chatInputCaretColor.value ? { caretColor: chatInputCaretColor.value } : {}),
     ...(chatInputSelectionColor.value ? { selectionColor: chatInputSelectionColor.value } : {}),
     ...(chatInputMaxLength.value > 0 ? { maxLength: chatInputMaxLength.value } : {}),
@@ -229,6 +229,9 @@ watch(
           :show-status-banner="statusBannerEnabled"
           @update:active-tab="onConversationActiveTabChange"
         >
+          <template #add-contact="{ show, close }">
+            <AddContactModal :show="show" @update:show="close" />
+          </template>
           <template v-if="conversationTabsTakeover" #tabs="{ tabs, activeTab, selectTab }">
             <div class="chat-page__takeover-tabs">
               <button
@@ -266,6 +269,9 @@ watch(
           :show-status-banner="statusBannerEnabled"
           @update:active-tab="onConversationActiveTabChange"
         >
+          <template #add-contact="{ show, close }">
+            <AddContactModal :show="show" @update:show="close" />
+          </template>
           <template v-if="conversationTabsTakeover" #tabs="{ tabs, activeTab, selectTab }">
             <div class="chat-page__takeover-tabs">
               <button

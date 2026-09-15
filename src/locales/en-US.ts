@@ -14,6 +14,11 @@ export default {
     saveFailed: 'Save failed, please try again',
     saveSuccess: 'Saved',
   },
+  autoLogin: {
+    loading: 'Signing in…',
+    failed: 'Auto sign-in failed',
+    relogin: 'Sign in again',
+  },
   nav: {
     chat: 'Chats',
     contacts: 'Contacts',
@@ -92,6 +97,11 @@ export default {
     empty: 'Select a contact or group to view details',
     userNotExist: 'User does not exist',
     alreadyFriend: 'This contact already exists',
+    addSelfError: 'You cannot add yourself as a contact',
+    addContact: {
+      addSuccess: 'Friend request sent',
+      errorRequired: 'Please enter a phone number or user ID',
+    },
   },
   features: {
     title: 'UIKIT Feature Switch',
@@ -123,11 +133,14 @@ export default {
       chatBg: 'Chat Background',
       chatBgPlaceholder: 'Color, gradient or url(...)',
       hoverColor: 'Hover Background',
-      hoverColorDesc: 'Background color when hovering list items / menu items, e.g. contact, conversation and group rows, or action menus',
+      hoverColorDesc:
+        'Background color when hovering list items / menu items, e.g. contact, conversation and group rows, or action menus',
       activeColor: 'Active Background',
-      activeColorDesc: 'Background color of the currently selected item, e.g. the active conversation in the list; falls back to the brand primary color when unset',
+      activeColorDesc:
+        'Background color of the currently selected item, e.g. the active conversation in the list; falls back to the brand primary color when unset',
       iconMutedColor: 'Muted Icon Color',
-      iconMutedColorDesc: 'Color of placeholder / muted icons, e.g. empty states and secondary icons',
+      iconMutedColorDesc:
+        'Color of placeholder / muted icons, e.g. empty states and secondary icons',
       restore: 'Restore',
       componentStyle: 'Component Style',
       hoverStyle: 'Hover Style',
@@ -202,11 +215,13 @@ export default {
       inputMode: 'Input Mode',
       inputModeSimple: 'Simple',
       inputModeRich: 'Rich',
-      inputModeDesc: 'Simple: plain text + toolbar buttons; Rich: supports bold, italic, lists, ＠mention and other formatting',
+      inputModeDesc:
+        'Simple: plain text + toolbar buttons; Rich: supports bold, italic, lists, ＠mention and other formatting',
       toolbarPosition: 'Toolbar Position',
       toolbarPositionBottom: 'Bottom',
       toolbarPositionTop: 'Top',
-      toolbarPositionDesc: 'Switch input toolbar position: bottom (toolbar below input box) or top (shortcut bar above input area)',
+      toolbarPositionDesc:
+        'Switch input toolbar position: bottom (toolbar below input box) or top (shortcut bar above input area)',
       inputFeatures: 'Input Features',
       inputFeatureLabels: {
         emoji: 'Emoji',
@@ -216,7 +231,8 @@ export default {
         video: 'Video',
         mention: '＠Mention',
       },
-      inputFeaturesDesc: 'Controls which capability buttons are shown in the input toolbar; unchecking hides the corresponding button and disables the feature',
+      inputFeaturesDesc:
+        'Controls which capability buttons are shown in the input toolbar; unchecking hides the corresponding button and disables the feature',
       inputExtra: 'Input Extra Config',
       inputAutoFocus: 'Auto Focus',
       focusBorderColor: 'Focus Border Color (default theme)',
@@ -232,9 +248,11 @@ export default {
       groupReadReceiptMaxSizePlaceholder: '200',
       messageList: 'Message List',
       showMessageAvatar: 'Show Message Avatar',
-      showMessageAvatarDesc: 'Master switch: when off, avatars for both self and others are hidden in the message list; the self avatar can be controlled separately via "Show Self Avatar"',
+      showMessageAvatarDesc:
+        'Master switch: when off, avatars for both self and others are hidden in the message list; the self avatar can be controlled separately via "Show Self Avatar"',
       showSelfAvatar: 'Show Self Avatar',
-      showSelfAvatarDesc: 'When off, only your own message avatar is hidden; the other party\'s avatar stays visible (WeChat/QQ style)',
+      showSelfAvatarDesc:
+        "When off, only your own message avatar is hidden; the other party's avatar stays visible (WeChat/QQ style)",
       enableMessageSearch: 'Enable Message Search',
       enableServerMessageSearch: 'Enable Server Message Search',
       serverMessageSearchDesc: 'Paid service, please enable it in Easemob console',
@@ -250,7 +268,8 @@ export default {
       statusDirectionHorizontal: 'Horizontal',
       statusDirectionVertical: 'Vertical',
       messageAction: 'Message Action Menu',
-      messageActionDesc: 'Controls which actions appear in the long-press / right-click message menu; turning off hides the corresponding item',
+      messageActionDesc:
+        'Controls which actions appear in the long-press / right-click message menu; turning off hides the corresponding item',
       messageActionLabels: {
         enableQuote: 'Quote',
         enableCopy: 'Copy',
@@ -313,15 +332,19 @@ export default {
     notice: {
       switches: 'Notification Switches',
       enableNotification: 'Enable Message Notifications',
-      enableNotificationDesc: 'Master switch for message notifications: when off, no push or prompts will be received',
+      enableNotificationDesc:
+        'Master switch for message notifications: when off, no push or prompts will be received',
       browserNotification: 'Browser System Notification',
-      browserNotificationDesc: 'Prefer native browser notifications when the page is in the background',
+      browserNotificationDesc:
+        'Prefer native browser notifications when the page is in the background',
       inAppNotification: 'In-App Top-Right Popup',
       inAppNotificationDesc: 'Fallback to in-app popup when browser notification is unavailable',
       autoRequestPermission: 'Auto Request Browser Permission on First Notify',
-      autoRequestPermissionDesc: 'Automatically show the browser permission prompt on the first notification',
+      autoRequestPermissionDesc:
+        'Automatically show the browser permission prompt on the first notification',
       sound: 'New Message Sound',
-      soundDesc: 'onNotify delivery callback demo: speak "您有一条新消息" when a notification is delivered',
+      soundDesc:
+        'onNotify delivery callback demo: speak "您有一条新消息" when a notification is delivered',
       simulateNewMessage: 'Simulate New Message',
       simulateNewMessageDesc:
         'Click to simulate a new message from Alice; use it to verify browser notification, in-app popup and sound effects',
@@ -343,7 +366,8 @@ export default {
       selectConversationTip: 'Please select a conversation first',
       permissionStatus: 'Browser Notification Permission',
       requestPermission: 'Request Permission',
-      browserPermissionDesc: 'Current browser permission status for this site; you can request permission manually',
+      browserPermissionDesc:
+        'Current browser permission status for this site; you can request permission manually',
       permissionGranted: 'Granted',
       permissionDenied: 'Denied',
       permissionDefault: 'Not Decided',
