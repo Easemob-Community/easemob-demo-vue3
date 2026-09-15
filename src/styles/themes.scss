@@ -15,7 +15,8 @@
 }
 
 html.dark {
-  // 对齐 UIKit 深色主色 hsl(203, 100%, 60%)，保持初始色相 203
+  // Demo 自有深色色板（中性灰，Ant 风格）：UIKit 深色主题反过来覆写对齐到这套变量，
+  // 见文件底部 [data-uikit-theme='dark'] 覆写块——验证 UIKit 样式可调能力。
   --color-primary: #33b1ff;
   --color-text: #e5e7eb;
   --color-text-secondary: #9ca3af;
@@ -40,4 +41,18 @@ html.dark {
   // 层次由灰底页面 + 卡片细边框体现；需要灰色聊天背景时可经「外观-聊天背景」设置
 }
 
-// 深色模式保持 UIKit 默认主题色，避免 #EBF7FF 背景过于刺眼。
+// UIKit 主题变量覆写（深色模式）：反向对齐 Demo 自有深色色板（html.dark 的 --color-*），
+// 让会话列表 / 聊天 / 联系人等 UIKit 容器的深色大背景与 Demo 外壳（导航 / 设置）一致——
+// 与浅色覆写块同理，用 [data-uikit-theme='dark'] 等特异性、靠加载顺序获胜，不用 !important。
+// 聊天背景（--uikit-chat-bg）、输入框背景、会话列表背景、他人气泡底色均引用下方基础变量，自动跟随。
+[data-uikit-theme='dark'] {
+  --uikit-bg-base: var(--color-bg); // 容器主背景 #141414
+  --uikit-bg-secondary: var(--color-bg-secondary); // 次级面 / 他人气泡 #1f1f1f
+  --uikit-bg-tertiary: #101010; // 更下沉的面（对齐 Demo 色阶：比主背景更暗）
+  --uikit-bg-elevated: var(--color-bg-secondary); // 弹层 / 浮起面 #1f1f1f
+  --uikit-bg-hover: #2a2a2a; // 悬浮态：主背景轻度提亮
+  --uikit-border-color: var(--color-border); // 主边框 #303030
+  --uikit-border-light: var(--color-bg-secondary);
+  --uikit-input-border-color: var(--color-border);
+  --uikit-text-primary: var(--color-text); // 主文字 #e5e7eb
+}
