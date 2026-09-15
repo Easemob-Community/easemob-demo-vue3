@@ -83,7 +83,7 @@ export default {
       termsOfService: '服务条款',
       thirdPartyInfo: '第三方信息共享',
       personalInfoCollection: '个人信息收集清单',
-      registerButton: '免费接入',
+      registerButton: '即刻接入',
       copyright: 'Copyright © 2026 环信 京ICP备2023007193号-10A',
     },
   },

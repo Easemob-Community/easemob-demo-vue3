@@ -117,11 +117,13 @@ const footerLinks = [
     color: var(--color-text);
   }
 
+  /* body 作为容器查询上下文：banner 按钮 / 文案字号按参考设计随内容区宽度等比缩放（cqw） */
   &__body {
     flex: 1;
     min-height: 0;
     overflow-y: auto;
     padding: 24px;
+    container-type: inline-size;
   }
 
   &__banner {
@@ -138,47 +140,46 @@ const footerLinks = [
     }
   }
 
-  /* banner 左侧文案区下方的注册按钮（白底胶囊，压住蓝色渐变底图，故用固定色值） */
+  /* banner 左下角「即刻接入」按钮：蓝色渐变胶囊白字，位置/尺寸按参考图等比（左 3.4%、上 73%、高 18%） */
   &__register-btn {
     position: absolute;
-    left: 3.5%;
-    top: 78%;
+    left: 3.4%;
+    top: 73%;
+    height: 18%;
     display: inline-flex;
     align-items: center;
-    padding: 10px 28px;
-    font-size: 15px;
-    font-weight: 500;
-    color: #2563eb;
+    padding: 0 2.5cqw;
+    font-size: clamp(12px, 1.75cqw, 28px);
+    font-weight: 600;
+    color: #ffffff;
     text-decoration: none;
-    background: #ffffff;
+    background: linear-gradient(135deg, #17b3fe 0%, #128fff 100%);
     border-radius: 999px;
-    box-shadow: 0 2px 8px rgba(10, 25, 80, 0.25);
-    transition:
-      transform 0.15s,
-      box-shadow 0.15s;
+    box-shadow: 0 2px 10px rgba(18, 100, 220, 0.35);
+    transition: filter 0.15s;
 
     &:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(10, 25, 80, 0.3);
+      filter: brightness(1.06);
     }
   }
 
+  /* 内容栏：参考设计为居中 960px 宽文本栏，左对齐 */
   &__content {
-    max-width: 560px;
-    margin: 24px auto 0;
+    max-width: 960px;
+    margin: clamp(24px, 4cqw, 64px) auto 0;
     text-align: left;
   }
 
   &__welcome {
     margin: 0;
-    font-size: 14px;
+    font-size: clamp(15px, 2.1cqw, 34px);
     color: var(--color-text-secondary);
   }
 
   &__name {
     margin: 8px 0 0;
-    font-size: 36px;
-    font-weight: 600;
+    font-size: clamp(28px, 3.6cqw, 60px);
+    font-weight: 800;
     color: var(--color-text);
   }
 
@@ -203,7 +204,7 @@ const footerLinks = [
   }
 
   &__links {
-    max-width: 560px;
+    max-width: 960px;
     margin: 40px auto 0;
   }
 
