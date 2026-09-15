@@ -89,7 +89,9 @@ function handlePromoClick() {
           :src="avatarUrl"
           :name="displayName || currentUser || 'Guest'"
           :size="DEMO_AVATAR_CONFIG.size"
+          :presence-size="DEMO_AVATAR_CONFIG.presenceSize"
           :editable="DEMO_AVATAR_CONFIG.editable"
+          selector-placement="right"
         />
       </div>
 

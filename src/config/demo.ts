@@ -215,6 +215,8 @@ export const DEMO_RESIZABLE_CONFIG = {
 export const DEMO_AVATAR_CONFIG = {
   /** 侧边栏头像尺寸（px） */
   size: 40,
+  /** 在线状态指示器直径（px），不传则按头像尺寸自适应（40px 头像约 9px） */
+  presenceSize: 12,
   /** 是否允许点击更换头像 */
   editable: true,
 } as const
