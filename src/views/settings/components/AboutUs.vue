@@ -35,6 +35,15 @@ const footerLinks = [
     <div class="about-us__body">
       <div class="about-us__banner">
         <img src="/settings-banner.png" :alt="t('settings.about.bannerAlt')" />
+        <!-- 手写注册按钮（替代旧图内嵌按钮）：点击跳转环信控制台注册页 -->
+        <a
+          class="about-us__register-btn"
+          href="https://console.easemob.com/user/register"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {{ t('settings.about.registerButton') }}
+        </a>
       </div>
 
       <div class="about-us__content">
@@ -116,6 +125,7 @@ const footerLinks = [
   }
 
   &__banner {
+    position: relative;
     width: 100%;
     overflow: hidden;
     border-radius: 12px;
@@ -125,6 +135,31 @@ const footerLinks = [
       width: 100%;
       height: auto;
       object-fit: cover;
+    }
+  }
+
+  /* banner 左侧文案区下方的注册按钮（白底胶囊，压住蓝色渐变底图，故用固定色值） */
+  &__register-btn {
+    position: absolute;
+    left: 3.5%;
+    top: 78%;
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 28px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #2563eb;
+    text-decoration: none;
+    background: #ffffff;
+    border-radius: 999px;
+    box-shadow: 0 2px 8px rgba(10, 25, 80, 0.25);
+    transition:
+      transform 0.15s,
+      box-shadow 0.15s;
+
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(10, 25, 80, 0.3);
     }
   }
 

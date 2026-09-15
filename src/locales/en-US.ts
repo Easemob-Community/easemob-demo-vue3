@@ -84,6 +84,7 @@ export default {
       termsOfService: 'Terms of Service',
       thirdPartyInfo: 'Third-party Info Sharing',
       personalInfoCollection: 'Personal Info Collection',
+      registerButton: 'Register for Free',
       copyright: 'Copyright © 2026 Easemob',
     },
   },
