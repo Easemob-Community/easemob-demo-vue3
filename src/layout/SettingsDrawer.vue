@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+import type { Component } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { EmIcon } from '@easemob/uikit-im'
 
@@ -45,6 +46,19 @@ const categoryKeys: CategoryKey[] = [
   'more',
 ]
 
+/** 分类 key 与对应面板组件的映射，PC / H5 共用同一份渲染 */
+const panelComponents: Record<CategoryKey, Component> = {
+  appearance: SettingsAppearancePanel,
+  conversation: SettingsConversationPanel,
+  chat: SettingsChatPanel,
+  contact: SettingsContactsPanel,
+  ai: SettingsAiPanel,
+  notification: SettingsNoticePanel,
+  logs: SettingsLogPanel,
+  provider: SettingsProviderPanel,
+  more: SettingsMorePanel,
+}
+
 const categories = computed(() =>
   categoryKeys.map((key) => ({
     key,
@@ -53,10 +67,6 @@ const categories = computed(() =>
 )
 
 const activeCategory = ref<CategoryKey>('appearance')
-
-const activeCategoryLabel = computed(
-  () => categories.value.find((cat) => cat.key === activeCategory.value)?.label ?? '',
-)
 
 function selectCategory(key: CategoryKey) {
   activeCategory.value = key
@@ -77,9 +87,10 @@ function selectCategory(key: CategoryKey) {
       </button>
     </header>
 
-    <!-- PC：左侧分类导航 + 右侧面板 -->
-    <div v-if="!isMobileView" class="settings-drawer__body settings-drawer__body--split">
-      <nav class="settings-drawer__nav">
+    <!-- PC / H5 仅在分类导航形态上有差异：左侧竖向导航 vs 顶部横向 tab -->
+    <div class="settings-drawer__body" :class="{ 'settings-drawer__body--split': !isMobileView }">
+      <!-- PC：左侧分类导航 -->
+      <nav v-if="!isMobileView" class="settings-drawer__nav">
         <button
           v-for="cat in categories"
           :key="cat.key"
@@ -91,25 +102,8 @@ function selectCategory(key: CategoryKey) {
           {{ cat.label }}
         </button>
       </nav>
-      <div class="settings-drawer__content">
-        <SettingsAppearancePanel v-if="activeCategory === 'appearance'" />
-        <SettingsConversationPanel v-else-if="activeCategory === 'conversation'" />
-        <SettingsChatPanel v-else-if="activeCategory === 'chat'" />
-        <SettingsContactsPanel v-else-if="activeCategory === 'contact'" />
-        <SettingsAiPanel v-else-if="activeCategory === 'ai'" />
-        <SettingsNoticePanel v-else-if="activeCategory === 'notification'" />
-        <SettingsLogPanel v-else-if="activeCategory === 'logs'" />
-        <SettingsProviderPanel v-else-if="activeCategory === 'provider'" />
-        <SettingsMorePanel v-else-if="activeCategory === 'more'" />
-        <div v-else class="settings-drawer__placeholder">
-          {{ t('features.placeholder', { label: activeCategoryLabel }) }}
-        </div>
-      </div>
-    </div>
-
-    <!-- H5：顶部横向分类 tab + 内容 -->
-    <div v-else class="settings-drawer__body">
-      <nav class="settings-drawer__tabs">
+      <!-- H5：顶部横向分类 tab -->
+      <nav v-else class="settings-drawer__tabs">
         <button
           v-for="cat in categories"
           :key="cat.key"
@@ -122,18 +116,7 @@ function selectCategory(key: CategoryKey) {
         </button>
       </nav>
       <div class="settings-drawer__content">
-        <SettingsAppearancePanel v-if="activeCategory === 'appearance'" />
-        <SettingsConversationPanel v-else-if="activeCategory === 'conversation'" />
-        <SettingsChatPanel v-else-if="activeCategory === 'chat'" />
-        <SettingsContactsPanel v-else-if="activeCategory === 'contact'" />
-        <SettingsAiPanel v-else-if="activeCategory === 'ai'" />
-        <SettingsNoticePanel v-else-if="activeCategory === 'notification'" />
-        <SettingsLogPanel v-else-if="activeCategory === 'logs'" />
-        <SettingsProviderPanel v-else-if="activeCategory === 'provider'" />
-        <SettingsMorePanel v-else-if="activeCategory === 'more'" />
-        <div v-else class="settings-drawer__placeholder">
-          {{ t('features.placeholder', { label: activeCategoryLabel }) }}
-        </div>
+        <component :is="panelComponents[activeCategory]" :key="activeCategory" />
       </div>
     </div>
   </aside>
@@ -301,15 +284,6 @@ function selectCategory(key: CategoryKey) {
     min-width: 0;
     overflow-y: auto;
     padding: 16px;
-  }
-
-  &__placeholder {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    color: var(--color-text-secondary);
-    font-size: 14px;
   }
 }
 </style>
