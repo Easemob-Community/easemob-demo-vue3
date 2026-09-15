@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   EmChatContainer,
   EmConversationContainer,
   EmIcon,
   EmResizable,
-  createUIKitStorageKey,
   useConversation,
   useConversationTabs,
   useUIKit,
@@ -17,6 +16,7 @@ import type { ConversationTabKey, UiMessage } from '@easemob/uikit-im'
 import MarkdownStreamMessage from '@/components/ai/MarkdownStreamMessage.vue'
 import { useDemoSettings } from '@/composables/useDemoSettings'
 import { useMobileView } from '@/composables/useMobileView'
+import { useSidebarWidth } from '@/composables/useSidebarWidth'
 import {
   getMockAiReply,
   simulateStreamMessage,
@@ -115,37 +115,11 @@ function backToConversationList() {
 
 /* ===== 会话列表宽度（参照 UIKit demo：EmResizable 拖拽调整 + localStorage 持久化） ===== */
 
-/** 默认宽度 / 最小 / 最大（来自 Demo 配置常量，与 UIKit demo 的侧边栏配置一致） */
-
 const { stores } = useUIKit()
-
-/** 存储 key：按 appKey + 用户隔离（与 UIKit 内部配置同一套体系） */
-const sidebarStorageKey = computed(() =>
-  createUIKitStorageKey(stores.client.appKey, stores.client.currentUser, 'layout_sidebar_width'),
+const { sidebarWidth, persistSidebarWidth } = useSidebarWidth(
+  'layout_sidebar_width',
+  DEMO_SIDEBAR_CONFIG.defaultWidth,
 )
-
-const sidebarWidth = ref<number>(DEMO_SIDEBAR_CONFIG.defaultWidth)
-
-/** 读取持久化宽度（含边界钳制）；登录用户变化时重新读取 */
-function readStoredSidebarWidth() {
-  const raw = localStorage.getItem(sidebarStorageKey.value)
-  const parsed = raw ? Number.parseInt(raw, 10) : Number.NaN
-  sidebarWidth.value = Number.isNaN(parsed)
-    ? DEMO_SIDEBAR_CONFIG.defaultWidth
-    : Math.min(Math.max(parsed, DEMO_SIDEBAR_CONFIG.minWidth), DEMO_SIDEBAR_CONFIG.maxWidth)
-}
-
-watch(
-  [() => stores.client.appKey, () => stores.client.currentUser],
-  () => readStoredSidebarWidth(),
-  { immediate: true },
-)
-
-/** 拖拽结束回调：写回状态并持久化到 UIKIT 内部配置存储 */
-function persistSidebarWidth(width: number) {
-  sidebarWidth.value = width
-  localStorage.setItem(sidebarStorageKey.value, String(width))
-}
 
 /* ===== 聊天UIKIT特性开关配置（由特性抽屉「聊天」面板驱动） ===== */
 const chatConfig = computed(() => ({

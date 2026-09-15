@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import {
@@ -9,7 +9,6 @@ import {
   EmCreateGroupModal,
   EmIcon,
   EmResizable,
-  createUIKitStorageKey,
   useConversation,
   useUIKit,
 } from '@easemob/uikit-im'
@@ -17,6 +16,7 @@ import type { UiContact, UiGroup } from '@easemob/uikit-core'
 
 import { useDemoSettings } from '@/composables/useDemoSettings'
 import { useMobileView } from '@/composables/useMobileView'
+import { useSidebarWidth } from '@/composables/useSidebarWidth'
 import {
   CONTACTS_SIDEBAR_WIDTH,
   DEMO_ICON_SIZE,
@@ -31,6 +31,7 @@ defineOptions({ name: 'ContactsPage' })
 
 const { t } = useI18n()
 const isMobileView = useMobileView()
+const { stores } = useUIKit()
 const {
   contactShowHomeSearch,
   contactShowContactSearch,
@@ -46,44 +47,14 @@ const {
 
 /* ===== 通讯录侧边栏宽度（与会话页一致：EmResizable 拖拽调整 + localStorage 持久化） ===== */
 
-/** 默认宽度来自 Demo 配置常量；最小 / 最大宽度与 UIKit demo 的侧边栏配置一致 */
-const SIDEBAR_DEFAULT_WIDTH = CONTACTS_SIDEBAR_WIDTH
+/** 最小 / 最大宽度与 UIKit demo 的侧边栏配置一致（默认宽度来自 Demo 配置常量） */
 const SIDEBAR_MIN_WIDTH = DEMO_SIDEBAR_CONFIG.minWidth
 const SIDEBAR_MAX_WIDTH = DEMO_SIDEBAR_CONFIG.maxWidth
 
-const { stores } = useUIKit()
-
-/** 存储 key：按 appKey + 用户隔离（与会话页共用同一套体系，key 独立互不影响） */
-const sidebarStorageKey = computed(() =>
-  createUIKitStorageKey(
-    stores.client.appKey,
-    stores.client.currentUser,
-    'layout_contacts_sidebar_width',
-  ),
+const { sidebarWidth, persistSidebarWidth } = useSidebarWidth(
+  'layout_contacts_sidebar_width',
+  CONTACTS_SIDEBAR_WIDTH,
 )
-
-const sidebarWidth = ref<number>(SIDEBAR_DEFAULT_WIDTH)
-
-/** 读取持久化宽度（含边界钳制）；登录用户变化时重新读取 */
-function readStoredSidebarWidth() {
-  const raw = localStorage.getItem(sidebarStorageKey.value)
-  const parsed = raw ? Number.parseInt(raw, 10) : Number.NaN
-  sidebarWidth.value = Number.isNaN(parsed)
-    ? SIDEBAR_DEFAULT_WIDTH
-    : Math.min(Math.max(parsed, SIDEBAR_MIN_WIDTH), SIDEBAR_MAX_WIDTH)
-}
-
-watch(
-  [() => stores.client.appKey, () => stores.client.currentUser],
-  () => readStoredSidebarWidth(),
-  { immediate: true },
-)
-
-/** 拖拽结束回调：写回状态并持久化到 UIKIT 内部配置存储 */
-function persistSidebarWidth(width: number) {
-  sidebarWidth.value = width
-  localStorage.setItem(sidebarStorageKey.value, String(width))
-}
 
 /** 当前选中的联系人/群组详情 ID */
 const detailUserId = ref<string | null>(null)

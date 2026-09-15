@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { EmCell, EmIcon, EmResizable, createUIKitStorageKey, useUIKit } from '@easemob/uikit-im'
+import { EmCell, EmIcon, EmResizable } from '@easemob/uikit-im'
 
 import { useMobileView } from '@/composables/useMobileView'
+import { useSidebarWidth } from '@/composables/useSidebarWidth'
 import { DEMO_RESIZABLE_CONFIG, DEMO_SIDEBAR_CONFIG } from '@/config/demo'
 
 import AboutUs from './components/AboutUs.vue'
@@ -16,7 +17,6 @@ defineOptions({ name: 'SettingsPage' })
 
 const { t } = useI18n()
 const isMobileView = useMobileView()
-const { stores } = useUIKit()
 
 const activeTab = ref<SettingsTab>('account')
 const showMobileDetail = ref(false)
@@ -57,34 +57,10 @@ const SETTINGS_SIDEBAR_MIN = DEMO_SIDEBAR_CONFIG.minWidth
 const SETTINGS_SIDEBAR_MAX = DEMO_SIDEBAR_CONFIG.maxWidth
 const SETTINGS_SIDEBAR_DEFAULT = 320
 
-const settingsStorageKey = computed(() =>
-  createUIKitStorageKey(
-    stores.client.appKey,
-    stores.client.currentUser,
-    'layout_settings_sidebar_width',
-  ),
+const { sidebarWidth, persistSidebarWidth } = useSidebarWidth(
+  'layout_settings_sidebar_width',
+  SETTINGS_SIDEBAR_DEFAULT,
 )
-
-const sidebarWidth = ref<number>(SETTINGS_SIDEBAR_DEFAULT)
-
-function readStoredSidebarWidth() {
-  const raw = localStorage.getItem(settingsStorageKey.value)
-  const parsed = raw ? Number.parseInt(raw, 10) : Number.NaN
-  sidebarWidth.value = Number.isNaN(parsed)
-    ? SETTINGS_SIDEBAR_DEFAULT
-    : Math.min(Math.max(parsed, SETTINGS_SIDEBAR_MIN), SETTINGS_SIDEBAR_MAX)
-}
-
-watch(
-  [() => stores.client.appKey, () => stores.client.currentUser],
-  () => readStoredSidebarWidth(),
-  { immediate: true },
-)
-
-function persistSidebarWidth(width: number) {
-  sidebarWidth.value = width
-  localStorage.setItem(settingsStorageKey.value, String(width))
-}
 </script>
 
 <template>
