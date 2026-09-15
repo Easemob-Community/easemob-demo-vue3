@@ -15,6 +15,13 @@
 ### 新增
 
 - 新版本检测提示：轮询部署后 index.html 的 ETag/Last-Modified 指纹，检测到新构建后弹不可关闭弹窗引导刷新（`useCheckUpdates` + `CheckUpdates`，挂载于 AppLayout）
+- 添加联系人支持手机号或用户 ID：自定义添加联系人弹窗（`AddContactModal` + `useContactAdd`，替换 `useContactSearch`），手机号经 App Server 解析为用户 ID，前置拦截「添加自己 / 已是好友」，并覆盖 UIKit 内置弹窗文案（`uikit-locale.ts`）
+- 自动登录加载与失败态：刷新后自动登录期间全屏 loading，失败展示错误详情与「重新登录」入口（AppInitializer）
+
+### 变更
+
+- uikit-im tgz 刷新至 3.5.1
+- 设置各子面板头部对齐 UIKit 会话列表头部（48px、无底线），关于我们注册链接补充 utm 参数
 
 ## [0.3.0] - 2026-09-15
 
