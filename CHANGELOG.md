@@ -12,6 +12,10 @@
 
 ## [Unreleased]
 
+### 新增
+
+- 新版本检测提示：轮询部署后 index.html 的 ETag/Last-Modified 指纹，检测到新构建后弹不可关闭弹窗引导刷新（`useCheckUpdates` + `CheckUpdates`，挂载于 AppLayout）
+
 ## [0.3.0] - 2026-09-15
 
 UIKit 接入后的首轮结构优化：消除复制样板、拆分巨型组件、测试体系独立成目录，并建立提交规范与自动打版流程。

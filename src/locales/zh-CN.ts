@@ -489,4 +489,9 @@ export default {
     title: '页面不存在',
     backHome: '返回首页',
   },
+  update: {
+    title: '新版本可用',
+    description: '检测到新版本已发布，刷新页面以获取最新体验。',
+    refresh: '刷新',
+  },
 }

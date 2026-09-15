@@ -12,6 +12,7 @@ import {
 } from '@easemob/uikit-im'
 
 import featurePromoImg from '@/assets/feature-promo.png'
+import CheckUpdates from '@/components/CheckUpdates.vue'
 import ChatIcon from '@/components/icons/ChatIcon.vue'
 import ContactsIcon from '@/components/icons/ContactsIcon.vue'
 import SettingsIcon from '@/components/icons/SettingsIcon.vue'
@@ -184,6 +185,9 @@ function handlePromoClick() {
         <span class="app-layout__tab-label">{{ tab.label }}</span>
       </router-link>
     </nav>
+
+    <!-- 新版本检测：轮询 index.html 指纹变化时全屏弹窗引导刷新 -->
+    <CheckUpdates />
   </div>
 </template>
 

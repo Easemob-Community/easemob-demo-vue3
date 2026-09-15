@@ -499,4 +499,9 @@ export default {
     title: 'Page Not Found',
     backHome: 'Back to Home',
   },
+  update: {
+    title: 'New Version Available',
+    description: 'A new version has been released. Refresh to get the latest experience.',
+    refresh: 'Refresh',
+  },
 }
