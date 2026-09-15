@@ -68,6 +68,6 @@ writeFileSync(changelogPath, nextChangelog)
 console.log(`\n==> 提交并打 tag v${next}\n`)
 run('git', ['add', 'package.json', 'CHANGELOG.md'])
 run('git', ['commit', '-m', `chore(release): ${next}`])
-run('git', ['tag', `v${next}`])
+run('git', ['tag', '-a', `v${next}`, '-m', `release ${next}`])
 
 console.log(`\n完成。请执行：git push --follow-tags origin $(git branch --show-current)\n`)
