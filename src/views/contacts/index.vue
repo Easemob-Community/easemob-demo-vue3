@@ -16,6 +16,7 @@ import {
 import type { UiContact, UiGroup } from '@easemob/uikit-core'
 
 import AddContactModal from '@/components/contact/AddContactModal.vue'
+import { useDemoCreateGroup } from '@/composables/useDemoCreateGroup'
 import { useDemoSettings } from '@/composables/useDemoSettings'
 import { useMobileView } from '@/composables/useMobileView'
 import { useSidebarWidth } from '@/composables/useSidebarWidth'
@@ -61,6 +62,9 @@ const detailTitle = ref('')
  */
 const showAddContactModal = ref(false)
 const showCreateGroupModal = ref(false)
+
+/** 创建群组接管：群名改为「群组 + 创建日期时间」，便于区分造数 */
+const { demoCreateGroup } = useDemoCreateGroup()
 
 /* ===== 添加好友弹窗：UIKit 内置 EmAddContactModal（手机号 / 用户 ID 单输入框），由页面接管弹出 ===== */
 
@@ -251,7 +255,7 @@ function backToContactList() {
 
     <!-- 加号弹窗：添加好友（手机号 / 用户 ID）/ 创建群组（PC 与 H5 共用一份） -->
     <AddContactModal v-model:show="showAddContactModal" />
-    <EmCreateGroupModal v-model:show="showCreateGroupModal" />
+    <EmCreateGroupModal v-model:show="showCreateGroupModal" :create-fn="demoCreateGroup" />
   </div>
 </template>
 

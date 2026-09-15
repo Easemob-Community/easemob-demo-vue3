@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n'
 import {
   EmChatContainer,
   EmConversationContainer,
+  EmCreateGroupModal,
   EmIcon,
   EmResizable,
   useConversation,
@@ -15,6 +16,7 @@ import type { ConversationTabKey, UiMessage } from '@easemob/uikit-im'
 
 import MarkdownStreamMessage from '@/components/ai/MarkdownStreamMessage.vue'
 import AddContactModal from '@/components/contact/AddContactModal.vue'
+import { useDemoCreateGroup } from '@/composables/useDemoCreateGroup'
 import { useDemoSettings } from '@/composables/useDemoSettings'
 import { useMobileView } from '@/composables/useMobileView'
 import { useSidebarWidth } from '@/composables/useSidebarWidth'
@@ -33,6 +35,7 @@ const { t } = useI18n()
 const isMobileView = useMobileView()
 const { isMobile } = useViewport()
 const { currentConversation, leaveConversation } = useConversation()
+const { demoCreateGroup } = useDemoCreateGroup()
 
 const hasCurrentConversation = computed(() => !!currentConversation.value)
 
@@ -232,6 +235,10 @@ watch(
           <template #add-contact="{ show, close }">
             <AddContactModal :show="show" @update:show="close" />
           </template>
+          <!-- 创建群组接管：群名改为「群组 + 创建日期时间」，便于区分造数 -->
+          <template #create-group="{ show, close }">
+            <EmCreateGroupModal :show="show" :create-fn="demoCreateGroup" @update:show="close" />
+          </template>
           <template v-if="conversationTabsTakeover" #tabs="{ tabs, activeTab, selectTab }">
             <div class="chat-page__takeover-tabs">
               <button
@@ -271,6 +278,10 @@ watch(
         >
           <template #add-contact="{ show, close }">
             <AddContactModal :show="show" @update:show="close" />
+          </template>
+          <!-- 创建群组接管：群名改为「群组 + 创建日期时间」，便于区分造数 -->
+          <template #create-group="{ show, close }">
+            <EmCreateGroupModal :show="show" :create-fn="demoCreateGroup" @update:show="close" />
           </template>
           <template v-if="conversationTabsTakeover" #tabs="{ tabs, activeTab, selectTab }">
             <div class="chat-page__takeover-tabs">
