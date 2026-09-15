@@ -51,15 +51,14 @@ function selectTab(tab: SettingsTab) {
   }
 }
 
-/* ===== 设置面板宽度（与会话/联系人侧边栏一致：EmResizable 拖拽调整 + localStorage 持久化） ===== */
+/* ===== 设置面板宽度（与会话/联系人侧边栏完全对齐：同一存储 key + 同一默认宽度，三页宽度始终一致） ===== */
 
 const SETTINGS_SIDEBAR_MIN = DEMO_SIDEBAR_CONFIG.minWidth
 const SETTINGS_SIDEBAR_MAX = DEMO_SIDEBAR_CONFIG.maxWidth
-const SETTINGS_SIDEBAR_DEFAULT = 320
 
 const { sidebarWidth, persistSidebarWidth } = useSidebarWidth(
-  'layout_settings_sidebar_width',
-  SETTINGS_SIDEBAR_DEFAULT,
+  'layout_sidebar_width',
+  DEMO_SIDEBAR_CONFIG.defaultWidth,
 )
 </script>
 
