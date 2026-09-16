@@ -98,6 +98,24 @@ export function useUIKitConfig() {
   // 由 UIKit 主题 store 写入 --uikit-item-hover-radius / --uikit-item-active-radius 等变量驱动
   uikitThemeApi.setHoverStyle(DEMO_INTERACTION_CONFIG.hoverStyle)
 
+  // 组件圆角（componentsShape）联动：
+  // 1. 根节点 data 属性——Demo 的按钮胶囊化覆盖（index.scss 的 .uikit-button 999px !important）
+  //    在「方正」档需让步给 --uikit-components-radius（0px 直角），
+  //    由 [data-demo-components-shape='square'] 选择器接管；
+  // 2. --demo-component-radius——Demo 页面卡片（会话列表侧栏 / 通讯录 / 设置 / 抽屉等）
+  //    的圆角与 UIKit 组件圆角同档：方正档直角（0px），圆润档回 DEMO_CONTAINER_CONFIG.radius。
+  watch(
+    uikitThemeApi.componentsShape,
+    (shape) => {
+      document.documentElement.setAttribute('data-demo-components-shape', shape)
+      document.documentElement.style.setProperty(
+        '--demo-component-radius',
+        shape === 'square' ? '0px' : `${DEMO_CONTAINER_CONFIG.radius}px`,
+      )
+    },
+    { immediate: true },
+  )
+
   const uikitLocale = computed<UIKitLocale>(() => toUIKitLocale(locale.value as AppLocale))
 
   // 跟随 Demo 语言切换 UIKit 全局语言

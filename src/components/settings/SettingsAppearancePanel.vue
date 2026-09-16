@@ -21,7 +21,9 @@ import { useTheme as useAppTheme } from '@/composables/useTheme'
 
 type InputVariant = 'default' | 'search' | 'filled' | 'ghost' | 'underline'
 type ThemeMode = 'light' | 'dark' | 'auto'
-type HoverStyle = 'default' | 'rounded'
+type HoverStyle = 'default' | 'rounded' | 'square'
+type AvatarShape = 'circle' | 'square'
+type ComponentsShape = 'ground' | 'square'
 type BubbleShape = 'ground' | 'square'
 type FontSizePreset = 'normal' | 'large' | 'xlarge'
 type Density = 'compact' | 'normal' | 'comfortable'
@@ -48,6 +50,8 @@ const {
   setHoverColor,
   setActiveColor,
   setIconMutedColor,
+  setHeaderBorder,
+  setAnimationRipple,
 } = uikitTheme
 
 /* ===== 主题模式 ===== */
@@ -59,6 +63,14 @@ function setThemeMode(mode: ThemeMode) {
 /* ===== 组件风格 ===== */
 function setHoverStyle(style: HoverStyle) {
   uikitTheme.setHoverStyle(style)
+}
+
+function setAvatarShape(shape: AvatarShape) {
+  uikitTheme.setAvatarShape(shape)
+}
+
+function setComponentsShape(shape: ComponentsShape) {
+  uikitTheme.setComponentsShape(shape)
 }
 
 function setBubbleShape(shape: BubbleShape) {
@@ -94,12 +106,16 @@ function resetAll() {
   setThemeMode('auto')
   setPrimaryColor({ h: 203, s: 100, l: 60 })
   setHoverStyle('default')
+  setAvatarShape('circle')
+  setComponentsShape('ground')
   setBubbleShape('ground')
   setContainerGap(8)
   setFontSize('normal')
   setDensity('normal')
+  setHeaderBorder(false)
   setAnimationEnabled(true)
   setAnimationLevel('normal')
+  setAnimationRipple(true)
   setBubbleBg(null, null)
   setChatBg(undefined)
   setInputBg(undefined)
@@ -336,9 +352,79 @@ function resetAll() {
           >
             {{ t('features.appearance.hoverRounded') }}
           </button>
+          <button
+            class="settings-appearance-panel__segmented-item"
+            :class="{
+              'settings-appearance-panel__segmented-item--active':
+                uikitTheme.hoverStyle.value === 'square',
+            }"
+            @click="setHoverStyle('square')"
+          >
+            {{ t('features.appearance.hoverSquare') }}
+          </button>
         </div>
       </div>
       <p class="settings-appearance-panel__desc">{{ t('features.appearance.hoverDesc') }}</p>
+
+      <div class="settings-appearance-panel__row settings-appearance-panel__row--bordered">
+        <span class="settings-appearance-panel__label">
+          {{ t('features.appearance.avatarShape') }}
+        </span>
+        <div class="settings-appearance-panel__segmented">
+          <button
+            class="settings-appearance-panel__segmented-item"
+            :class="{
+              'settings-appearance-panel__segmented-item--active':
+                uikitTheme.avatarShape.value === 'circle',
+            }"
+            @click="setAvatarShape('circle')"
+          >
+            {{ t('features.appearance.avatarCircle') }}
+          </button>
+          <button
+            class="settings-appearance-panel__segmented-item"
+            :class="{
+              'settings-appearance-panel__segmented-item--active':
+                uikitTheme.avatarShape.value === 'square',
+            }"
+            @click="setAvatarShape('square')"
+          >
+            {{ t('features.appearance.avatarSquare') }}
+          </button>
+        </div>
+      </div>
+      <p class="settings-appearance-panel__desc">{{ t('features.appearance.avatarShapeDesc') }}</p>
+
+      <div class="settings-appearance-panel__row settings-appearance-panel__row--bordered">
+        <span class="settings-appearance-panel__label">
+          {{ t('features.appearance.componentsShape') }}
+        </span>
+        <div class="settings-appearance-panel__segmented">
+          <button
+            class="settings-appearance-panel__segmented-item"
+            :class="{
+              'settings-appearance-panel__segmented-item--active':
+                uikitTheme.componentsShape.value === 'ground',
+            }"
+            @click="setComponentsShape('ground')"
+          >
+            {{ t('features.appearance.componentsGround') }}
+          </button>
+          <button
+            class="settings-appearance-panel__segmented-item"
+            :class="{
+              'settings-appearance-panel__segmented-item--active':
+                uikitTheme.componentsShape.value === 'square',
+            }"
+            @click="setComponentsShape('square')"
+          >
+            {{ t('features.appearance.componentsSquare') }}
+          </button>
+        </div>
+      </div>
+      <p class="settings-appearance-panel__desc">
+        {{ t('features.appearance.componentsShapeDesc') }}
+      </p>
 
       <div class="settings-appearance-panel__row settings-appearance-panel__row--bordered">
         <span class="settings-appearance-panel__label">
@@ -469,6 +555,24 @@ function resetAll() {
 
       <div class="settings-appearance-panel__row settings-appearance-panel__row--bordered">
         <span class="settings-appearance-panel__label">
+          {{ t('features.appearance.headerBorder') }}
+        </span>
+        <button
+          class="settings-appearance-panel__switch"
+          :class="{
+            'settings-appearance-panel__switch--active': uikitTheme.headerBorder.value,
+          }"
+          @click="setHeaderBorder(!uikitTheme.headerBorder.value)"
+        >
+          <span class="settings-appearance-panel__switch-thumb" />
+        </button>
+      </div>
+      <p class="settings-appearance-panel__desc">
+        {{ t('features.appearance.headerBorderDesc') }}
+      </p>
+
+      <div class="settings-appearance-panel__row settings-appearance-panel__row--bordered">
+        <span class="settings-appearance-panel__label">
           {{ t('features.appearance.animationEnabled') }}
         </span>
         <button
@@ -522,6 +626,24 @@ function resetAll() {
           </button>
         </div>
       </div>
+
+      <div class="settings-appearance-panel__row settings-appearance-panel__row--bordered">
+        <span class="settings-appearance-panel__label">
+          {{ t('features.appearance.animationRipple') }}
+        </span>
+        <button
+          class="settings-appearance-panel__switch"
+          :class="{
+            'settings-appearance-panel__switch--active': uikitTheme.animationRipple.value,
+          }"
+          @click="setAnimationRipple(!uikitTheme.animationRipple.value)"
+        >
+          <span class="settings-appearance-panel__switch-thumb" />
+        </button>
+      </div>
+      <p class="settings-appearance-panel__desc">
+        {{ t('features.appearance.animationRippleDesc') }}
+      </p>
 
       <div class="settings-appearance-panel__row settings-appearance-panel__row--bordered">
         <span class="settings-appearance-panel__label">
@@ -642,7 +764,7 @@ function resetAll() {
   &__segmented {
     display: inline-flex;
     padding: 3px;
-    border-radius: 8px;
+    border-radius: 999px;
     background-color: var(--color-bg-secondary);
   }
 
@@ -650,7 +772,7 @@ function resetAll() {
     height: 30px;
     padding: 0 14px;
     border: none;
-    border-radius: 6px;
+    border-radius: 999px;
     background: transparent;
     color: var(--color-text);
     font-size: 13px;
@@ -794,7 +916,7 @@ function resetAll() {
     height: 32px;
     padding: 0 28px 0 12px;
     border: 1px solid var(--color-border);
-    border-radius: 8px;
+    border-radius: 999px;
     background-color: var(--color-bg);
     color: var(--color-text);
     font-size: 14px;
@@ -822,7 +944,7 @@ function resetAll() {
     height: 40px;
     margin-top: 8px;
     border: none;
-    border-radius: 8px;
+    border-radius: 999px;
     background-color: var(--color-bg-secondary);
     color: var(--color-text);
     font-size: 14px;

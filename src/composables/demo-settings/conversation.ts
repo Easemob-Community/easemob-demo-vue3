@@ -18,6 +18,14 @@ function createConversationSettings() {
   /** 是否展示 ConversationList 中的连接 / 同步状态横幅 */
   const statusBannerEnabled = ref(true)
 
+  /* ===== 未读徽标配置（EmConversationContainer 的 unreadMode / unreadPlacement / badgePlacement） ===== */
+  /** 未读数显示模式：count 数字徽标（默认）/ dot 红点 */
+  const conversationUnreadMode = ref<'count' | 'dot'>('count')
+  /** 未读徽标归位：inline 信息区行尾（默认）/ avatar 头像角标 */
+  const conversationUnreadPlacement = ref<'inline' | 'avatar'>('inline')
+  /** 头像角标位置（仅 unreadPlacement=avatar 时生效）：top-right（默认）/ bottom-right */
+  const conversationBadgePlacement = ref<'top-right' | 'bottom-right'>('top-right')
+
   /* ===== 会话分栏配置 ===== */
   /** 会话分栏 tab 集合（顺序即渲染优先级；置空数组隐藏 tab 栏） */
   const conversationTabs = ref<ConversationTabKey[]>([...DEFAULT_CONVERSATION_TABS])
@@ -66,6 +74,9 @@ function createConversationSettings() {
   /** 一键重置会话相关状态 */
   function resetConversationSettings() {
     statusBannerEnabled.value = true
+    conversationUnreadMode.value = 'count'
+    conversationUnreadPlacement.value = 'inline'
+    conversationBadgePlacement.value = 'top-right'
     conversationTabs.value = [...DEFAULT_CONVERSATION_TABS]
     conversationTabsVisible.value = true
     conversationTabsTakeover.value = false
@@ -75,6 +86,10 @@ function createConversationSettings() {
   return {
     // 状态横幅
     statusBannerEnabled,
+    // 未读徽标
+    conversationUnreadMode,
+    conversationUnreadPlacement,
+    conversationBadgePlacement,
     // 会话分栏
     conversationTabs,
     conversationTabsVisible,

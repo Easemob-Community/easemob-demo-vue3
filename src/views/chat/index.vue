@@ -42,6 +42,9 @@ const hasCurrentConversation = computed(() => !!currentConversation.value)
 /* ===== 会话UIKIT特性开关配置（由特性抽屉「会话」面板驱动） ===== */
 const {
   statusBannerEnabled,
+  conversationUnreadMode,
+  conversationUnreadPlacement,
+  conversationBadgePlacement,
   conversationTabs,
   conversationTabsVisible,
   conversationTabsTakeover,
@@ -230,6 +233,9 @@ watch(
           :tabs="effectiveConversationTabs"
           :active-tab="effectiveConversationActiveTab"
           :show-status-banner="statusBannerEnabled"
+          :unread-mode="conversationUnreadMode"
+          :unread-placement="conversationUnreadPlacement"
+          :badge-placement="conversationBadgePlacement"
           @update:active-tab="onConversationActiveTabChange"
         >
           <template #add-contact="{ show, close }">
@@ -274,6 +280,9 @@ watch(
           :tabs="effectiveConversationTabs"
           :active-tab="effectiveConversationActiveTab"
           :show-status-banner="statusBannerEnabled"
+          :unread-mode="conversationUnreadMode"
+          :unread-placement="conversationUnreadPlacement"
+          :badge-placement="conversationBadgePlacement"
           @update:active-tab="onConversationActiveTabChange"
         >
           <template #add-contact="{ show, close }">
@@ -390,6 +399,7 @@ watch(
     color: var(--color-text);
     background: transparent;
     border: none;
+    border-radius: 50%;
     cursor: pointer;
   }
 

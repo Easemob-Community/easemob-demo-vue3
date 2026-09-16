@@ -77,7 +77,8 @@ export default {
     },
     about: {
       title: 'About Us',
-      bannerAlt: 'Easemob IM promo banner',
+      bannerAlt: 'Easemob IM — Stable, Easy to Use, Compliant',
+      bannerSlogan: 'Integrate in 1 day, launch fast. Cut 90% of development time.',
       welcome: 'Welcome to',
       description: 'Built with Easemob IM SDK and VUE architecture',
       sdkVersion: 'SDK Version',
@@ -146,8 +147,19 @@ export default {
       hoverStyle: 'Hover Style',
       hoverDefault: 'Default',
       hoverRounded: 'Rounded',
+      hoverSquare: 'Square',
       hoverDesc:
-        'Hover style for list items (conversation / contacts, etc.): default highlights the entire row; rounded card mode adds corner radius and left/right indentation.',
+        'Hover style for list items (conversation / contacts, etc.): default highlights the entire row; rounded card mode adds corner radius and left/right indentation; square highlights the entire row with right angles.',
+      avatarShape: 'Avatar Shape',
+      avatarCircle: 'Circle',
+      avatarSquare: 'Square',
+      avatarShapeDesc:
+        'Global avatar shape: Circle / Square (rounded rectangle), applied to all avatars in conversations, contacts, chat, etc.',
+      componentsShape: 'Component Radius',
+      componentsGround: 'Rounded',
+      componentsSquare: 'Square',
+      componentsShapeDesc:
+        'Global component style: Rounded uses large radius (8px), Square uses right angles (0px), affecting buttons, modals, cards, etc.',
       bubbleShape: 'Bubble Shape',
       bubbleGround: 'Large Rounded',
       bubbleSquare: 'Small Rounded',
@@ -167,6 +179,9 @@ export default {
       densityComfortable: 'Comfortable',
       densityDesc:
         'List item and container height, padding, spacing scale: Compact / Normal / Comfortable',
+      headerBorder: 'Header Divider',
+      headerBorderDesc:
+        'The 1px divider at the bottom of headers in conversation, contacts, chat, drawer and modals; off by default',
       animationEnabled: 'Animation Toggle',
       animationEnabledDesc:
         'Global animation master switch; disables hover, popups, ripple and other animations when off',
@@ -174,6 +189,9 @@ export default {
       animationLevelSubtle: 'Subtle',
       animationLevelNormal: 'Normal',
       animationLevelExpressive: 'Expressive',
+      animationRipple: 'Button Ripple',
+      animationRippleDesc:
+        'Ripple effect on button click; also disabled when the animation master switch is off',
       inputVariant: 'Input Variant',
       inputVariantDesc:
         'Five built-in input styles; the input below previews the effect in real time',
@@ -205,6 +223,18 @@ export default {
       notification: 'New Message Notification',
       newMessageNotification: 'New message notification',
       newMessageNotificationDesc: 'When off, you will not receive any message push or prompts',
+      unreadBadge: 'Unread Badge',
+      unreadMode: 'Unread display mode',
+      unreadModeCount: 'Count',
+      unreadModeDot: 'Dot',
+      unreadPlacement: 'Unread badge placement',
+      unreadPlacementInline: 'Inline',
+      unreadPlacementAvatar: 'Avatar corner',
+      badgePlacement: 'Avatar badge corner',
+      badgePlacementTopRight: 'Top right',
+      badgePlacementBottomRight: 'Bottom right',
+      unreadBadgeDesc:
+        'Unread count can be shown as a numeric badge or a dot (muted conversations always show a dot); the badge sits at the end of the info row by default, or can be moved onto the avatar as a corner badge in the top-right or bottom-right corner',
       takeover: 'Fully take over rendering (#tabs slot)',
       useTabsSlot: 'Use #tabs slot to draw the tab bar (underline style)',
       useTabsSlotDesc:

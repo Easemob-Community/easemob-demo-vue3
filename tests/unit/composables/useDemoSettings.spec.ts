@@ -7,6 +7,9 @@ describe('useDemoSettings（会话UIKIT特性开关）', () => {
     const settings = useDemoSettings()
 
     expect(settings.statusBannerEnabled.value).toBe(true)
+    expect(settings.conversationUnreadMode.value).toBe('count')
+    expect(settings.conversationUnreadPlacement.value).toBe('inline')
+    expect(settings.conversationBadgePlacement.value).toBe('top-right')
     expect(settings.conversationTabsVisible.value).toBe(true)
     expect(settings.conversationTabsTakeover.value).toBe(false)
     expect(settings.notificationEnable.value).toBe(false)
@@ -67,6 +70,9 @@ describe('useDemoSettings（会话UIKIT特性开关）', () => {
   it('resetConversationSettings 重置为默认值', () => {
     const settings = useDemoSettings()
     settings.statusBannerEnabled.value = false
+    settings.conversationUnreadMode.value = 'dot'
+    settings.conversationUnreadPlacement.value = 'avatar'
+    settings.conversationBadgePlacement.value = 'bottom-right'
     settings.conversationTabsVisible.value = false
     settings.conversationTabsTakeover.value = true
     settings.conversationActiveTab.value = 'group'
@@ -75,6 +81,9 @@ describe('useDemoSettings（会话UIKIT特性开关）', () => {
     settings.resetConversationSettings()
 
     expect(settings.statusBannerEnabled.value).toBe(true)
+    expect(settings.conversationUnreadMode.value).toBe('count')
+    expect(settings.conversationUnreadPlacement.value).toBe('inline')
+    expect(settings.conversationBadgePlacement.value).toBe('top-right')
     expect(settings.conversationTabsVisible.value).toBe(true)
     expect(settings.conversationTabsTakeover.value).toBe(false)
     expect(settings.conversationActiveTab.value).toBe('all')

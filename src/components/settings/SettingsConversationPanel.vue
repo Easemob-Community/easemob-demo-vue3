@@ -25,6 +25,9 @@ defineOptions({ name: 'SettingsConversationPanel' })
 const { t } = useI18n()
 const {
   statusBannerEnabled,
+  conversationUnreadMode,
+  conversationUnreadPlacement,
+  conversationBadgePlacement,
   conversationTabs,
   conversationTabsVisible,
   conversationTabsTakeover,
@@ -187,6 +190,90 @@ function onToggleTab(tab: ConversationTabKey, checked: boolean) {
       </div>
       <p class="settings-conversation-panel__desc">
         {{ t('features.conversation.tabButtonsDesc') }}
+      </p>
+    </section>
+
+    <!-- ===== 未读徽标 ===== -->
+    <section class="settings-conversation-panel__section">
+      <h3 class="settings-conversation-panel__section-title">
+        {{ t('features.conversation.unreadBadge') }}
+      </h3>
+
+      <div class="settings-conversation-panel__row">
+        <span class="settings-conversation-panel__label">
+          {{ t('features.conversation.unreadMode') }}
+        </span>
+      </div>
+      <div class="settings-conversation-panel__options">
+        <button
+          type="button"
+          class="settings-conversation-panel__option"
+          :class="{ 'settings-conversation-panel__option--active': conversationUnreadMode === 'count' }"
+          @click="conversationUnreadMode = 'count'"
+        >
+          {{ t('features.conversation.unreadModeCount') }}
+        </button>
+        <button
+          type="button"
+          class="settings-conversation-panel__option"
+          :class="{ 'settings-conversation-panel__option--active': conversationUnreadMode === 'dot' }"
+          @click="conversationUnreadMode = 'dot'"
+        >
+          {{ t('features.conversation.unreadModeDot') }}
+        </button>
+      </div>
+
+      <div class="settings-conversation-panel__row">
+        <span class="settings-conversation-panel__label">
+          {{ t('features.conversation.unreadPlacement') }}
+        </span>
+      </div>
+      <div class="settings-conversation-panel__options">
+        <button
+          type="button"
+          class="settings-conversation-panel__option"
+          :class="{ 'settings-conversation-panel__option--active': conversationUnreadPlacement === 'inline' }"
+          @click="conversationUnreadPlacement = 'inline'"
+        >
+          {{ t('features.conversation.unreadPlacementInline') }}
+        </button>
+        <button
+          type="button"
+          class="settings-conversation-panel__option"
+          :class="{ 'settings-conversation-panel__option--active': conversationUnreadPlacement === 'avatar' }"
+          @click="conversationUnreadPlacement = 'avatar'"
+        >
+          {{ t('features.conversation.unreadPlacementAvatar') }}
+        </button>
+      </div>
+
+      <div class="settings-conversation-panel__row">
+        <span class="settings-conversation-panel__label">
+          {{ t('features.conversation.badgePlacement') }}
+        </span>
+      </div>
+      <div class="settings-conversation-panel__options">
+        <button
+          type="button"
+          class="settings-conversation-panel__option"
+          :class="{ 'settings-conversation-panel__option--active': conversationBadgePlacement === 'top-right' }"
+          :disabled="conversationUnreadPlacement !== 'avatar'"
+          @click="conversationBadgePlacement = 'top-right'"
+        >
+          {{ t('features.conversation.badgePlacementTopRight') }}
+        </button>
+        <button
+          type="button"
+          class="settings-conversation-panel__option"
+          :class="{ 'settings-conversation-panel__option--active': conversationBadgePlacement === 'bottom-right' }"
+          :disabled="conversationUnreadPlacement !== 'avatar'"
+          @click="conversationBadgePlacement = 'bottom-right'"
+        >
+          {{ t('features.conversation.badgePlacementBottomRight') }}
+        </button>
+      </div>
+      <p class="settings-conversation-panel__desc">
+        {{ t('features.conversation.unreadBadgeDesc') }}
       </p>
     </section>
 
@@ -407,13 +494,50 @@ function onToggleTab(tab: ConversationTabKey, checked: boolean) {
     }
   }
 
+  /* Segmented options（与 SettingsChatPanel 同口径） */
+  &__options {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  &__option {
+    flex: 1;
+    height: 32px;
+    min-width: 64px;
+    padding: 0 12px;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    background-color: transparent;
+    color: var(--color-text);
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+
+    &:hover:not(:disabled) {
+      border-color: var(--uikit-primary-color, var(--color-primary));
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    &--active {
+      border-color: var(--uikit-primary-color, var(--color-primary));
+      background-color: var(--uikit-primary-color, var(--color-primary));
+      color: #ffffff;
+    }
+  }
+
   /* 一键重置 */
   &__reset {
     width: 100%;
     height: 40px;
     margin-top: 8px;
     border: none;
-    border-radius: 8px;
+    border-radius: 999px;
     background-color: var(--color-bg-secondary);
     color: var(--color-text);
     font-size: 14px;
