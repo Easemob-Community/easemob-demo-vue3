@@ -246,7 +246,7 @@ export const DEMO_UIKIT_DOCS_CONFIG = {
  */
 export const DEMO_SIDEBAR_CONFIG = {
   /** 侧边栏默认宽度（px）：无记忆时的初始值，保证首屏宽度舒适 */
-  defaultWidth: 400,
+  defaultWidth: 360,
   /** 侧边栏最小宽度（px） */
   minWidth: 240,
   /** 侧边栏最大宽度（px） */

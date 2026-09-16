@@ -110,8 +110,8 @@ describe('组件静态属性配置（uikit 组件模板中的静态值）', () =
 })
 
 describe('DEMO_SIDEBAR_CONFIG（侧边栏宽度，对齐 UIKit demo 的 EmResizable 范围）', () => {
-  it('会话/通讯录侧边栏共用默认 400 / 最小 240 / 最大 480', () => {
-    expect(DEMO_SIDEBAR_CONFIG.defaultWidth).toBe(400)
+  it('会话/通讯录/设置侧边栏共用默认 360 / 最小 240 / 最大 480', () => {
+    expect(DEMO_SIDEBAR_CONFIG.defaultWidth).toBe(360)
     expect(DEMO_SIDEBAR_CONFIG.minWidth).toBe(240)
     expect(DEMO_SIDEBAR_CONFIG.maxWidth).toBe(480)
   })
