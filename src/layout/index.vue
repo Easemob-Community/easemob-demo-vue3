@@ -10,12 +10,10 @@ import {
   useConversationStore,
   useOwnUserInfo,
 } from '@easemob/uikit-im'
+import { useRoute } from 'vue-router'
 
 import featurePromoImg from '@/assets/feature-promo.png'
 import CheckUpdates from '@/components/CheckUpdates.vue'
-import ChatIcon from '@/components/icons/ChatIcon.vue'
-import ContactsIcon from '@/components/icons/ContactsIcon.vue'
-import SettingsIcon from '@/components/icons/SettingsIcon.vue'
 import { useFeaturePromo } from '@/composables/useFeaturePromo'
 import { useMobileView } from '@/composables/useMobileView'
 import { useSettingsDrawer } from '@/composables/useSettingsDrawer'
@@ -34,21 +32,36 @@ const {
   closePromo,
 } = useFeaturePromo()
 const { t } = useI18n()
+const route = useRoute()
 const { currentUser } = useClient()
 const { avatarUrl, displayName } = useOwnUserInfo()
 const conversationStore = useConversationStore()
 const { inviteList } = useContact()
 
+/* 导航图标对齐设计稿图标资源：聚焦为面性（filled），不聚焦为线性（stroked） */
 const tabs = [
-  { key: 'chat' as const, icon: ChatIcon, label: t('nav.chat'), to: '/chat', size: 26 },
+  {
+    key: 'chat' as const,
+    icon: 'bubble/rect',
+    activeIcon: 'filled/bubble/rect/empty',
+    label: t('nav.chat'),
+    to: '/chat',
+    size: 24,
+  },
   {
     key: 'contacts' as const,
-    icon: ContactsIcon,
+    icon: 'person/list',
+    activeIcon: 'filled/person/list',
     label: t('nav.contacts'),
     to: '/contacts',
-    size: 26,
+    size: 24,
   },
 ]
+
+/** 当前路由命中时返回面性图标，否则返回线性图标 */
+function navIcon(tab: (typeof tabs)[number]) {
+  return route.path.startsWith(tab.to) ? tab.activeIcon : tab.icon
+}
 
 /** 会话未读总数（忽略静音会话） */
 const totalUnread = computed(() => {
@@ -102,16 +115,16 @@ function handlePromoClick() {
             :count="totalUnread"
             class="app-layout__nav-badge"
           >
-            <component :is="tab.icon" :size="tab.size" />
+            <EmIcon :name="navIcon(tab)" :size="tab.size" />
           </EmBadge>
           <EmBadge
             v-else-if="tab.key === 'contacts' && pendingNoticeCount > 0"
             :count="pendingNoticeCount"
             class="app-layout__nav-badge"
           >
-            <component :is="tab.icon" :size="tab.size" />
+            <EmIcon :name="navIcon(tab)" :size="tab.size" />
           </EmBadge>
-          <component :is="tab.icon" v-else :size="tab.size" />
+          <EmIcon v-else :name="navIcon(tab)" :size="tab.size" />
         </router-link>
       </nav>
 
@@ -125,7 +138,10 @@ function handlePromoClick() {
             @click="handleFeaturesClick"
           >
             <span class="app-layout__feature-icon-wrap">
-              <EmIcon name="console" :size="22" />
+              <EmIcon
+                :name="isSettingsDrawerOpen ? 'filled/console' : 'console'"
+                :size="24"
+              />
               <span v-if="showFeatureRedDot" class="app-layout__red-dot" />
             </span>
           </button>
@@ -151,7 +167,7 @@ function handlePromoClick() {
           to="/settings"
           :aria-label="t('nav.settings')"
         >
-          <SettingsIcon :size="18" />
+          <EmIcon name="hamburger" :size="24" />
         </router-link>
       </div>
     </aside>
@@ -174,16 +190,16 @@ function handlePromoClick() {
           :count="totalUnread"
           class="app-layout__tab-badge"
         >
-          <component :is="tab.icon" :size="tab.size" />
+          <EmIcon :name="navIcon(tab)" :size="tab.size" />
         </EmBadge>
         <EmBadge
           v-else-if="tab.key === 'contacts' && pendingNoticeCount > 0"
           :count="pendingNoticeCount"
           class="app-layout__tab-badge"
         >
-          <component :is="tab.icon" :size="tab.size" />
+          <EmIcon :name="navIcon(tab)" :size="tab.size" />
         </EmBadge>
-        <component :is="tab.icon" v-else :size="tab.size" />
+        <EmIcon v-else :name="navIcon(tab)" :size="tab.size" />
         <span class="app-layout__tab-label">{{ tab.label }}</span>
       </router-link>
     </nav>
