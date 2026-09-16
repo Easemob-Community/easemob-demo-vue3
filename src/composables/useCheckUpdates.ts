@@ -3,7 +3,8 @@ import { ref } from 'vue'
 /**
  * 检测新版本 composable：轮询部署后 index.html 的 etag / last-modified 指纹，
  * 指纹变化即认为有新构建发布，配合弹窗引导用户刷新页面。
- * 参考 vben-admin 的 CheckUpdates 实现（HEAD 请求 + ETag 对比，无 PWA 依赖）。
+ * 参考 vben-admin 的 CheckUpdates 实现（请求 index.html 对比 ETag，无 PWA 依赖）。
+ * 注意使用 GET 而非 HEAD：部分 CDN / 网关会拦截 HEAD 方法返回 403。
  */
 
 export interface CheckUpdatesOptions {
@@ -36,7 +37,7 @@ export function useCheckUpdates(options: CheckUpdatesOptions = {}) {
     try {
       const response = await fetch(checkUrl, {
         cache: 'no-cache',
-        method: 'HEAD',
+        method: 'GET',
         redirect: 'manual',
       })
       return response.headers.get('etag') || response.headers.get('last-modified')

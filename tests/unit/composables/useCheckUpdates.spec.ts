@@ -45,7 +45,7 @@ describe('useCheckUpdates', () => {
     expect(hasUpdate.value).toBe(false)
     expect(fetchMock).toHaveBeenCalledWith('/', {
       cache: 'no-cache',
-      method: 'HEAD',
+      method: 'GET',
       redirect: 'manual',
     })
   })
