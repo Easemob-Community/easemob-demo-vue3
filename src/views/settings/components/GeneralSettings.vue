@@ -1,17 +1,21 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useUIKit } from '@easemob/uikit-im'
+import { EmIcon, useUIKit, useTheme as useUIKitTheme } from '@easemob/uikit-im'
+import { isKeyboardShortcutsEnabled, setKeyboardShortcutsEnabled } from '@easemob/uikit-core'
 
 import { useDemoSettings } from '@/composables/useDemoSettings'
+import { useSettingsDrawer } from '@/composables/useSettingsDrawer'
 import { useTheme, type ThemeMode } from '@/composables/useTheme'
 
 defineOptions({ name: 'GeneralSettings' })
 
 const { t, locale } = useI18n()
 const { mode: themeMode, setMode: setThemeMode } = useTheme()
+const uikitTheme = useUIKitTheme()
 const { stores } = useUIKit()
 const { notificationEnable } = useDemoSettings()
+const { open: openSettingsDrawer } = useSettingsDrawer()
 
 /** 显示输入状态：接入 UIKit 会话 store 的 typingEnabled */
 const showTyping = computed({
@@ -19,19 +23,51 @@ const showTyping = computed({
   set: (value) => stores.conversation.setTypingEnabled(value),
 })
 
+/** 暗黑模式：跟随系统 / 浅色 / 深色 三档，Demo 与 UIKit 主题同步切换 */
+function selectThemeMode(value: ThemeMode) {
+  setThemeMode(value)
+  uikitTheme.setMode(value)
+  darkModeOpen.value = false
+}
+
+/** 键盘操作：直连 UIKit 全局键盘快捷键开关（Esc 关闭弹层、方向键切换导航项等） */
+const keyboardState = ref(isKeyboardShortcutsEnabled())
+const keyboardEnabled = computed({
+  get: () => keyboardState.value,
+  set: (value) => {
+    setKeyboardShortcutsEnabled(value)
+    keyboardState.value = value
+  },
+})
+
+/* ===== 下拉弹层（暗黑模式 / 切换主题 / 语言设置）：同一时刻仅展开一个 ===== */
+const darkModeOpen = ref(false)
 const languageOpen = ref(false)
-const themeModeOpen = ref(false)
+const themeOpen = ref(false)
+
+/** 暗黑模式选项：跟随系统 / 浅色 / 深色 */
+const darkModeOptions = computed(() => [
+  { label: t('theme.auto'), value: 'auto' as ThemeMode },
+  { label: t('theme.light'), value: 'light' as ThemeMode },
+  { label: t('theme.dark'), value: 'dark' as ThemeMode },
+])
 
 const languageOptions = computed(() => [
   { label: t('settings.general.langZh'), value: 'zh-CN' },
   { label: t('settings.general.langEn'), value: 'en-US' },
 ])
 
-const themeModeOptions = computed(() => [
-  { label: t('theme.auto'), value: 'auto' as ThemeMode },
-  { label: t('theme.light'), value: 'light' as ThemeMode },
-  { label: t('theme.dark'), value: 'dark' as ThemeMode },
+/** 主题选项：当前仅「经典」一套 */
+const themeOptions = computed(() => [
+  { label: t('settings.general.themeClassic'), value: 'classic' as const },
 ])
+const currentTheme = ref<'classic'>('classic')
+
+const currentDarkModeLabel = computed(
+  () =>
+    darkModeOptions.value.find((item) => item.value === themeMode.value)?.label ??
+    darkModeOptions.value[0].label,
+)
 
 const currentLanguageLabel = computed(
   () =>
@@ -39,17 +75,27 @@ const currentLanguageLabel = computed(
     languageOptions.value[0].label,
 )
 
-const currentThemeModeLabel = computed(
+const currentThemeLabel = computed(
   () =>
-    themeModeOptions.value.find((item) => item.value === themeMode.value)?.label ??
-    themeModeOptions.value[0].label,
+    themeOptions.value.find((item) => item.value === currentTheme.value)?.label ??
+    themeOptions.value[0].label,
 )
+
+function toggleDarkModePanel() {
+  const willOpen = !darkModeOpen.value
+  darkModeOpen.value = willOpen
+  if (willOpen) {
+    themeOpen.value = false
+    languageOpen.value = false
+  }
+}
 
 function toggleLanguagePanel() {
   const willOpen = !languageOpen.value
   languageOpen.value = willOpen
   if (willOpen) {
-    themeModeOpen.value = false
+    darkModeOpen.value = false
+    themeOpen.value = false
   }
 }
 
@@ -58,17 +104,18 @@ function selectLanguage(value: string) {
   languageOpen.value = false
 }
 
-function toggleThemeModePanel() {
-  const willOpen = !themeModeOpen.value
-  themeModeOpen.value = willOpen
+function toggleThemePanel() {
+  const willOpen = !themeOpen.value
+  themeOpen.value = willOpen
   if (willOpen) {
+    darkModeOpen.value = false
     languageOpen.value = false
   }
 }
 
-function selectThemeMode(value: ThemeMode) {
-  setThemeMode(value)
-  themeModeOpen.value = false
+function selectTheme(value: 'classic') {
+  currentTheme.value = value
+  themeOpen.value = false
 }
 </script>
 
@@ -79,45 +126,36 @@ function selectThemeMode(value: ThemeMode) {
     </div>
 
     <div class="general-settings__body">
-      <div class="general-settings__section">
-        <div class="general-settings__row">
-          <span class="general-settings__label">{{ t('settings.general.showTyping') }}</span>
-          <label class="general-settings__switch">
-            <input v-model="showTyping" type="checkbox" />
-            <span class="general-settings__switch-track" />
-          </label>
+      <!-- 第一组：显示输入状态 / 暗黑模式 / 切换主题 / 设置颜色 / 语言设置 -->
+      <div class="general-settings__group">
+        <div class="general-settings__item">
+          <div class="general-settings__row">
+            <span class="general-settings__label">{{ t('settings.general.showTyping') }}</span>
+            <label class="general-settings__switch">
+              <input v-model="showTyping" type="checkbox" />
+              <span class="general-settings__switch-track" />
+            </label>
+          </div>
+          <p class="general-settings__hint">{{ t('settings.general.showTypingHint') }}</p>
         </div>
-        <p class="general-settings__hint">{{ t('settings.general.showTypingHint') }}</p>
 
-        <div class="general-settings__row">
-          <span class="general-settings__label">{{ t('settings.general.messageNotification') }}</span>
-          <label class="general-settings__switch">
-            <input v-model="notificationEnable" type="checkbox" />
-            <span class="general-settings__switch-track" />
-          </label>
-        </div>
-        <p class="general-settings__hint">{{ t('settings.general.messageNotificationHint') }}</p>
-
-        <div class="general-settings__popup-wrapper">
-          <div class="general-settings__row general-settings__row--clickable">
+        <div class="general-settings__item general-settings__popup-wrapper">
+          <div
+            class="general-settings__row general-settings__row--clickable"
+            @click="toggleDarkModePanel"
+          >
             <span class="general-settings__label">{{ t('settings.general.darkMode') }}</span>
-            <span class="general-settings__value" @click="toggleThemeModePanel">
-              {{ currentThemeModeLabel }}
-              <span
-                class="general-settings__arrow"
-                :class="{ 'general-settings__arrow--up': themeModeOpen }"
-              >
-                ›
-              </span>
+            <span class="general-settings__value">
+              {{ currentDarkModeLabel }}
+              <EmIcon :name="darkModeOpen ? 'chevron/up' : 'chevron/down'" :size="16" />
             </span>
           </div>
 
-          <div v-show="themeModeOpen" class="general-settings__popup">
+          <div v-show="darkModeOpen" class="general-settings__popup">
             <div
-              v-for="item in themeModeOptions"
+              v-for="item in darkModeOptions"
               :key="item.value"
               class="general-settings__popup-item"
-              :class="{ 'general-settings__popup-item--active': themeMode === item.value }"
               @click="selectThemeMode(item.value)"
             >
               <span class="general-settings__popup-label">{{ item.label }}</span>
@@ -138,20 +176,63 @@ function selectThemeMode(value: ThemeMode) {
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="general-settings__section">
-        <div class="general-settings__popup-wrapper">
-          <div class="general-settings__row general-settings__row--clickable">
-            <span class="general-settings__label">{{ t('settings.general.language') }}</span>
-            <span class="general-settings__value" @click="toggleLanguagePanel">
-              {{ currentLanguageLabel }}
-              <span
-                class="general-settings__arrow"
-                :class="{ 'general-settings__arrow--up': languageOpen }"
+        <div class="general-settings__item general-settings__popup-wrapper">
+          <div class="general-settings__row general-settings__row--clickable" @click="toggleThemePanel">
+            <span class="general-settings__label">{{ t('settings.general.switchTheme') }}</span>
+            <span class="general-settings__value">
+              {{ currentThemeLabel }}
+              <EmIcon :name="themeOpen ? 'chevron/up' : 'chevron/down'" :size="16" />
+            </span>
+          </div>
+
+          <div v-show="themeOpen" class="general-settings__popup">
+            <div
+              v-for="item in themeOptions"
+              :key="item.value"
+              class="general-settings__popup-item"
+              @click="selectTheme(item.value)"
+            >
+              <span class="general-settings__popup-label">{{ item.label }}</span>
+              <svg
+                v-if="currentTheme === item.value"
+                class="general-settings__popup-check"
+                viewBox="0 0 24 24"
+                fill="none"
               >
-                ›
-              </span>
+                <path
+                  d="M5 12l5 5L20 7"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="general-settings__item">
+          <div
+            class="general-settings__row general-settings__row--clickable"
+            @click="openSettingsDrawer"
+          >
+            <span class="general-settings__label">{{ t('settings.general.setColor') }}</span>
+            <span class="general-settings__value">
+              <EmIcon name="chevron/right" :size="16" />
+            </span>
+          </div>
+        </div>
+
+        <div class="general-settings__item general-settings__popup-wrapper">
+          <div
+            class="general-settings__row general-settings__row--clickable"
+            @click="toggleLanguagePanel"
+          >
+            <span class="general-settings__label">{{ t('settings.general.language') }}</span>
+            <span class="general-settings__value">
+              {{ currentLanguageLabel }}
+              <EmIcon :name="languageOpen ? 'chevron/up' : 'chevron/down'" :size="16" />
             </span>
           </div>
 
@@ -160,7 +241,6 @@ function selectThemeMode(value: ThemeMode) {
               v-for="item in languageOptions"
               :key="item.value"
               class="general-settings__popup-item"
-              :class="{ 'general-settings__popup-item--active': locale === item.value }"
               @click="selectLanguage(item.value)"
             >
               <span class="general-settings__popup-label">{{ item.label }}</span>
@@ -180,6 +260,38 @@ function selectThemeMode(value: ThemeMode) {
               </svg>
             </div>
           </div>
+        </div>
+      </div>
+
+      <!-- 第二组：消息通知 -->
+      <div class="general-settings__group">
+        <div class="general-settings__item">
+          <div class="general-settings__row">
+            <span class="general-settings__label">{{
+              t('settings.general.messageNotification')
+            }}</span>
+            <label class="general-settings__switch">
+              <input v-model="notificationEnable" type="checkbox" />
+              <span class="general-settings__switch-track" />
+            </label>
+          </div>
+          <p class="general-settings__hint">{{ t('settings.general.messageNotificationHint') }}</p>
+        </div>
+      </div>
+
+      <!-- 第三组：键盘操作 -->
+      <div class="general-settings__group">
+        <div class="general-settings__item">
+          <div class="general-settings__row">
+            <span class="general-settings__label">{{
+              t('settings.general.keyboardOperation')
+            }}</span>
+            <label class="general-settings__switch">
+              <input v-model="keyboardEnabled" type="checkbox" />
+              <span class="general-settings__switch-track" />
+            </label>
+          </div>
+          <p class="general-settings__hint">{{ t('settings.general.keyboardOperationHint') }}</p>
         </div>
       </div>
     </div>
@@ -213,32 +325,29 @@ function selectThemeMode(value: ThemeMode) {
     flex: 1;
     min-height: 0;
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
     padding: 24px;
+    box-sizing: border-box;
   }
 
-  &__section {
-    max-width: 560px;
-    margin: 0 auto 24px;
-    padding: 0 16px;
-    background: var(--color-bg);
-    border-radius: 8px;
-
-    &:last-child {
-      margin-bottom: 0;
-    }
+  /* 设计稿内容列宽 520px 居中，组间距 16px */
+  &__group {
+    width: 100%;
+    max-width: 520px;
   }
 
+  /* 行高 54px，左 14px / 右 12px 内边距，底部 1px 分割线 */
   &__row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    min-height: 52px;
-    padding: 12px 0;
+    height: 54px;
+    padding: 0 12px 0 14px;
     border-bottom: 1px solid var(--color-border);
-
-    &:last-child {
-      border-bottom: none;
-    }
+    box-sizing: border-box;
 
     &--clickable {
       cursor: pointer;
@@ -247,43 +356,41 @@ function selectThemeMode(value: ThemeMode) {
 
   &__label {
     font-size: 14px;
+    font-weight: 500;
     color: var(--color-text);
   }
 
   &__value {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
+    gap: 2px;
     font-size: 14px;
+    font-weight: 500;
     color: var(--color-text-secondary);
-    cursor: pointer;
   }
 
-  &__arrow {
-    display: inline-block;
-    font-size: 16px;
-    transform: rotate(90deg);
-    transition: transform 0.2s;
-
-    &--up {
-      transform: rotate(-90deg);
-    }
-  }
-
+  /* 行下方说明文案：28px 高、右对齐、12px 次级色 */
   &__hint {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    height: 28px;
     margin: 0;
-    padding: 0 0 12px;
+    padding: 0 12px 0 14px;
     font-size: 12px;
     color: var(--color-text-secondary);
-    text-align: right;
+    box-sizing: border-box;
   }
 
+  /* 开关：40×28 点击区内嵌 36×20 轨道 + 18px 滑块（对齐设计稿 Switches 组件） */
   &__switch {
     position: relative;
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     width: 40px;
-    height: 22px;
+    height: 28px;
+    flex-shrink: 0;
     cursor: pointer;
 
     input {
@@ -296,20 +403,20 @@ function selectThemeMode(value: ThemeMode) {
 
   &__switch-track {
     position: relative;
-    width: 100%;
-    height: 100%;
+    width: 36px;
+    height: 20px;
     background: var(--color-border);
-    border-radius: 11px;
+    border-radius: 10px;
     transition: background-color 0.2s;
 
     &::after {
       position: absolute;
-      top: 2px;
-      left: 2px;
+      top: 1px;
+      left: 1px;
       width: 18px;
       height: 18px;
       content: '';
-      background: var(--color-bg);
+      background: #ffffff;
       border-radius: 50%;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
       transition: transform 0.2s;
@@ -317,64 +424,62 @@ function selectThemeMode(value: ThemeMode) {
   }
 
   &__switch input:checked + &__switch-track {
-    background: var(--color-primary);
+    background: var(--uikit-primary-color, var(--color-primary));
   }
 
   &__switch input:checked + &__switch-track::after {
-    transform: translateX(18px);
+    transform: translateX(16px);
   }
 
-  /* 下拉弹层：展示在切换行下方，深色模式与语言切换共用 */
+  /* 下拉弹层：220px 宽、4px 内边距、次级底色 + 1px 描边（对齐设计稿 overflowmenu） */
   &__popup-wrapper {
     position: relative;
   }
 
   &__popup {
     position: absolute;
-    top: calc(100% - 4px);
-    right: 0;
+    top: calc(100% + 4px);
+    right: 12px;
     left: auto;
     z-index: 10;
-    min-width: 120px;
-    max-width: 180px;
-    padding: 8px 0;
-    background: var(--color-bg);
-    border-radius: 12px;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 220px;
+    padding: 4px;
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    box-sizing: border-box;
+    box-shadow:
+      0 4px 8px rgba(23, 26, 28, 0.1),
+      0 1px 3px rgba(70, 78, 83, 0.15);
   }
 
   &__popup-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 48px;
-    padding: 0 20px;
+    height: 36px;
+    padding: 0 8px 0 12px;
+    border-radius: 4px;
     cursor: pointer;
 
     &:hover {
-      background: var(--color-bg-secondary);
-    }
-
-    &--active {
-      .general-settings__popup-label {
-        color: var(--color-primary);
-      }
-
-      .general-settings__popup-check {
-        color: var(--color-primary);
-      }
+      background: var(--color-bg);
     }
   }
 
   &__popup-label {
-    font-size: 15px;
+    font-size: 14px;
+    font-weight: 500;
     color: var(--color-text);
   }
 
   &__popup-check {
-    width: 18px;
-    height: 18px;
+    width: 14px;
+    height: 14px;
+    color: var(--color-text);
   }
-
 }
 </style>

@@ -160,33 +160,41 @@ async function confirmEdit() {
 
 <style lang="scss" scoped>
 .account-info {
+  /* 资料行：54px 高、左 14px / 右 12px 内边距；分隔线自左 14px 起、通到右缘（对齐设计稿 stroke） */
   &__row {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    min-height: 52px;
-    padding: 12px 0;
-    border-bottom: 1px solid var(--color-border);
+    min-height: 54px;
+    padding: 0 12px 0 14px;
 
-    &:last-child {
-      border-bottom: none;
+    &::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 14px;
+      height: 1px;
+      background: var(--color-border);
     }
   }
 
   &__label {
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 500;
     color: var(--color-text);
   }
 
   &__field {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 2px;
   }
 
   &__field-text {
     font-size: 14px;
+    font-weight: 500;
     color: var(--color-text-secondary);
   }
 
@@ -194,21 +202,18 @@ async function confirmEdit() {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 24px;
-    height: 24px;
+    width: 16px;
+    height: 16px;
     padding: 0;
     color: var(--color-text-secondary);
     cursor: pointer;
     background: transparent;
     border: none;
-    border-radius: 4px;
-    transition:
-      color 0.2s,
-      background-color 0.2s;
+    border-radius: 50%;
+    transition: color 0.2s;
 
     &:hover {
       color: var(--color-primary);
-      background: var(--color-bg-secondary);
     }
   }
 
@@ -251,7 +256,7 @@ async function confirmEdit() {
     padding: 0 16px;
     font-size: 14px;
     border: none;
-    border-radius: 8px;
+    border-radius: 999px;
     cursor: pointer;
     transition:
       background-color 0.2s,

@@ -40,6 +40,23 @@
   }
 }
 
+// ------------------------------------------------------------------
+// 按钮胶囊化：UIKit 按钮统一为椭圆（胶囊）造型，与登录 / 退出按钮一致。
+// UIKit 按钮圆角由 --uikit-components-radius 驱动，但该变量同时作用于输入框、
+// 卡片等组件，不能整体改大，因此只覆盖按钮本身（modal 弹窗底部按钮是主要场景）。
+// UIKit 组件样式由异步 chunk 注入、加载顺序不稳定，故使用 !important。
+// ------------------------------------------------------------------
+.uikit-button {
+  border-radius: 999px !important;
+}
+
+// 「方正」组件风格（UIKIT 特性开关 componentsShape）下按钮让步给全局圆角 token
+//（--uikit-components-radius: 0px 直角），否则胶囊 !important 会屏蔽组件圆角调节。
+// data 属性由 useUIKitConfig 按 UIKit 主题 store 的 componentsShape 同步。
+[data-demo-components-shape='square'] .uikit-button {
+  border-radius: var(--uikit-components-radius, 0px) !important;
+}
+
 // 自定义 GIF 表情包 picker 布局：仅在 sticker（GIF）标签页下每行固定 4 个、等比放大，
 // 避免影响「常用」等普通 emoji 标签页的默认排列。
 .emoji-picker {

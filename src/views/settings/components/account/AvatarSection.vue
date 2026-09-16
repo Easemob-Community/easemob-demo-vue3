@@ -106,7 +106,7 @@ async function confirmAvatarUpdate(blob: Blob) {
           :aria-label="t('common.edit')"
           @click="openAvatarModal"
         >
-          <EmIcon name="rect_notched/pen" :size="16" />
+          <EmIcon name="rect_notched/pen" :size="24" />
         </button>
       </div>
     </div>
@@ -117,29 +117,35 @@ async function confirmAvatarUpdate(blob: Blob) {
 
 <style lang="scss" scoped>
 .account-info {
+  /* 头像行：64px 高（头像 40px 上下各 12px），分隔线与昵称 / 签名行一致 */
   &__row {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    min-height: 52px;
-    padding: 12px 0;
-    border-bottom: 1px solid var(--color-border);
+    min-height: 64px;
+    padding: 0 12px 0 14px;
 
-    &:last-child {
-      border-bottom: none;
+    &::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 14px;
+      height: 1px;
+      background: var(--color-border);
     }
   }
 
   &__label {
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 500;
     color: var(--color-text);
   }
 
   &__field {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
   }
 
   &__field-avatar {
@@ -152,6 +158,7 @@ async function confirmAvatarUpdate(blob: Blob) {
     display: inline-flex;
   }
 
+  /* 编辑遮罩常显（对齐设计稿：rgba(0,0,0,0.1) 遮罩 + 白色编辑图标居中） */
   &__avatar-edit {
     position: absolute;
     inset: 0;
@@ -161,17 +168,14 @@ async function confirmAvatarUpdate(blob: Blob) {
     width: 100%;
     height: 100%;
     padding: 0;
-    color: var(--color-text-secondary);
+    color: #ffffff;
     cursor: pointer;
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.1);
     border: none;
     border-radius: 50%;
-    transition:
-      color 0.2s,
-      background-color 0.2s;
+    transition: background-color 0.2s;
 
     &:hover {
-      color: var(--color-primary);
       background: rgba(0, 0, 0, 0.3);
     }
   }

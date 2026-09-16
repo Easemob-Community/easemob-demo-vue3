@@ -127,14 +127,14 @@ async function confirmDeleteAccount() {
 
 <style lang="scss" scoped>
 .account-info {
+  /* 操作按钮组：与资料列表同宽（520px 由父级内容列约束），间距 16px */
   &__actions {
     display: flex;
     gap: 16px;
-    justify-content: center;
-    max-width: 560px;
-    margin: 0 auto;
+    width: 100%;
   }
 
+  /* 按钮对齐设计稿：40px 高、胶囊圆角 999px、次级灰底、无边框 */
   &__btn {
     display: inline-flex;
     align-items: center;
@@ -144,14 +144,13 @@ async function confirmDeleteAccount() {
     height: 40px;
     padding: 0 16px;
     font-size: 14px;
+    font-weight: 500;
     color: var(--color-text);
     cursor: pointer;
     background: var(--color-bg-secondary);
-    border: 1px solid var(--color-border);
-    border-radius: 8px;
-    transition:
-      background-color 0.2s,
-      border-color 0.2s;
+    border: none;
+    border-radius: 999px;
+    transition: background-color 0.2s;
 
     &:hover:not(:disabled) {
       background: var(--color-border);

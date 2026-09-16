@@ -32,17 +32,17 @@ const { presenceStatus } = usePresenceSubscription(userId)
     </div>
 
     <div class="account-info__body">
-      <ProfileDisplay :user-id="userId" :presence="presenceStatus" />
+      <div class="account-info__content">
+        <ProfileDisplay :user-id="userId" :presence="presenceStatus" />
 
-      <div class="account-info__form">
         <ProfileEditor>
           <template #avatar-row>
             <AvatarSection />
           </template>
         </ProfileEditor>
-      </div>
 
-      <DangerZone />
+        <DangerZone />
+      </div>
     </div>
   </div>
 </template>
@@ -55,17 +55,18 @@ const { presenceStatus } = usePresenceSubscription(userId)
   min-height: 0;
   background: var(--color-bg);
 
-  /* 与左侧设置列表头部同高（48px），无底线 */
+  /* 头部对齐设计稿 top_bars：60px 高、18px 标题、底部 1px 分割线 */
   &__header {
     flex-shrink: 0;
     display: flex;
     align-items: center;
-    min-height: 48px;
-    padding: 12px 24px;
+    min-height: 60px;
+    padding: 0 16px;
+    border-bottom: 1px solid var(--color-border);
   }
 
   &__title {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 500;
     color: var(--color-text);
   }
@@ -74,12 +75,19 @@ const { presenceStatus } = usePresenceSubscription(userId)
     flex: 1;
     min-height: 0;
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
     padding: 32px 24px;
   }
 
-  &__form {
-    max-width: 560px;
-    margin: 0 auto 32px;
+  /* 内容列：520px 宽水平居中、垂直居中（margin auto 保证超高时可滚动不裁切），区块间距对齐设计稿 63px */
+  &__content {
+    width: 100%;
+    max-width: 520px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 63px;
   }
 }
 </style>

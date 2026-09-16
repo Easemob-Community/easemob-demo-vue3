@@ -248,7 +248,7 @@ function injectErrorDemo() {
     height: 32px;
     padding: 0 16px;
     border: 1px solid var(--uikit-primary-color, var(--color-primary));
-    border-radius: 6px;
+    border-radius: 999px;
     background-color: transparent;
     color: var(--uikit-primary-color, var(--color-primary));
     font-size: 13px;
@@ -274,7 +274,7 @@ function injectErrorDemo() {
     height: 40px;
     margin-top: 8px;
     border: none;
-    border-radius: 8px;
+    border-radius: 999px;
     background-color: var(--color-bg-secondary);
     color: var(--color-text);
     font-size: 14px;

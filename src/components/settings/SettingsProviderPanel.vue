@@ -357,7 +357,7 @@ const {
     height: 32px;
     padding: 0 12px;
     border: 1px solid var(--color-border);
-    border-radius: 6px;
+    border-radius: 999px;
     background-color: transparent;
     color: var(--color-text);
     font-size: 13px;
@@ -437,7 +437,7 @@ const {
     height: 40px;
     margin-top: 8px;
     border: none;
-    border-radius: 8px;
+    border-radius: 999px;
     background-color: var(--color-bg-secondary);
     color: var(--color-text);
     font-size: 14px;

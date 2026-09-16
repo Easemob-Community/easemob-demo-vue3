@@ -34,7 +34,7 @@ async function copyUserId() {
 <template>
   <div class="account-info__profile">
     <EmAvatar
-      :size="80"
+      :size="100"
       :src="avatarUrl"
       :name="nickname"
       shape="circle"
@@ -50,7 +50,7 @@ async function copyUserId() {
         :aria-label="t('common.copy')"
         @click="copyUserId"
       >
-        <EmIcon name="rects" :size="16" />
+        <EmIcon name="rects" :size="18" />
       </button>
     </div>
   </div>
@@ -62,49 +62,49 @@ async function copyUserId() {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 32px;
+    padding-top: 16px;
   }
 
+  /* 100px 头像内首字符字号对齐设计稿 34px */
   &__avatar {
-    font-size: 28px;
+    font-size: 34px;
     font-weight: 500;
   }
 
   &__nickname {
     margin: 16px 0 0;
     font-size: 18px;
-    font-weight: 600;
+    font-weight: 500;
+    line-height: 26px;
     color: var(--color-text);
   }
 
   &__user-id {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    margin-top: 6px;
-    font-size: 13px;
-    color: var(--color-text-secondary);
+    gap: 2px;
+    margin-top: 3px;
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--color-text-tertiary);
   }
 
   &__icon-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 24px;
-    height: 24px;
+    width: 18px;
+    height: 18px;
     padding: 0;
-    color: var(--color-text-secondary);
+    color: var(--color-text-tertiary);
     cursor: pointer;
     background: transparent;
     border: none;
-    border-radius: 4px;
-    transition:
-      color 0.2s,
-      background-color 0.2s;
+    border-radius: 50%;
+    transition: color 0.2s;
 
     &:hover {
       color: var(--color-primary);
-      background: var(--color-bg-secondary);
     }
   }
 }

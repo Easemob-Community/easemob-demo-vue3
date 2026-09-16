@@ -175,7 +175,7 @@ function selectCategory(key: CategoryKey) {
     color: var(--color-text-secondary);
     background: transparent;
     border: none;
-    border-radius: 8px;
+    border-radius: 50%;
     cursor: pointer;
     transition:
       background-color 0.2s,
@@ -262,7 +262,7 @@ function selectCategory(key: CategoryKey) {
     height: 32px;
     padding: 0 12px;
     border: 1px solid var(--color-border);
-    border-radius: 16px;
+    border-radius: 999px;
     background: transparent;
     color: var(--color-text-secondary);
     font-size: 13px;

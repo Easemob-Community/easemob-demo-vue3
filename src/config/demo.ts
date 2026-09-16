@@ -215,8 +215,8 @@ export const DEMO_RESIZABLE_CONFIG = {
 export const DEMO_AVATAR_CONFIG = {
   /** 侧边栏头像尺寸（px） */
   size: 40,
-  /** 在线状态指示器直径（px），不传则按头像尺寸自适应（40px 头像约 9px） */
-  presenceSize: 12,
+  /** 在线状态指示器直径（px），对齐设计稿：8px 圆点 + 2px 白边 */
+  presenceSize: 8,
   /** 是否允许点击更换头像 */
   editable: true,
 } as const
@@ -224,7 +224,7 @@ export const DEMO_AVATAR_CONFIG = {
 /** EmIcon 图标尺寸配置 */
 export const DEMO_ICON_SIZE = {
   /** 侧边栏导航 / Tab 图标尺寸（px） */
-  nav: 22,
+  nav: 24,
   /** 侧边栏工具按钮图标尺寸（px） */
   tool: 18,
   /** 返回按钮图标尺寸（px） */

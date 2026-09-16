@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { EmCell, EmIcon, EmResizable } from '@easemob/uikit-im'
+import { EmIcon, EmResizable } from '@easemob/uikit-im'
 
 import { useMobileView } from '@/composables/useMobileView'
 import { useSidebarWidth } from '@/composables/useSidebarWidth'
@@ -21,12 +21,12 @@ const isMobileView = useMobileView()
 const activeTab = ref<SettingsTab>('account')
 const showMobileDetail = ref(false)
 
-/** 设置菜单项：icon 为左侧图标组件或 EmIcon 名称（账户信息 / 通用 / 关于我们） */
+/** 设置菜单项：icon 为 EmIcon 名称（账户信息 / 通用 / 关于我们）；选中态切换为 filled 面性图标 */
 const menuItems = computed(() => [
   {
     key: 'account' as SettingsTab,
     label: t('settings.account.title'),
-    icon: 'filled/person/single',
+    icon: 'person/single',
   },
   {
     key: 'general' as SettingsTab,
@@ -39,6 +39,13 @@ const menuItems = computed(() => [
     icon: 'rect/candle',
   },
 ])
+
+function menuIcon(item: { key: SettingsTab; icon: string }) {
+  if (activeTab.value !== item.key || item.icon.startsWith('filled/')) {
+    return item.icon
+  }
+  return `filled/${item.icon}`
+}
 
 const activeTabLabel = computed(
   () => menuItems.value.find((item) => item.key === activeTab.value)?.label ?? '',
@@ -80,22 +87,17 @@ const { sidebarWidth, persistSidebarWidth } = useSidebarWidth(
             <span class="settings-page__title">{{ t('nav.settings') }}</span>
           </div>
           <div class="settings-page__list">
-            <EmCell
+            <button
               v-for="item in menuItems"
               :key="item.key"
-              :title="item.label"
-              :active="activeTab === item.key"
-              auto-height
-              class="settings-page__menu-cell"
+              type="button"
+              class="settings-page__menu-item"
+              :class="{ 'settings-page__menu-item--active': activeTab === item.key }"
               @click="selectTab(item.key)"
             >
-              <template #leading>
-                <span class="settings-page__menu-icon">
-                  <EmIcon v-if="typeof item.icon === 'string'" :name="item.icon" :size="22" />
-                  <component :is="item.icon" v-else :size="22" />
-                </span>
-              </template>
-            </EmCell>
+              <EmIcon :name="menuIcon(item)" :size="24" class="settings-page__menu-icon" />
+              <span class="settings-page__menu-label">{{ item.label }}</span>
+            </button>
           </div>
         </div>
       </EmResizable>
@@ -112,22 +114,17 @@ const { sidebarWidth, persistSidebarWidth } = useSidebarWidth(
         <span class="settings-page__mobile-title">{{ t('nav.settings') }}</span>
       </div>
       <div class="settings-page__mobile-body">
-        <EmCell
+        <button
           v-for="item in menuItems"
           :key="item.key"
-          :title="item.label"
-          :active="activeTab === item.key"
-          auto-height
-          class="settings-page__menu-cell"
+          type="button"
+          class="settings-page__menu-item"
+          :class="{ 'settings-page__menu-item--active': activeTab === item.key }"
           @click="selectTab(item.key)"
         >
-          <template #leading>
-            <span class="settings-page__menu-icon">
-              <EmIcon v-if="typeof item.icon === 'string'" :name="item.icon" :size="22" />
-              <component :is="item.icon" v-else :size="22" />
-            </span>
-          </template>
-        </EmCell>
+          <EmIcon :name="menuIcon(item)" :size="24" class="settings-page__menu-icon" />
+          <span class="settings-page__menu-label">{{ item.label }}</span>
+        </button>
 
         <!-- H5 详情页：点击菜单后全屏展示 -->
         <div v-if="showMobileDetail" class="settings-page__mobile-detail">
@@ -199,43 +196,66 @@ const { sidebarWidth, persistSidebarWidth } = useSidebarWidth(
     height: 100%;
   }
 
-  /* 与 UIKit 会话列表头部对齐（conversation-list__header）：48px + 12px/16px 内边距、无底线 */
+  /* 头部对齐设计稿 top_bars：60px 高、18px 标题 */
   &__header {
     flex-shrink: 0;
     display: flex;
     align-items: center;
-    min-height: 48px;
-    padding: 12px 16px;
+    min-height: 60px;
+    padding: 0 16px;
   }
 
   &__title {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 500;
     color: var(--color-text);
   }
 
+  /* 菜单列表：左右 8px 内边距、项间距 8px（对齐设计稿 conversation_list） */
   &__list {
     flex: 1;
     min-height: 0;
+    padding: 0 8px 8px;
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
   }
 
-  /* 菜单 leading 图标：40px 头像尺寸，与会话 / 联系人列表项的行高（40 + 2×--uikit-cell-padding-y）对齐 */
-  &__menu-icon {
-    display: inline-flex;
+  /* 菜单项：54px 高、24px 图标 + 8px 间距、圆角 8px、常态底色 --color-bg-secondary */
+  &__menu-item {
+    display: flex;
     align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
+    gap: 8px;
+    width: 100%;
+    height: 54px;
+    flex-shrink: 0;
+    padding: 0 12px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-text);
+    cursor: pointer;
+    background: var(--color-bg-secondary);
+    border: none;
+    border-radius: 8px;
+    transition:
+      background-color 0.2s,
+      color 0.2s;
+
+    &--active {
+      color: var(--color-primary);
+      background: var(--uikit-bg-active, #ebf7ff);
+    }
+  }
+
+  &__menu-icon {
     flex-shrink: 0;
   }
 
-  /* 菜单项选中态：图标与文字高亮为主题色（背景高亮由 EmCell active 态自带） */
-  &__menu-cell.is-active {
-    :deep(.uikit-cell__leading),
-    :deep(.uikit-cell__title) {
-      color: var(--uikit-primary-color, var(--color-primary));
-    }
+  &__menu-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   &__divider {
@@ -280,7 +300,11 @@ const { sidebarWidth, persistSidebarWidth } = useSidebarWidth(
   &__mobile-body {
     flex: 1;
     min-height: 0;
+    padding: 0 8px 8px;
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
   }
 
   &__mobile-detail {
@@ -313,7 +337,7 @@ const { sidebarWidth, persistSidebarWidth } = useSidebarWidth(
     cursor: pointer;
     background: transparent;
     border: none;
-    border-radius: 8px;
+    border-radius: 50%;
 
     svg {
       width: 20px;

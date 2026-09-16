@@ -347,6 +347,7 @@ function backToContactList() {
     color: var(--color-text);
     background: transparent;
     border: none;
+    border-radius: 50%;
     cursor: pointer;
   }
 

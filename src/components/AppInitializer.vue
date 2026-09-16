@@ -113,7 +113,7 @@ onMounted(autoLoginToSDK)
 .app-initializer__relogin {
   padding: 8px 24px;
   border: none;
-  border-radius: 6px;
+  border-radius: 999px;
   font-size: 14px;
   color: #fff;
   background-color: var(--color-primary);

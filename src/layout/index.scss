@@ -17,16 +17,12 @@
     align-items: center;
     width: 60px;
     height: calc(100vh - 16px);
-    padding: 16px 0;
+    padding: 10px 0;
     border-radius: 6px;
     background: var(--color-bg);
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
     flex-shrink: 0;
     user-select: none;
-  }
-
-  &__avatar {
-    margin-bottom: 12px;
   }
 
   &__nav {
@@ -36,26 +32,25 @@
     flex-direction: column;
     align-items: center;
     gap: 8px;
+    /* 设计稿：头像 40px + 顶部留白 10px，导航项组距头像 17px */
+    margin-top: 17px;
   }
 
   &__nav-item {
     position: relative;
-    width: 54px;
-    height: 54px;
+    width: 40px;
+    height: 40px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border-radius: 12px;
+    border-radius: 50%;
     color: var(--color-nav-icon-inactive);
     transition:
       background-color 0.2s,
-      color 0.2s,
-      box-shadow 0.2s;
+      color 0.2s;
 
     &:hover {
       background: var(--color-bg-secondary);
-      color: var(--color-text);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     }
 
     &.router-link-active {
@@ -73,9 +68,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
-    padding-top: 12px;
-    border-top: 1px solid var(--color-border);
+    /* 设计稿：特性入口底边距容器底 64px，设置项底边距 10px，二者间距 14px */
+    gap: 14px;
   }
 
   /* 特性入口容器：红点与广告弹层的定位基准 */
@@ -86,20 +80,20 @@
     justify-content: center;
   }
 
-  /* 特性图标包裹：让红点直接相对于 20px 图标定位 */
+  /* 特性图标包裹：让红点直接相对于 24px 图标定位 */
   &__feature-icon-wrap {
     position: relative;
     display: inline-flex;
   }
 
-  /* 特性图标右下角的诱导红点：附着在 20px 图标的右下角，略微外凸 */
+  /* 特性图标右下角的诱导红点：8px 圆点 + 2px 白边，附着在 24px 图标的右下角，略微外凸 */
   &__red-dot {
     position: absolute;
-    right: -3px;
-    bottom: -3px;
-    width: 7px;
-    height: 7px;
-    border: 1.5px solid var(--color-bg);
+    right: -1px;
+    bottom: -1px;
+    width: 8px;
+    height: 8px;
+    border: 2px solid var(--color-bg);
     border-radius: 50%;
     background: var(--color-badge-red);
     pointer-events: none;
@@ -108,8 +102,8 @@
   /* 特性广告弹层：左侧 caret 直接附着在特性图标右侧 */
   &__feature-promo {
     position: absolute;
-    /* 入口容器宽 60px，22px 图标居中后右侧位于 41px，用 calc 把弹层左边缘拉到图标右侧 */
-    left: calc(100% - 19px);
+    /* 入口容器宽 60px，24px 图标居中后右侧位于 42px，用 calc 把弹层左边缘拉到图标右侧 */
+    left: calc(100% - 18px);
     top: 50%;
     z-index: 20;
     width: 240px;
@@ -152,6 +146,7 @@
     padding: 0;
     background: transparent;
     border: none;
+    border-radius: 50%;
     cursor: pointer;
   }
 
@@ -170,23 +165,22 @@
   }
 
   &__tool-btn {
-    width: 54px;
-    height: 54px;
+    width: 40px;
+    height: 40px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 11px;
     color: var(--color-nav-icon-inactive);
     background: transparent;
     border: none;
-    border-radius: 12px;
+    border-radius: 50%;
     cursor: pointer;
-    transition: all 0.2s;
+    transition:
+      background-color 0.2s,
+      color 0.2s;
 
     &:hover {
       background: var(--color-bg-secondary);
-      color: var(--color-text);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     }
 
     &.router-link-active,

@@ -5,13 +5,16 @@
   --color-primary: #009eff;
   --color-text: #1f2329;
   --color-text-secondary: #6b7280;
+  --color-text-tertiary: #999999;
+  // 三级弱文字（个人信息页 ID / 复制图标，对齐设计稿 neutral/7）
+  --color-text-tertiary: #acb4b9;
   --color-bg: #ffffff;
   --color-bg-secondary: #f5f6f7;
   --color-border: #e5e6eb;
   --color-nav-icon-inactive: #b7c1c7;
-  --color-nav-icon-active: #0094fa;
-  --color-nav-icon-active-bg: #e6f6fe;
-  --color-badge-red: #ff4d4f;
+  --color-nav-icon-active: #009eff;
+  --color-nav-icon-active-bg: #ebf7ff;
+  --color-badge-red: #ff0055;
 }
 
 html.dark {
@@ -20,6 +23,8 @@ html.dark {
   --color-primary: #33b1ff;
   --color-text: #e5e7eb;
   --color-text-secondary: #9ca3af;
+  --color-text-tertiary: #6b7280;
+  --color-text-tertiary: #6b7280;
   --color-bg: #141414;
   --color-bg-secondary: #1f1f1f;
   --color-border: #303030;

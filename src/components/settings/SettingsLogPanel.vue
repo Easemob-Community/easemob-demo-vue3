@@ -244,7 +244,7 @@ async function onClearLogs() {
     height: 32px;
     padding: 0 14px;
     border: 1px solid var(--color-border);
-    border-radius: 16px;
+    border-radius: 999px;
     background: transparent;
     color: var(--color-text);
     font-size: 13px;
@@ -290,7 +290,7 @@ async function onClearLogs() {
     height: 32px;
     padding: 0 14px;
     border: 1px solid var(--color-border);
-    border-radius: 6px;
+    border-radius: 999px;
     background: transparent;
     color: var(--color-text);
     font-size: 13px;

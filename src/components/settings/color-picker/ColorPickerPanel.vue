@@ -288,7 +288,7 @@ const colorModes: { key: ColorMode; label: string }[] = [
   &__color-modes {
     display: flex;
     padding: 3px;
-    border-radius: 8px;
+    border-radius: 999px;
     background-color: var(--color-bg-secondary);
   }
 
@@ -296,7 +296,7 @@ const colorModes: { key: ColorMode; label: string }[] = [
     flex: 1;
     height: 30px;
     border: none;
-    border-radius: 6px;
+    border-radius: 999px;
     background: transparent;
     color: var(--color-text-secondary);
     font-size: 13px;

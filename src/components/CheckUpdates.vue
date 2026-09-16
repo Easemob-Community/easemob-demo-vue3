@@ -89,7 +89,7 @@ onBeforeUnmount(stopPolling)
     padding: 0 12px;
     font-size: 14px;
     border: none;
-    border-radius: 8px;
+    border-radius: 999px;
     cursor: pointer;
     transition: background-color 0.2s;
 
