@@ -17,11 +17,20 @@
 - 新版本检测提示：轮询部署后 index.html 的 ETag/Last-Modified 指纹，检测到新构建后弹不可关闭弹窗引导刷新（`useCheckUpdates` + `CheckUpdates`，挂载于 AppLayout）
 - 添加联系人支持手机号或用户 ID：自定义添加联系人弹窗（`AddContactModal` + `useContactAdd`，替换 `useContactSearch`），手机号经 App Server 解析为用户 ID，前置拦截「添加自己 / 已是好友」，并覆盖 UIKit 内置弹窗文案（`uikit-locale.ts`）
 - 自动登录加载与失败态：刷新后自动登录期间全屏 loading，失败展示错误详情与「重新登录」入口（AppInitializer）
+- 特性抽屉新增外观档位：头像形状（圆形/方形）、组件圆角（圆润/方正，联动 Demo 卡片圆角与按钮胶囊化让步）、Header 分隔线、按钮波纹，Hover 风格补充「方正」档
+- 特性抽屉新增会话未读徽标开关：数字/红点模式、信息区行尾/头像角标归位、角标位置（`EmConversationContainer` 的 unreadMode / unreadPlacement / badgePlacement）
+
+### 修复
+
+- 新版本检测改用 GET 请求，规避部分 CDN / 网关拦截 HEAD 返回 403
 
 ### 变更
 
-- uikit-im tgz 刷新至 3.5.1
+- uikit tgz 刷新至 core 2.8.1 / im 3.7.1 / websdk5 1.3.0
 - 设置各子面板头部对齐 UIKit 会话列表头部（48px、无底线），关于我们注册链接补充 utm 参数
+- 导航与工具图标统一迁移至 UIKit EmIcon（聚焦面性 / 常态线性），移除自维护 SVG 图标组件
+- 全面对齐新设计稿：主题色与弱文字色、按钮胶囊化（999px）、设置页与关于我们改造、头像在线状态点 8px + 2px 白边
+- 会话 / 通讯录 / 设置侧边栏容器默认宽度由 400px 调整为 360px（`DEMO_SIDEBAR_CONFIG.defaultWidth`）
 
 ## [0.3.0] - 2026-09-15
 
