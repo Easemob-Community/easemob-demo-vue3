@@ -207,7 +207,7 @@ describe('useDemoSettings（会话UIKIT特性开关）', () => {
     expect(settings.noticeTone.value).toBe('default')
   })
 
-  it('Provider 能力开关默认全部开启，自定义数据源默认关闭', () => {
+  it('Provider 能力开关默认全部开启（单聊昵称除外），自定义数据源默认关闭', () => {
     const settings = useDemoSettings()
 
     expect(settings.providerEnableContact.value).toBe(true)
@@ -216,6 +216,8 @@ describe('useDemoSettings（会话UIKIT特性开关）', () => {
     expect(settings.providerEnableDraft.value).toBe(true)
     expect(settings.providerEnableMotion.value).toBe(true)
     expect(settings.providerEnableTyping.value).toBe(true)
+    expect(settings.providerShowNicknameInSingleChat.value).toBe(false)
+    expect(settings.providerShowNicknameInGroupChat.value).toBe(true)
     expect(settings.providerEnableFetchContacts.value).toBe(false)
     expect(settings.providerEnableGroup.value).toBe(true)
     expect(settings.providerEnableUserInfo.value).toBe(true)
@@ -233,6 +235,8 @@ describe('useDemoSettings（会话UIKIT特性开关）', () => {
     settings.providerEnableDraft.value = false
     settings.providerEnableMotion.value = false
     settings.providerEnableTyping.value = false
+    settings.providerShowNicknameInSingleChat.value = true
+    settings.providerShowNicknameInGroupChat.value = false
     settings.providerEnableFetchContacts.value = true
     settings.providerEnableGroup.value = false
     settings.providerEnableUserInfo.value = false
@@ -249,6 +253,8 @@ describe('useDemoSettings（会话UIKIT特性开关）', () => {
     expect(settings.providerEnableDraft.value).toBe(true)
     expect(settings.providerEnableMotion.value).toBe(true)
     expect(settings.providerEnableTyping.value).toBe(true)
+    expect(settings.providerShowNicknameInSingleChat.value).toBe(false)
+    expect(settings.providerShowNicknameInGroupChat.value).toBe(true)
     expect(settings.providerEnableFetchContacts.value).toBe(false)
     expect(settings.providerEnableGroup.value).toBe(true)
     expect(settings.providerEnableUserInfo.value).toBe(true)

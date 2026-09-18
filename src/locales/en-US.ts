@@ -2,6 +2,7 @@
 export default {
   app: {
     title: 'Easemob IM Demo',
+    newMessageNotice: '[New Message]',
   },
   common: {
     back: 'Back',
@@ -16,8 +17,6 @@ export default {
   },
   autoLogin: {
     loading: 'Signing in…',
-    failed: 'Auto sign-in failed',
-    relogin: 'Sign in again',
   },
   nav: {
     chat: 'Chats',
@@ -63,9 +62,6 @@ export default {
       showTyping: 'Show Typing Status',
       showTypingHint: 'When on, others will see your typing status',
       darkMode: 'Dark Mode',
-      switchTheme: 'Switch Theme',
-      themeClassic: 'Classic',
-      setColor: 'Set Color',
       language: 'Language',
       langZh: 'Simplified Chinese',
       langEn: 'English',
@@ -432,6 +428,8 @@ export default {
       enableDraft: 'Show conversation draft (enableDraft)',
       enableMotion: '＠Me message reminder (enableMotion)',
       enableTyping: 'Other side typing indicator (enableTyping)',
+      showNicknameInSingleChat: 'Show peer nickname in single chat (showNicknameInSingleChat)',
+      showNicknameInGroupChat: 'Show sender nickname in group chat (showNicknameInGroupChat)',
       fetchContacts: 'Custom data source (fetchContacts)',
       fetchContactsDesc: 'Take over contact fetching via business API',
       enableGroup: 'Group system (enableGroup)',
@@ -447,7 +445,7 @@ export default {
       notes: {
         afterEnable: 'When on:',
         defaultAllOn:
-          'Provider capability switches are all on by default. When off, the corresponding feature will no longer pull / render / send.',
+          'Provider capability switches are all on by default (single-chat nickname off, custom data source off). When off, the corresponding feature will no longer pull / render / send.',
         readOnMount:
           'Note: these switches are read when the Provider mounts; after logging in, you need to log in again (or refresh the page) for changes to take full effect.',
         customDataSource:

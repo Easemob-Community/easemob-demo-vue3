@@ -94,7 +94,9 @@ export const DEMO_CONVERSATION_CONFIG = {
 /**
  * EmUIKitProvider 功能开关
  *
- * 与「UIKIT特性开关 - Provider」面板一一对应（默认全部开启，见面板说明「Provider 能力开关默认全部开启」）。
+ * 与「UIKIT特性开关 - Provider」面板一一对应。
+ * 除昵称展示开关（showNicknameInSingleChat 默认关闭）与自定义数据源（enableFetchContacts 默认关闭）外，
+ * 其余开关默认全部开启，见面板说明「Provider 能力开关默认全部开启」。
  * 由 useDemoSettings 读取作为默认值，App.vue 绑定到 EmUIKitProvider；运行期改动即时反映为 Provider props。
  */
 export const DEMO_PROVIDER_CONFIG = {
@@ -113,6 +115,10 @@ export const DEMO_PROVIDER_CONFIG = {
   enableAtMe: true,
   /** 是否启用对方正在输入提示（enableTyping） */
   enableTyping: true,
+  /** 单聊消息列表是否展示对方昵称（showNicknameInSingleChat，默认关闭） */
+  showNicknameInSingleChat: false,
+  /** 群聊消息列表是否展示发送者昵称（showNicknameInGroupChat，默认开启） */
+  showNicknameInGroupChat: true,
   /**
    * 是否使用自定义数据源接管拉取联系人（fetchContacts）。
    * 开启后拉取好友走示例接口（返回 DEMO_CUSTOM_CONTACTS，Alice / Bob），否则走 SDK 默认。
@@ -215,8 +221,8 @@ export const DEMO_RESIZABLE_CONFIG = {
 export const DEMO_AVATAR_CONFIG = {
   /** 侧边栏头像尺寸（px） */
   size: 40,
-  /** 在线状态指示器直径（px），对齐设计稿：8px 圆点 + 2px 白边 */
-  presenceSize: 8,
+  /** 在线状态指示器直径（px），对齐设计稿固定规格：8px 核心 + 1.5px 分界环 × 2 = 11px，与会话列表一致且不随头像缩放 */
+  presenceSize: 11,
   /** 是否允许点击更换头像 */
   editable: true,
 } as const
@@ -243,9 +249,10 @@ export const DEMO_UIKIT_DOCS_CONFIG = {
 
 /**
  * 会话列表侧边栏宽度（px），对齐 UIKit demo 的 EmResizable 可拖拽范围（240~480）。
+ * 无记忆时侧边栏不按固定宽度渲染，走 UIKIT 弹性基准（clamp(240px, 25%, 480px)）随窗口伸缩。
  */
 export const DEMO_SIDEBAR_CONFIG = {
-  /** 侧边栏默认宽度（px）：无记忆时的初始值，保证首屏宽度舒适 */
+  /** 侧边栏基准宽度（px）：仅作 fluid 模式下首次拖拽测量失败时的兜底初值（约 1440px 窗口下的弹性值） */
   defaultWidth: 360,
   /** 侧边栏最小宽度（px） */
   minWidth: 240,

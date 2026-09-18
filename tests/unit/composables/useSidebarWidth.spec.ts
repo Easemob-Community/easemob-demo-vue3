@@ -31,7 +31,6 @@ function currentStorageKey(suffix: string) {
 }
 
 const SUFFIX = 'layout_test_sidebar_width'
-const DEFAULT_WIDTH = 320
 
 describe('useSidebarWidth', () => {
   beforeEach(() => {
@@ -40,56 +39,56 @@ describe('useSidebarWidth', () => {
     mockClient().currentUser = 'user-1'
   })
 
-  it('无持久化值时使用默认宽度', () => {
-    const { sidebarWidth } = useSidebarWidth(SUFFIX, DEFAULT_WIDTH)
-    expect(sidebarWidth.value).toBe(DEFAULT_WIDTH)
+  it('无持久化值时为 undefined（EmResizable 走 fluid 弹性基准，不写内联宽度）', () => {
+    const { sidebarWidth } = useSidebarWidth(SUFFIX)
+    expect(sidebarWidth.value).toBeUndefined()
   })
 
   it('读取范围内的持久化宽度', () => {
-    localStorage.setItem(currentStorageKey(SUFFIX), String(DEFAULT_WIDTH + 40))
-    const { sidebarWidth } = useSidebarWidth(SUFFIX, DEFAULT_WIDTH)
-    expect(sidebarWidth.value).toBe(DEFAULT_WIDTH + 40)
+    localStorage.setItem(currentStorageKey(SUFFIX), '360')
+    const { sidebarWidth } = useSidebarWidth(SUFFIX)
+    expect(sidebarWidth.value).toBe(360)
   })
 
   it('持久化宽度超出边界时钳制到最小 / 最大宽度', () => {
     localStorage.setItem(currentStorageKey(SUFFIX), String(DEMO_SIDEBAR_CONFIG.minWidth - 100))
-    const tooNarrow = useSidebarWidth(SUFFIX, DEFAULT_WIDTH)
+    const tooNarrow = useSidebarWidth(SUFFIX)
     expect(tooNarrow.sidebarWidth.value).toBe(DEMO_SIDEBAR_CONFIG.minWidth)
 
     localStorage.setItem(currentStorageKey(SUFFIX), String(DEMO_SIDEBAR_CONFIG.maxWidth + 100))
-    const tooWide = useSidebarWidth(SUFFIX, DEFAULT_WIDTH)
+    const tooWide = useSidebarWidth(SUFFIX)
     expect(tooWide.sidebarWidth.value).toBe(DEMO_SIDEBAR_CONFIG.maxWidth)
   })
 
-  it('持久化值非法（非数字）时回退默认宽度', () => {
+  it('持久化值非法（非数字）时为 undefined（走弹性基准）', () => {
     localStorage.setItem(currentStorageKey(SUFFIX), 'abc')
-    const { sidebarWidth } = useSidebarWidth(SUFFIX, DEFAULT_WIDTH)
-    expect(sidebarWidth.value).toBe(DEFAULT_WIDTH)
+    const { sidebarWidth } = useSidebarWidth(SUFFIX)
+    expect(sidebarWidth.value).toBeUndefined()
   })
 
   it('登录用户变化时按新 key 重新读取', async () => {
-    localStorage.setItem(currentStorageKey(SUFFIX), String(DEFAULT_WIDTH + 40))
+    localStorage.setItem(currentStorageKey(SUFFIX), '360')
 
-    const { sidebarWidth } = useSidebarWidth(SUFFIX, DEFAULT_WIDTH)
-    expect(sidebarWidth.value).toBe(DEFAULT_WIDTH + 40)
+    const { sidebarWidth } = useSidebarWidth(SUFFIX)
+    expect(sidebarWidth.value).toBe(360)
 
-    // 切换用户：新用户无记忆 → 回退默认宽度
+    // 切换用户：新用户无记忆 → undefined（弹性基准）
     mockClient().currentUser = 'user-2'
     await nextTick()
-    expect(sidebarWidth.value).toBe(DEFAULT_WIDTH)
+    expect(sidebarWidth.value).toBeUndefined()
 
     // 给新用户写入记忆后再切回，按各自 key 独立读取
-    localStorage.setItem(currentStorageKey(SUFFIX), String(DEFAULT_WIDTH + 80))
+    localStorage.setItem(currentStorageKey(SUFFIX), '400')
     mockClient().currentUser = 'user-1'
     await nextTick()
-    expect(sidebarWidth.value).toBe(DEFAULT_WIDTH + 40)
+    expect(sidebarWidth.value).toBe(360)
   })
 
   it('persistSidebarWidth 写回状态并持久化到当前用户的存储 key', () => {
-    const { sidebarWidth, persistSidebarWidth } = useSidebarWidth(SUFFIX, DEFAULT_WIDTH)
+    const { sidebarWidth, persistSidebarWidth } = useSidebarWidth(SUFFIX)
 
-    persistSidebarWidth(DEFAULT_WIDTH + 60)
-    expect(sidebarWidth.value).toBe(DEFAULT_WIDTH + 60)
-    expect(localStorage.getItem(currentStorageKey(SUFFIX))).toBe(String(DEFAULT_WIDTH + 60))
+    persistSidebarWidth(420)
+    expect(sidebarWidth.value).toBe(420)
+    expect(localStorage.getItem(currentStorageKey(SUFFIX))).toBe('420')
   })
 })

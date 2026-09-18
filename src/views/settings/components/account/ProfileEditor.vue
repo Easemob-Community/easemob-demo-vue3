@@ -181,7 +181,7 @@ async function confirmEdit() {
   }
 
   &__label {
-    font-size: 14px;
+    font-size: calc(14px * var(--demo-font-scale, 1));
     font-weight: 500;
     color: var(--color-text);
   }
@@ -193,7 +193,7 @@ async function confirmEdit() {
   }
 
   &__field-text {
-    font-size: 14px;
+    font-size: calc(14px * var(--demo-font-scale, 1));
     font-weight: 500;
     color: var(--color-text-secondary);
   }
@@ -229,6 +229,7 @@ async function confirmEdit() {
   &__edit-modal {
     width: 320px;
     padding: 20px;
+    box-sizing: border-box;
   }
 
   &__edit-modal-header {
@@ -236,7 +237,7 @@ async function confirmEdit() {
   }
 
   &__edit-modal-title {
-    font-size: 16px;
+    font-size: calc(16px * var(--demo-font-scale, 1));
     font-weight: 600;
     color: var(--color-text);
   }
@@ -254,7 +255,7 @@ async function confirmEdit() {
   &__edit-btn {
     height: 36px;
     padding: 0 16px;
-    font-size: 14px;
+    font-size: calc(14px * var(--demo-font-scale, 1));
     border: none;
     border-radius: 999px;
     cursor: pointer;

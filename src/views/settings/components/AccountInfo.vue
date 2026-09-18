@@ -55,18 +55,17 @@ const { presenceStatus } = usePresenceSubscription(userId)
   min-height: 0;
   background: var(--color-bg);
 
-  /* 头部对齐设计稿 top_bars：60px 高、18px 标题、底部 1px 分割线 */
+  /* 头部对齐设计稿 top_bars：60px 高、18px 标题，无底部分割线 */
   &__header {
     flex-shrink: 0;
     display: flex;
     align-items: center;
     min-height: 60px;
     padding: 0 16px;
-    border-bottom: 1px solid var(--color-border);
   }
 
   &__title {
-    font-size: 18px;
+    font-size: calc(18px * var(--demo-font-scale, 1));
     font-weight: 500;
     color: var(--color-text);
   }

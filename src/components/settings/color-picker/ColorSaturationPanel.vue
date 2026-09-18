@@ -95,6 +95,7 @@ function stopDragging() {
     position: absolute;
     width: 18px;
     height: 18px;
+    box-sizing: border-box;
     border: 2px solid #ffffff;
     border-radius: 50%;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);

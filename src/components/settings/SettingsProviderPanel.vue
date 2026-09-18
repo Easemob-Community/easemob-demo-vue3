@@ -3,7 +3,7 @@
  * UIKIT特性开关 - Provider 面板
  *
  * 按设计图一比一还原，包含：
- * - 6 项 Provider 能力开关（好友列表 / 黑名单 / 在线状态 / 草稿 / ＠我 / 正在输入）
+ * - 8 项 Provider 能力开关（好友列表 / 黑名单 / 在线状态 / 草稿 / ＠我 / 正在输入 / 单聊昵称 / 群聊昵称）
  * - 自定义数据源（fetchContacts）开关及「由业务接口接管拉取联系人」说明
  * - 扩展能力开关：群组体系 / 用户资料 / 用户资料订阅 / 过滤拉黑好友 / 内置 Toast
  * - 联系人拉取模式（contactFetchMode：分页 / 全量）
@@ -27,6 +27,8 @@ const {
   providerEnableDraft,
   providerEnableMotion,
   providerEnableTyping,
+  providerShowNicknameInSingleChat,
+  providerShowNicknameInGroupChat,
   providerEnableFetchContacts,
   providerEnableGroup,
   providerEnableUserInfo,
@@ -133,6 +135,38 @@ const {
           :aria-checked="providerEnableTyping"
           role="switch"
           @click="providerEnableTyping = !providerEnableTyping"
+        >
+          <span class="settings-provider-panel__switch-thumb" />
+        </button>
+      </div>
+
+      <div class="settings-provider-panel__switch-item">
+        <span class="settings-provider-panel__label">
+          {{ t('features.provider.showNicknameInSingleChat') }}
+        </span>
+        <button
+          type="button"
+          class="settings-provider-panel__switch"
+          :class="{ 'settings-provider-panel__switch--active': providerShowNicknameInSingleChat }"
+          :aria-checked="providerShowNicknameInSingleChat"
+          role="switch"
+          @click="providerShowNicknameInSingleChat = !providerShowNicknameInSingleChat"
+        >
+          <span class="settings-provider-panel__switch-thumb" />
+        </button>
+      </div>
+
+      <div class="settings-provider-panel__switch-item">
+        <span class="settings-provider-panel__label">
+          {{ t('features.provider.showNicknameInGroupChat') }}
+        </span>
+        <button
+          type="button"
+          class="settings-provider-panel__switch"
+          :class="{ 'settings-provider-panel__switch--active': providerShowNicknameInGroupChat }"
+          :aria-checked="providerShowNicknameInGroupChat"
+          role="switch"
+          @click="providerShowNicknameInGroupChat = !providerShowNicknameInGroupChat"
         >
           <span class="settings-provider-panel__switch-thumb" />
         </button>
@@ -319,14 +353,14 @@ const {
   }
 
   &__label {
-    font-size: 15px;
+    font-size: calc(15px * var(--demo-font-scale, 1));
     font-weight: 500;
     color: var(--color-text);
   }
 
   &__row-desc {
     margin: 8px 0 0;
-    font-size: 12px;
+    font-size: calc(12px * var(--demo-font-scale, 1));
     color: var(--color-text-secondary);
     line-height: 1.5;
     text-align: right;
@@ -342,7 +376,7 @@ const {
   }
 
   &__sub-title {
-    font-size: 15px;
+    font-size: calc(15px * var(--demo-font-scale, 1));
     font-weight: 500;
     color: var(--color-text);
   }
@@ -360,7 +394,7 @@ const {
     border-radius: 999px;
     background-color: transparent;
     color: var(--color-text);
-    font-size: 13px;
+    font-size: calc(13px * var(--demo-font-scale, 1));
     cursor: pointer;
     transition: all 0.2s;
     white-space: nowrap;
@@ -419,14 +453,14 @@ const {
 
   &__note-title {
     margin: 0;
-    font-size: 13px;
+    font-size: calc(13px * var(--demo-font-scale, 1));
     font-weight: 500;
     color: var(--color-text);
   }
 
   &__note-text {
     margin: 0;
-    font-size: 12px;
+    font-size: calc(12px * var(--demo-font-scale, 1));
     color: var(--color-text-secondary);
     line-height: 1.6;
   }
@@ -440,7 +474,7 @@ const {
     border-radius: 999px;
     background-color: var(--color-bg-secondary);
     color: var(--color-text);
-    font-size: 14px;
+    font-size: calc(14px * var(--demo-font-scale, 1));
     font-weight: 500;
     cursor: pointer;
     transition: background-color 0.2s;

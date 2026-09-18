@@ -58,15 +58,13 @@ function selectTab(tab: SettingsTab) {
   }
 }
 
-/* ===== 设置面板宽度（与会话/联系人侧边栏完全对齐：同一存储 key + 同一默认宽度，三页宽度始终一致） ===== */
+/* ===== 设置面板宽度（与会话/联系人侧边栏完全对齐：同一存储 key + 同一弹性基准，三页宽度始终一致） ===== */
 
 const SETTINGS_SIDEBAR_MIN = DEMO_SIDEBAR_CONFIG.minWidth
 const SETTINGS_SIDEBAR_MAX = DEMO_SIDEBAR_CONFIG.maxWidth
 
-const { sidebarWidth, persistSidebarWidth } = useSidebarWidth(
-  'layout_sidebar_width',
-  DEMO_SIDEBAR_CONFIG.defaultWidth,
-)
+// 无记忆时 sidebarWidth 为 undefined：走 fluid 弹性基准（三页同一存储 key，宽度联动一致）
+const { sidebarWidth, persistSidebarWidth } = useSidebarWidth('layout_sidebar_width')
 </script>
 
 <template>
@@ -78,7 +76,9 @@ const { sidebarWidth, persistSidebarWidth } = useSidebarWidth(
         :axis="DEMO_RESIZABLE_CONFIG.axis"
         :min="SETTINGS_SIDEBAR_MIN"
         :max="SETTINGS_SIDEBAR_MAX"
+        :initial="DEMO_SIDEBAR_CONFIG.defaultWidth"
         :handle-size="DEMO_RESIZABLE_CONFIG.handleSize"
+        fluid
         class="settings-page__sidebar"
         @resize-end="persistSidebarWidth"
       >
@@ -176,6 +176,8 @@ const { sidebarWidth, persistSidebarWidth } = useSidebarWidth(
 
   &__sidebar {
     flex-shrink: 0;
+    /* 未拖拽时按 UIKIT 侧栏基准弹性取值（随窗口伸缩）；拖拽后由 EmResizable 内联宽度覆盖 */
+    width: clamp(var(--uikit-sidebar-min-width, 240px), 25%, var(--uikit-sidebar-max-width, 480px));
     height: 100%;
     min-height: 0;
     overflow: hidden;
@@ -206,7 +208,7 @@ const { sidebarWidth, persistSidebarWidth } = useSidebarWidth(
   }
 
   &__title {
-    font-size: 18px;
+    font-size: calc(18px * var(--demo-font-scale, 1));
     font-weight: 500;
     color: var(--color-text);
   }
@@ -231,7 +233,8 @@ const { sidebarWidth, persistSidebarWidth } = useSidebarWidth(
     height: 54px;
     flex-shrink: 0;
     padding: 0 12px;
-    font-size: 14px;
+    box-sizing: border-box;
+    font-size: calc(14px * var(--demo-font-scale, 1));
     font-weight: 500;
     color: var(--color-text);
     cursor: pointer;
@@ -292,7 +295,7 @@ const { sidebarWidth, persistSidebarWidth } = useSidebarWidth(
   }
 
   &__mobile-title {
-    font-size: 16px;
+    font-size: calc(16px * var(--demo-font-scale, 1));
     font-weight: 500;
     color: var(--color-text);
   }
@@ -350,7 +353,7 @@ const { sidebarWidth, persistSidebarWidth } = useSidebarWidth(
   }
 
   &__mobile-detail-title {
-    font-size: 16px;
+    font-size: calc(16px * var(--demo-font-scale, 1));
     font-weight: 500;
     color: var(--color-text);
   }

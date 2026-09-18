@@ -17,7 +17,7 @@ import { DEMO_PROVIDER_CONFIG } from '@/config/demo'
 
 function createProviderSettings() {
   /* ===== Provider 能力开关（EmUIKitProvider，见「UIKIT特性开关 - Provider」面板） =====
-   * 默认全部开启（对齐 DEMO_PROVIDER_CONFIG），关闭后对应功能不再拉取 / 渲染 / 发送。
+   * 默认对齐 DEMO_PROVIDER_CONFIG（除昵称展示/自定义数据源外默认全部开启），关闭后对应功能不再拉取 / 渲染 / 发送。
    * 注意：开关在 Provider 挂载时读取，登录后修改需重新登录（或刷新页面）才能完整生效。
    */
   /** 好友列表与好友事件（标签 enableContact） */
@@ -34,6 +34,10 @@ function createProviderSettings() {
   const providerEnableMotion = ref(DEMO_PROVIDER_CONFIG.enableAtMe as boolean)
   /** 对方正在输入提示（标签 enableTyping） */
   const providerEnableTyping = ref(DEMO_PROVIDER_CONFIG.enableTyping as boolean)
+  /** 单聊消息列表展示对方昵称（标签 showNicknameInSingleChat，默认关闭） */
+  const providerShowNicknameInSingleChat = ref(DEMO_PROVIDER_CONFIG.showNicknameInSingleChat as boolean)
+  /** 群聊消息列表展示发送者昵称（标签 showNicknameInGroupChat，默认开启） */
+  const providerShowNicknameInGroupChat = ref(DEMO_PROVIDER_CONFIG.showNicknameInGroupChat as boolean)
   /**
    * 自定义数据源（fetchContacts）：开启后拉取好友走示例接口（返回 Alice / Bob），否则走 SDK 默认。
    */
@@ -61,6 +65,8 @@ function createProviderSettings() {
     providerEnableDraft.value = DEMO_PROVIDER_CONFIG.enableDraft
     providerEnableMotion.value = DEMO_PROVIDER_CONFIG.enableAtMe
     providerEnableTyping.value = DEMO_PROVIDER_CONFIG.enableTyping
+    providerShowNicknameInSingleChat.value = DEMO_PROVIDER_CONFIG.showNicknameInSingleChat
+    providerShowNicknameInGroupChat.value = DEMO_PROVIDER_CONFIG.showNicknameInGroupChat
     providerEnableFetchContacts.value = DEMO_PROVIDER_CONFIG.enableFetchContacts
     providerEnableGroup.value = DEMO_PROVIDER_CONFIG.enableGroup
     providerEnableUserInfo.value = DEMO_PROVIDER_CONFIG.enableUserInfo
@@ -78,6 +84,8 @@ function createProviderSettings() {
     providerEnableDraft,
     providerEnableMotion,
     providerEnableTyping,
+    providerShowNicknameInSingleChat,
+    providerShowNicknameInGroupChat,
     providerEnableFetchContacts,
     providerEnableGroup,
     providerEnableUserInfo,

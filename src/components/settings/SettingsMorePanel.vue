@@ -64,7 +64,7 @@ const { t } = useI18n()
 
   &__section-title {
     margin: 0;
-    font-size: 13px;
+    font-size: calc(13px * var(--demo-font-scale, 1));
     font-weight: 600;
     color: var(--color-text-secondary);
   }
@@ -94,13 +94,13 @@ const { t } = useI18n()
   }
 
   &__doc-label {
-    font-size: 15px;
+    font-size: calc(15px * var(--demo-font-scale, 1));
     font-weight: 500;
     color: var(--color-text);
   }
 
   &__doc-desc {
-    font-size: 12px;
+    font-size: calc(12px * var(--demo-font-scale, 1));
     color: var(--color-text-secondary);
     line-height: 1.5;
   }
@@ -112,7 +112,7 @@ const { t } = useI18n()
 
   &__desc {
     margin: 0;
-    font-size: 12px;
+    font-size: calc(12px * var(--demo-font-scale, 1));
     color: var(--color-text-secondary);
     line-height: 1.5;
   }

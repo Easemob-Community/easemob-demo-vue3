@@ -372,7 +372,7 @@ function simulateNewMessage() {
 
   &__section-title {
     margin: 0;
-    font-size: 13px;
+    font-size: calc(13px * var(--demo-font-scale, 1));
     font-weight: 600;
     color: var(--color-text-secondary);
   }
@@ -398,25 +398,25 @@ function simulateNewMessage() {
   }
 
   &__label {
-    font-size: 16px;
+    font-size: calc(16px * var(--demo-font-scale, 1));
     font-weight: 500;
     color: var(--color-text);
 
     &--sub {
-      font-size: 15px;
+      font-size: calc(15px * var(--demo-font-scale, 1));
       font-weight: 400;
       color: var(--color-text);
     }
   }
 
   &__status {
-    font-size: 14px;
+    font-size: calc(14px * var(--demo-font-scale, 1));
     color: var(--color-text-secondary);
   }
 
   &__desc {
     margin: -10px 0 0;
-    font-size: 12px;
+    font-size: calc(12px * var(--demo-font-scale, 1));
     color: var(--color-text-secondary);
     line-height: 1.5;
     text-align: right;
@@ -485,7 +485,7 @@ function simulateNewMessage() {
     border-radius: 999px;
     background: transparent;
     color: var(--color-text);
-    font-size: 13px;
+    font-size: calc(13px * var(--demo-font-scale, 1));
     cursor: pointer;
     transition: all 0.15s;
 
@@ -524,7 +524,7 @@ function simulateNewMessage() {
     border-radius: 999px;
     background: transparent;
     color: var(--uikit-primary-color, var(--color-primary));
-    font-size: 13px;
+    font-size: calc(13px * var(--demo-font-scale, 1));
     cursor: pointer;
     transition: all 0.15s;
 
@@ -541,7 +541,7 @@ function simulateNewMessage() {
 
   &__tip {
     margin: 0;
-    font-size: 12px;
+    font-size: calc(12px * var(--demo-font-scale, 1));
     color: var(--uikit-error-color, #ff4d4f);
     opacity: 0;
     transition: opacity 0.2s;
@@ -560,7 +560,7 @@ function simulateNewMessage() {
     border-radius: 999px;
     background-color: var(--color-bg-secondary);
     color: var(--color-text);
-    font-size: 14px;
+    font-size: calc(14px * var(--demo-font-scale, 1));
     font-weight: 500;
     cursor: pointer;
     transition: background-color 0.2s;

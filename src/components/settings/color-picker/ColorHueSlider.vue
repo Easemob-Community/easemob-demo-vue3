@@ -84,6 +84,7 @@ function stopDragging() {
   &__color-dot {
     width: 28px;
     height: 28px;
+    box-sizing: border-box;
     border-radius: 6px;
     border: 1px solid var(--color-border);
     flex-shrink: 0;
@@ -104,6 +105,7 @@ function stopDragging() {
     top: 50%;
     width: 14px;
     height: 28px;
+    box-sizing: border-box;
     border: 2px solid #ffffff;
     border-radius: 7px;
     background-color: transparent;

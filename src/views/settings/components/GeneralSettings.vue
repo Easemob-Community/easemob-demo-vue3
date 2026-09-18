@@ -5,7 +5,6 @@ import { EmIcon, useUIKit, useTheme as useUIKitTheme } from '@easemob/uikit-im'
 import { isKeyboardShortcutsEnabled, setKeyboardShortcutsEnabled } from '@easemob/uikit-core'
 
 import { useDemoSettings } from '@/composables/useDemoSettings'
-import { useSettingsDrawer } from '@/composables/useSettingsDrawer'
 import { useTheme, type ThemeMode } from '@/composables/useTheme'
 
 defineOptions({ name: 'GeneralSettings' })
@@ -15,7 +14,6 @@ const { mode: themeMode, setMode: setThemeMode } = useTheme()
 const uikitTheme = useUIKitTheme()
 const { stores } = useUIKit()
 const { notificationEnable } = useDemoSettings()
-const { open: openSettingsDrawer } = useSettingsDrawer()
 
 /** 显示输入状态：接入 UIKit 会话 store 的 typingEnabled */
 const showTyping = computed({
@@ -40,10 +38,9 @@ const keyboardEnabled = computed({
   },
 })
 
-/* ===== 下拉弹层（暗黑模式 / 切换主题 / 语言设置）：同一时刻仅展开一个 ===== */
+/* ===== 下拉弹层（暗黑模式 / 语言设置）：同一时刻仅展开一个 ===== */
 const darkModeOpen = ref(false)
 const languageOpen = ref(false)
-const themeOpen = ref(false)
 
 /** 暗黑模式选项：跟随系统 / 浅色 / 深色 */
 const darkModeOptions = computed(() => [
@@ -57,12 +54,6 @@ const languageOptions = computed(() => [
   { label: t('settings.general.langEn'), value: 'en-US' },
 ])
 
-/** 主题选项：当前仅「经典」一套 */
-const themeOptions = computed(() => [
-  { label: t('settings.general.themeClassic'), value: 'classic' as const },
-])
-const currentTheme = ref<'classic'>('classic')
-
 const currentDarkModeLabel = computed(
   () =>
     darkModeOptions.value.find((item) => item.value === themeMode.value)?.label ??
@@ -75,17 +66,10 @@ const currentLanguageLabel = computed(
     languageOptions.value[0].label,
 )
 
-const currentThemeLabel = computed(
-  () =>
-    themeOptions.value.find((item) => item.value === currentTheme.value)?.label ??
-    themeOptions.value[0].label,
-)
-
 function toggleDarkModePanel() {
   const willOpen = !darkModeOpen.value
   darkModeOpen.value = willOpen
   if (willOpen) {
-    themeOpen.value = false
     languageOpen.value = false
   }
 }
@@ -95,27 +79,12 @@ function toggleLanguagePanel() {
   languageOpen.value = willOpen
   if (willOpen) {
     darkModeOpen.value = false
-    themeOpen.value = false
   }
 }
 
 function selectLanguage(value: string) {
   locale.value = value
   languageOpen.value = false
-}
-
-function toggleThemePanel() {
-  const willOpen = !themeOpen.value
-  themeOpen.value = willOpen
-  if (willOpen) {
-    darkModeOpen.value = false
-    languageOpen.value = false
-  }
-}
-
-function selectTheme(value: 'classic') {
-  currentTheme.value = value
-  themeOpen.value = false
 }
 </script>
 
@@ -126,7 +95,7 @@ function selectTheme(value: 'classic') {
     </div>
 
     <div class="general-settings__body">
-      <!-- 第一组：显示输入状态 / 暗黑模式 / 切换主题 / 设置颜色 / 语言设置 -->
+      <!-- 第一组：显示输入状态 / 暗黑模式 / 语言设置 -->
       <div class="general-settings__group">
         <div class="general-settings__item">
           <div class="general-settings__row">
@@ -174,53 +143,6 @@ function selectTheme(value: 'classic') {
                 />
               </svg>
             </div>
-          </div>
-        </div>
-
-        <div class="general-settings__item general-settings__popup-wrapper">
-          <div class="general-settings__row general-settings__row--clickable" @click="toggleThemePanel">
-            <span class="general-settings__label">{{ t('settings.general.switchTheme') }}</span>
-            <span class="general-settings__value">
-              {{ currentThemeLabel }}
-              <EmIcon :name="themeOpen ? 'chevron/up' : 'chevron/down'" :size="16" />
-            </span>
-          </div>
-
-          <div v-show="themeOpen" class="general-settings__popup">
-            <div
-              v-for="item in themeOptions"
-              :key="item.value"
-              class="general-settings__popup-item"
-              @click="selectTheme(item.value)"
-            >
-              <span class="general-settings__popup-label">{{ item.label }}</span>
-              <svg
-                v-if="currentTheme === item.value"
-                class="general-settings__popup-check"
-                viewBox="0 0 24 24"
-                fill="none"
-              >
-                <path
-                  d="M5 12l5 5L20 7"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            </div>
-          </div>
-        </div>
-
-        <div class="general-settings__item">
-          <div
-            class="general-settings__row general-settings__row--clickable"
-            @click="openSettingsDrawer"
-          >
-            <span class="general-settings__label">{{ t('settings.general.setColor') }}</span>
-            <span class="general-settings__value">
-              <EmIcon name="chevron/right" :size="16" />
-            </span>
           </div>
         </div>
 
@@ -306,17 +228,17 @@ function selectTheme(value: 'classic') {
   min-height: 0;
   background: var(--color-bg);
 
-  /* 与左侧设置列表头部同高（48px），无底线 */
+  /* 与另外两个设置面板头部统一：60px 高、18px 标题、无底线 */
   &__header {
     flex-shrink: 0;
     display: flex;
     align-items: center;
-    min-height: 48px;
-    padding: 12px 24px;
+    min-height: 60px;
+    padding: 0 16px;
   }
 
   &__title {
-    font-size: 16px;
+    font-size: calc(18px * var(--demo-font-scale, 1));
     font-weight: 500;
     color: var(--color-text);
   }
@@ -355,7 +277,7 @@ function selectTheme(value: 'classic') {
   }
 
   &__label {
-    font-size: 14px;
+    font-size: calc(14px * var(--demo-font-scale, 1));
     font-weight: 500;
     color: var(--color-text);
   }
@@ -364,7 +286,7 @@ function selectTheme(value: 'classic') {
     display: inline-flex;
     align-items: center;
     gap: 2px;
-    font-size: 14px;
+    font-size: calc(14px * var(--demo-font-scale, 1));
     font-weight: 500;
     color: var(--color-text-secondary);
   }
@@ -377,7 +299,7 @@ function selectTheme(value: 'classic') {
     height: 28px;
     margin: 0;
     padding: 0 12px 0 14px;
-    font-size: 12px;
+    font-size: calc(12px * var(--demo-font-scale, 1));
     color: var(--color-text-secondary);
     box-sizing: border-box;
   }
@@ -471,7 +393,7 @@ function selectTheme(value: 'classic') {
   }
 
   &__popup-label {
-    font-size: 14px;
+    font-size: calc(14px * var(--demo-font-scale, 1));
     font-weight: 500;
     color: var(--color-text);
   }

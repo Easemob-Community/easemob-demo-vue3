@@ -143,7 +143,7 @@ async function confirmDeleteAccount() {
     flex: 1;
     height: 40px;
     padding: 0 16px;
-    font-size: 14px;
+    font-size: calc(14px * var(--demo-font-scale, 1));
     font-weight: 500;
     color: var(--color-text);
     cursor: pointer;
@@ -170,7 +170,7 @@ async function confirmDeleteAccount() {
   &__logout-message,
   &__delete-message {
     margin: 0;
-    font-size: 14px;
+    font-size: calc(14px * var(--demo-font-scale, 1));
     line-height: 1.5;
     color: var(--color-text-secondary);
   }

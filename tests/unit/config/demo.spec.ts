@@ -71,13 +71,15 @@ describe('DEMO_CHAT_CONFIG（EmChatContainer 聊天页面配置，对齐 UIKit d
 })
 
 describe('组件静态属性配置（uikit 组件模板中的静态值）', () => {
-  it('Provider 能力开关默认全部开启，自定义数据源默认关闭', () => {
+  it('Provider 能力开关默认全部开启（单聊昵称除外），自定义数据源默认关闭', () => {
     expect(DEMO_PROVIDER_CONFIG.enableContact).toBe(true)
     expect(DEMO_PROVIDER_CONFIG.enableBlocklist).toBe(true)
     expect(DEMO_PROVIDER_CONFIG.enablePresence).toBe(true)
     expect(DEMO_PROVIDER_CONFIG.enableDraft).toBe(true)
     expect(DEMO_PROVIDER_CONFIG.enableAtMe).toBe(true)
     expect(DEMO_PROVIDER_CONFIG.enableTyping).toBe(true)
+    expect(DEMO_PROVIDER_CONFIG.showNicknameInSingleChat).toBe(false)
+    expect(DEMO_PROVIDER_CONFIG.showNicknameInGroupChat).toBe(true)
     expect(DEMO_PROVIDER_CONFIG.enableFetchContacts).toBe(false)
     expect(DEMO_PROVIDER_CONFIG.enableGroup).toBe(true)
     expect(DEMO_PROVIDER_CONFIG.enableUserInfo).toBe(true)
@@ -96,9 +98,10 @@ describe('组件静态属性配置（uikit 组件模板中的静态值）', () =
     expect(DEMO_RESIZABLE_CONFIG.handleSize).toBe(10)
   })
 
-  it('侧边栏头像 40px 且可编辑', () => {
+  it('侧边栏头像 40px 且可编辑，在线状态点 11px 与会话列表一致', () => {
     expect(DEMO_AVATAR_CONFIG.size).toBe(40)
     expect(DEMO_AVATAR_CONFIG.editable).toBe(true)
+    expect(DEMO_AVATAR_CONFIG.presenceSize).toBe(11)
   })
 
   it('图标尺寸：导航 24 / 工具 18 / 返回 20 / 空状态 48', () => {

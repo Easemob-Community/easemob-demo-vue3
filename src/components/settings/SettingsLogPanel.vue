@@ -176,13 +176,13 @@ async function onClearLogs() {
   }
 
   &__label {
-    font-size: 16px;
+    font-size: calc(16px * var(--demo-font-scale, 1));
     font-weight: 500;
     color: var(--color-text);
   }
 
   &__level-label {
-    font-size: 16px;
+    font-size: calc(16px * var(--demo-font-scale, 1));
     font-weight: 500;
     color: var(--color-text);
     flex-shrink: 0;
@@ -191,7 +191,7 @@ async function onClearLogs() {
 
   &__desc {
     margin: -10px 0 0;
-    font-size: 12px;
+    font-size: calc(12px * var(--demo-font-scale, 1));
     color: var(--color-text-secondary);
     line-height: 1.5;
     text-align: right;
@@ -247,7 +247,7 @@ async function onClearLogs() {
     border-radius: 999px;
     background: transparent;
     color: var(--color-text);
-    font-size: 13px;
+    font-size: calc(13px * var(--demo-font-scale, 1));
     cursor: pointer;
     transition: all 0.15s;
 
@@ -273,7 +273,7 @@ async function onClearLogs() {
     border: none;
     background: transparent;
     color: var(--uikit-primary-color, var(--color-primary));
-    font-size: 14px;
+    font-size: calc(14px * var(--demo-font-scale, 1));
     cursor: pointer;
     transition: opacity 0.15s;
 
@@ -293,7 +293,7 @@ async function onClearLogs() {
     border-radius: 999px;
     background: transparent;
     color: var(--color-text);
-    font-size: 13px;
+    font-size: calc(13px * var(--demo-font-scale, 1));
     cursor: pointer;
     transition: all 0.15s;
 
@@ -305,7 +305,7 @@ async function onClearLogs() {
 
   &__tip {
     margin: 0;
-    font-size: 12px;
+    font-size: calc(12px * var(--demo-font-scale, 1));
     color: var(--uikit-primary-color, var(--color-primary));
   }
 
@@ -316,7 +316,7 @@ async function onClearLogs() {
 
     p {
       margin: 0;
-      font-size: 12px;
+      font-size: calc(12px * var(--demo-font-scale, 1));
       color: var(--color-text-secondary);
       line-height: 1.5;
     }

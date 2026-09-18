@@ -154,14 +154,17 @@ function selectCategory(key: CategoryKey) {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 56px;
+    /* 与 UIKit 容器 header（会话 / 聊天 56px）对齐；分隔线宽度由 UIKit 主题
+       store 的 headerBorder 开关驱动（--uikit-header-border-width，默认 0 无线条） */
+    min-height: 56px;
     padding: 0 16px;
-    border-bottom: 1px solid var(--color-border);
+    border-bottom: var(--uikit-header-border-width, 0px) solid var(--color-border);
   }
 
   &__title {
-    font-size: 16px;
+    font-size: var(--uikit-font-size-18, 18px);
     font-weight: 500;
+    line-height: calc(22px * var(--demo-font-scale, 1));
     color: var(--color-text);
   }
 
@@ -205,12 +208,13 @@ function selectCategory(key: CategoryKey) {
     width: auto;
     min-width: 104px;
     max-width: 160px;
+    box-sizing: border-box;
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
     gap: 4px;
     padding: 12px 8px;
-    border-right: 1px solid var(--color-border);
+    border-right: var(--uikit-header-border-width, 0px) solid var(--color-border);
     overflow-y: auto;
   }
 
@@ -223,7 +227,7 @@ function selectCategory(key: CategoryKey) {
     border-radius: 8px;
     background: transparent;
     color: var(--color-text-secondary);
-    font-size: 14px;
+    font-size: calc(14px * var(--demo-font-scale, 1));
     line-height: 1.3;
     text-align: left;
     cursor: pointer;
@@ -252,7 +256,7 @@ function selectCategory(key: CategoryKey) {
     padding: 12px;
     padding-bottom: 4px;
     flex-shrink: 0;
-    border-bottom: 1px solid var(--color-border);
+    border-bottom: var(--uikit-header-border-width, 0px) solid var(--color-border);
   }
 
   &__tab-item {
@@ -265,7 +269,7 @@ function selectCategory(key: CategoryKey) {
     border-radius: 999px;
     background: transparent;
     color: var(--color-text-secondary);
-    font-size: 13px;
+    font-size: calc(13px * var(--demo-font-scale, 1));
     cursor: pointer;
     transition: all 0.15s;
     white-space: nowrap;

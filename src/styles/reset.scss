@@ -1,14 +1,13 @@
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+// 全局 reset：与 uikit 官方 demo 对齐，仅做精准重置。
+// 不使用 * 通配 —— uikit 组件按浏览器默认 content-box 编写，
+// 通配 border-box / margin / padding 清零会导致 uikit 组件尺寸与默认样式异常。
+// Demo 自有组件若依赖清零，需在其 scoped 样式中显式补充。
 
 html,
 body,
 #app {
+  margin: 0;
+  padding: 0;
   height: 100%;
 }
 

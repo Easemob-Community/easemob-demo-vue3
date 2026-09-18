@@ -2,6 +2,14 @@
 // 约定：组件颜色一律使用 var(--color-*)，不要写死色值，保证深色模式生效
 // vue3-uikit 接入后遵循同一约定（html.dark + 同名变量）
 :root {
+  // 全局字号缩放系数：由 useUIKitConfig watch UIKit 主题 store 的 fontSizeScale 写入
+  // （对应「UIKIT特性开关 - 字号」标准 1 / 大 1.125 / 特大 1.25），
+  // Demo 外壳字号统一写 calc(Npx * var(--demo-font-scale, 1)) 跟随缩放
+  --demo-font-scale: 1;
+  // 密度档布局变量：由 useUIKitConfig 把 UIKit density 镜像为 html[data-demo-density] 后按档覆写，
+  // Demo 列表行高 / 区块间距统一以 var(--demo-density-*, 默认值) 消费
+  --demo-density-row-height: 44px;
+  --demo-density-section-gap: 12px;
   --color-primary: #009eff;
   --color-text: #1f2329;
   --color-text-secondary: #6b7280;
@@ -60,4 +68,17 @@ html.dark {
   --uikit-border-light: var(--color-bg-secondary);
   --uikit-input-border-color: var(--color-border);
   --uikit-text-primary: var(--color-text); // 主文字 #e5e7eb
+}
+
+// ===== Demo 密度档覆写（对应「UIKIT特性开关 - 密度」） =====
+// useUIKitConfig 将 UIKit density 镜像到 html[data-demo-density]，这里按档调整 Demo 布局变量：
+// 紧凑档整体收紧（行高 / 区块间距缩小），宽松档放宽，默认（normal / 未设置）用 :root 值。
+html[data-demo-density='compact'] {
+  --demo-density-row-height: 36px;
+  --demo-density-section-gap: 8px;
+}
+
+html[data-demo-density='comfortable'] {
+  --demo-density-row-height: 52px;
+  --demo-density-section-gap: 16px;
 }

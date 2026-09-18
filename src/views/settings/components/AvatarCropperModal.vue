@@ -391,6 +391,7 @@ watch([scale, offsetX, offsetY], () => {
   &__content {
     width: 320px;
     padding: 20px;
+    box-sizing: border-box;
   }
 
   &__header {
@@ -398,7 +399,7 @@ watch([scale, offsetX, offsetY], () => {
   }
 
   &__title {
-    font-size: 16px;
+    font-size: calc(16px * var(--demo-font-scale, 1));
     font-weight: 600;
     color: var(--color-text);
   }
@@ -446,7 +447,7 @@ watch([scale, offsetX, offsetY], () => {
   }
 
   &__placeholder-text {
-    font-size: 14px;
+    font-size: calc(14px * var(--demo-font-scale, 1));
   }
 
   &__file-input {
@@ -459,7 +460,7 @@ watch([scale, offsetX, offsetY], () => {
 
   &__hint {
     margin: 12px 0 0;
-    font-size: 12px;
+    font-size: calc(12px * var(--demo-font-scale, 1));
     text-align: center;
     color: var(--color-text-secondary);
   }
@@ -475,7 +476,7 @@ watch([scale, offsetX, offsetY], () => {
     min-width: 0;
     height: 36px;
     padding: 0 12px;
-    font-size: 14px;
+    font-size: calc(14px * var(--demo-font-scale, 1));
     border: none;
     border-radius: 999px;
     cursor: pointer;
@@ -526,7 +527,7 @@ watch([scale, offsetX, offsetY], () => {
 
   &__zoom-label {
     flex-shrink: 0;
-    font-size: 13px;
+    font-size: calc(13px * var(--demo-font-scale, 1));
     color: var(--color-text-secondary);
   }
 
@@ -554,6 +555,7 @@ watch([scale, offsetX, offsetY], () => {
     &::-webkit-slider-thumb {
       width: 16px;
       height: 16px;
+      box-sizing: border-box;
       margin-top: -5px;
       appearance: none;
       background: var(--color-primary);
@@ -568,6 +570,7 @@ watch([scale, offsetX, offsetY], () => {
     &::-moz-range-thumb {
       width: 16px;
       height: 16px;
+      box-sizing: border-box;
       appearance: none;
       background: var(--color-primary);
       border: 2px solid var(--color-bg);

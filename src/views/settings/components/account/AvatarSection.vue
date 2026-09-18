@@ -138,7 +138,7 @@ async function confirmAvatarUpdate(blob: Blob) {
   }
 
   &__label {
-    font-size: 14px;
+    font-size: calc(14px * var(--demo-font-scale, 1));
     font-weight: 500;
     color: var(--color-text);
   }
@@ -149,7 +149,7 @@ async function confirmAvatarUpdate(blob: Blob) {
   }
 
   &__field-avatar {
-    font-size: 12px;
+    font-size: calc(12px * var(--demo-font-scale, 1));
     font-weight: 500;
   }
 

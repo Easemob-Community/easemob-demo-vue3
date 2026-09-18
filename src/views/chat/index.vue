@@ -117,13 +117,12 @@ function backToConversationList() {
   leaveConversation()
 }
 
-/* ===== 会话列表宽度（参照 UIKit demo：EmResizable 拖拽调整 + localStorage 持久化） ===== */
+/* ===== 会话列表宽度（参照 UIKit demo：默认弹性 + EmResizable 拖拽定宽 + localStorage 持久化） ===== */
 
 const { stores } = useUIKit()
-const { sidebarWidth, persistSidebarWidth } = useSidebarWidth(
-  'layout_sidebar_width',
-  DEMO_SIDEBAR_CONFIG.defaultWidth,
-)
+// 无记忆时 sidebarWidth 为 undefined：EmResizable 走 fluid 弹性模式，宽度交给 UIKIT 侧栏
+// 基准 token（--uikit-sidebar-width，默认 clamp(240px, 25%, 480px)）随窗口伸缩
+const { sidebarWidth, persistSidebarWidth } = useSidebarWidth('layout_sidebar_width')
 
 /* ===== 聊天UIKIT特性开关配置（由特性抽屉「聊天」面板驱动） ===== */
 const chatConfig = computed(() => ({
@@ -218,13 +217,16 @@ watch(
   <div class="chat-page" :class="{ 'chat-page--pc': !isMobileView }">
     <!-- PC 端：左侧会话列表 + 右侧聊天窗口（容器间距对齐 UIKit demo，见 DEMO_CONTAINER_CONFIG） -->
     <template v-if="!isMobileView">
-      <!-- 会话列表宽度可拖拽调整（240~480），宽度持久化到 UIKIT 内部配置存储 -->
+      <!-- 会话列表宽度默认弹性（随窗口伸缩，基准 clamp(240px, 25%, 480px)），可拖拽定宽（240~480），
+           拖拽后持久化到 UIKIT 内部配置存储；无记忆时不写内联宽度（fluid） -->
       <EmResizable
         v-model="sidebarWidth"
         :axis="DEMO_RESIZABLE_CONFIG.axis"
         :min="DEMO_SIDEBAR_CONFIG.minWidth"
         :max="DEMO_SIDEBAR_CONFIG.maxWidth"
+        :initial="DEMO_SIDEBAR_CONFIG.defaultWidth"
         :handle-size="DEMO_RESIZABLE_CONFIG.handleSize"
+        fluid
         class="chat-page__sidebar"
         @resize-end="persistSidebarWidth"
       >
@@ -345,6 +347,10 @@ watch(
 
   &__sidebar {
     flex-shrink: 0;
+    /* 未拖拽时按 UIKIT 侧栏基准弹性取值（随窗口伸缩，与 --uikit-sidebar-width 默认一致）；
+       拖拽后由 EmResizable 内联宽度覆盖。内部列表容器覆写 token 为 100% 填满拖拽壳（对齐 UIKit 官方 demo） */
+    width: clamp(var(--uikit-sidebar-min-width, 240px), 25%, var(--uikit-sidebar-max-width, 480px));
+    --uikit-sidebar-width: 100%;
     height: 100%;
     min-height: 0;
     overflow: hidden;
@@ -386,6 +392,7 @@ watch(
     align-items: center;
     height: 48px;
     padding: 0 12px;
+    box-sizing: border-box;
     border-bottom: 1px solid var(--color-border);
     background: var(--color-bg);
   }
@@ -395,7 +402,7 @@ watch(
     align-items: center;
     gap: 4px;
     padding: 6px 8px;
-    font-size: 14px;
+    font-size: calc(14px * var(--demo-font-scale, 1));
     color: var(--color-text);
     background: transparent;
     border: none;
@@ -424,7 +431,7 @@ watch(
     border-bottom: 2px solid transparent;
     background: transparent;
     color: var(--color-text-secondary);
-    font-size: 14px;
+    font-size: calc(14px * var(--demo-font-scale, 1));
     cursor: pointer;
     transition: all 0.15s;
 

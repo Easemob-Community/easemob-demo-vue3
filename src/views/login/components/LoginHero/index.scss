@@ -103,7 +103,7 @@
     animation: spin-slow 28s linear infinite;
 
     text {
-      font-size: 11px;
+      font-size: calc(11px * var(--demo-font-scale, 1));
       fill: rgba(0, 158, 255, 0.45);
     }
   }
@@ -115,7 +115,7 @@
     animation: spin-slow-reverse 20s linear infinite;
 
     text {
-      font-size: 10px;
+      font-size: calc(10px * var(--demo-font-scale, 1));
       fill: rgba(108, 99, 255, 0.4);
       letter-spacing: 3px;
     }
@@ -128,7 +128,7 @@
     animation: spin-slow 44s linear infinite;
 
     text {
-      font-size: 10px;
+      font-size: calc(10px * var(--demo-font-scale, 1));
       fill: rgba(56, 189, 248, 0.3);
       letter-spacing: 4px;
     }
@@ -141,7 +141,7 @@
     animation: spin-slow-reverse 34s linear infinite;
 
     text {
-      font-size: 10px;
+      font-size: calc(10px * var(--demo-font-scale, 1));
       fill: rgba(251, 191, 36, 0.28);
       letter-spacing: 3px;
     }
@@ -158,6 +158,7 @@
   margin: auto;
   width: 46.5%;
   aspect-ratio: 1;
+  box-sizing: border-box;
   border-radius: 50%;
   border: 1px solid rgba(0, 158, 255, 0.2);
   box-shadow:
@@ -169,7 +170,7 @@
 .login-page__chip {
   position: absolute;
   font-family: 'JetBrains Mono', 'Courier New', monospace;
-  font-size: 11px;
+  font-size: calc(11px * var(--demo-font-scale, 1));
   border-radius: 6px;
   padding: 3px 8px;
   white-space: nowrap;
@@ -180,6 +181,7 @@
 .login-page__code-window {
   position: absolute;
   z-index: 20;
+  box-sizing: border-box;
   background: rgba(10, 6, 35, 0.75);
   backdrop-filter: blur(16px);
   border-radius: 12px;
@@ -233,13 +235,13 @@
 
   &-title {
     margin-left: 8px;
-    font-size: 10px;
+    font-size: calc(10px * var(--demo-font-scale, 1));
     color: rgba(255, 255, 255, 0.25);
   }
 
   &-body {
     padding: 10px 12px;
-    font-size: 10px;
+    font-size: calc(10px * var(--demo-font-scale, 1));
     line-height: 1.6;
     color: rgba(255, 255, 255, 0.9);
 
@@ -299,7 +301,7 @@
 
   &-text {
     padding: 10px 14px;
-    font-size: 12px;
+    font-size: calc(12px * var(--demo-font-scale, 1));
     font-weight: 500;
     white-space: nowrap;
     border-radius: 18px;
@@ -339,7 +341,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
+  font-size: calc(12px * var(--demo-font-scale, 1));
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
 }
 
@@ -381,7 +383,7 @@
   }
 
   span:last-child {
-    font-size: 11px;
+    font-size: calc(11px * var(--demo-font-scale, 1));
     font-weight: 600;
     color: rgba(255, 255, 255, 0.7);
   }
@@ -402,8 +404,9 @@
 }
 
 .login-page__latency-desc {
-  margin-top: 6px;
-  font-size: 10px;
+  /* 全局 reset 收敛后 p 恢复浏览器默认外边距，此处显式清零（保留顶部间距） */
+  margin: 6px 0 0;
+  font-size: calc(10px * var(--demo-font-scale, 1));
   color: rgba(255, 255, 255, 0.3);
 }
 

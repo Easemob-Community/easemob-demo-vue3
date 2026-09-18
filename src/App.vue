@@ -38,6 +38,8 @@ const {
   // 面板标签为 enableMotion，实际映射 Provider 的 enableAtMe
   providerEnableMotion,
   providerEnableTyping,
+  providerShowNicknameInSingleChat,
+  providerShowNicknameInGroupChat,
   providerEnableFetchContacts,
   providerEnableGroup,
   providerEnableUserInfo,
@@ -84,6 +86,8 @@ const providerDataSource = computed<UIKitDataSource | undefined>(() =>
     :enable-draft="providerEnableDraft"
     :enable-at-me="providerEnableMotion"
     :enable-typing="providerEnableTyping"
+    :show-nickname-in-single-chat="providerShowNicknameInSingleChat"
+    :show-nickname-in-group-chat="providerShowNicknameInGroupChat"
     :data-source="providerDataSource"
     :enable-group="providerEnableGroup"
     :enable-user-info="providerEnableUserInfo"

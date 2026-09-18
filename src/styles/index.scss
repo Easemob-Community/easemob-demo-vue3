@@ -57,6 +57,19 @@
   border-radius: var(--uikit-components-radius, 0px) !important;
 }
 
+// ------------------------------------------------------------------
+// 在线状态选择弹层（presence-selector）文本折行修复：
+// 当前安装的 uikit-core tgz 为修复前构建，compact 行被勾选时要多容纳一个
+// 对勾图标，「自定义」等标签会折成两行。uikit 仓库源码已修复（label 加
+// nowrap + ellipsis），待换新 tgz 后此段覆盖可删除。
+// ------------------------------------------------------------------
+.presence-selector__label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 // 自定义 GIF 表情包 picker 布局：仅在 sticker（GIF）标签页下每行固定 4 个、等比放大，
 // 避免影响「常用」等普通 emoji 标签页的默认排列。
 .emoji-picker {
@@ -102,7 +115,7 @@
 
     #aliyunCaptcha-title {
       color: rgba(255, 255, 255, 0.9) !important;
-      font-size: 15px !important;
+      font-size: calc(15px * var(--demo-font-scale, 1)) !important;
       font-weight: 600 !important;
     }
 
@@ -110,7 +123,7 @@
       color: rgba(255, 255, 255, 0.5) !important;
       background: transparent !important;
       border: none !important;
-      font-size: 16px !important;
+      font-size: calc(16px * var(--demo-font-scale, 1)) !important;
       transition: color 0.2s;
 
       &:hover {
@@ -154,7 +167,7 @@
 
           #aliyunCaptcha-sliding-text.aliyunCaptcha-sliding-text {
             color: rgba(255, 255, 255, 0.55) !important;
-            font-size: 13px !important;
+            font-size: calc(13px * var(--demo-font-scale, 1)) !important;
           }
         }
       }
@@ -163,7 +176,7 @@
       #aliyunCaptcha-sliding-errorCode,
       #aliyunCaptcha-sliding-failTip {
         color: rgba(239, 100, 100, 0.9) !important;
-        font-size: 12px !important;
+        font-size: calc(12px * var(--demo-font-scale, 1)) !important;
         margin-top: 8px !important;
       }
     }

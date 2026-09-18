@@ -67,15 +67,15 @@ async function copyUserId() {
 
   /* 100px 头像内首字符字号对齐设计稿 34px */
   &__avatar {
-    font-size: 34px;
+    font-size: calc(34px * var(--demo-font-scale, 1));
     font-weight: 500;
   }
 
   &__nickname {
     margin: 16px 0 0;
-    font-size: 18px;
+    font-size: calc(18px * var(--demo-font-scale, 1));
     font-weight: 500;
-    line-height: 26px;
+    line-height: calc(26px * var(--demo-font-scale, 1));
     color: var(--color-text);
   }
 
@@ -84,8 +84,8 @@ async function copyUserId() {
     align-items: center;
     gap: 2px;
     margin-top: 3px;
-    font-size: 14px;
-    line-height: 20px;
+    font-size: calc(14px * var(--demo-font-scale, 1));
+    line-height: calc(20px * var(--demo-font-scale, 1));
     color: var(--color-text-tertiary);
   }
 

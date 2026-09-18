@@ -543,7 +543,7 @@ const MESSAGE_ACTION_KEYS = [
 
   &__section-title {
     margin: 0;
-    font-size: 13px;
+    font-size: calc(13px * var(--demo-font-scale, 1));
     font-weight: 600;
     color: var(--color-text-secondary);
   }
@@ -555,7 +555,7 @@ const MESSAGE_ACTION_KEYS = [
   }
 
   &__sub-title {
-    font-size: 13px;
+    font-size: calc(13px * var(--demo-font-scale, 1));
     color: var(--color-text-secondary);
   }
 
@@ -576,7 +576,7 @@ const MESSAGE_ACTION_KEYS = [
   }
 
   &__label {
-    font-size: 16px;
+    font-size: calc(16px * var(--demo-font-scale, 1));
     font-weight: 500;
     color: var(--color-text);
 
@@ -587,7 +587,7 @@ const MESSAGE_ACTION_KEYS = [
 
   &__desc {
     margin: -10px 0 0;
-    font-size: 12px;
+    font-size: calc(12px * var(--demo-font-scale, 1));
     color: var(--color-text-secondary);
     line-height: 1.5;
     text-align: right;
@@ -609,7 +609,7 @@ const MESSAGE_ACTION_KEYS = [
     border-radius: 999px;
     background-color: transparent;
     color: var(--color-text);
-    font-size: 13px;
+    font-size: calc(13px * var(--demo-font-scale, 1));
     cursor: pointer;
     transition: all 0.2s;
     white-space: nowrap;
@@ -675,7 +675,7 @@ const MESSAGE_ACTION_KEYS = [
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    font-size: 14px;
+    font-size: calc(14px * var(--demo-font-scale, 1));
     color: var(--color-text);
     cursor: pointer;
 
@@ -737,10 +737,11 @@ const MESSAGE_ACTION_KEYS = [
     height: 32px;
     padding: 0 10px;
     border: 1px solid var(--color-border);
+    box-sizing: border-box;
     border-radius: 6px;
     background-color: var(--color-bg);
     color: var(--color-text);
-    font-size: 13px;
+    font-size: calc(13px * var(--demo-font-scale, 1));
     outline: none;
 
     &:focus {
@@ -778,7 +779,7 @@ const MESSAGE_ACTION_KEYS = [
     border-radius: 999px;
     background-color: transparent;
     color: var(--color-text-secondary);
-    font-size: 12px;
+    font-size: calc(12px * var(--demo-font-scale, 1));
     cursor: pointer;
     transition: all 0.2s;
     white-space: nowrap;
@@ -805,7 +806,7 @@ const MESSAGE_ACTION_KEYS = [
   }
 
   &__action-label {
-    font-size: 14px;
+    font-size: calc(14px * var(--demo-font-scale, 1));
     color: var(--color-text);
   }
 
@@ -818,7 +819,7 @@ const MESSAGE_ACTION_KEYS = [
     border-radius: 999px;
     background-color: var(--color-bg-secondary);
     color: var(--color-text);
-    font-size: 14px;
+    font-size: calc(14px * var(--demo-font-scale, 1));
     font-weight: 500;
     cursor: pointer;
     transition: background-color 0.2s;

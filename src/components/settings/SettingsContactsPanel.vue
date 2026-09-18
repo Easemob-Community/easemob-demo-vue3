@@ -258,7 +258,7 @@ const {
 
   &__section-title {
     margin: 0;
-    font-size: 13px;
+    font-size: calc(13px * var(--demo-font-scale, 1));
     font-weight: 600;
     color: var(--color-text-secondary);
   }
@@ -282,14 +282,14 @@ const {
   }
 
   &__label {
-    font-size: 15px;
+    font-size: calc(15px * var(--demo-font-scale, 1));
     font-weight: 500;
     color: var(--color-text);
   }
 
   &__desc {
     margin: -4px 0 0;
-    font-size: 12px;
+    font-size: calc(12px * var(--demo-font-scale, 1));
     color: var(--color-text-secondary);
     line-height: 1.5;
     text-align: right;
@@ -338,7 +338,7 @@ const {
     border-radius: 999px;
     background-color: var(--color-bg-secondary);
     color: var(--color-text);
-    font-size: 14px;
+    font-size: calc(14px * var(--demo-font-scale, 1));
     font-weight: 500;
     cursor: pointer;
     transition: background-color 0.2s;

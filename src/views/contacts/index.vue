@@ -43,14 +43,12 @@ const {
 
 /* ===== 通讯录侧边栏宽度（与会话页完全共用：同一存储 key + 同一默认宽度，保证两页宽度始终一致） ===== */
 
-/** 最小 / 最大宽度与 UIKit demo 的侧边栏配置一致（默认宽度取会话页同一常量） */
+/** 最小 / 最大宽度与 UIKit demo 的侧边栏配置一致 */
 const SIDEBAR_MIN_WIDTH = DEMO_SIDEBAR_CONFIG.minWidth
 const SIDEBAR_MAX_WIDTH = DEMO_SIDEBAR_CONFIG.maxWidth
 
-const { sidebarWidth, persistSidebarWidth } = useSidebarWidth(
-  'layout_sidebar_width',
-  DEMO_SIDEBAR_CONFIG.defaultWidth,
-)
+// 无记忆时 sidebarWidth 为 undefined：走 fluid 弹性基准（与会话页同一存储 key，宽度联动一致）
+const { sidebarWidth, persistSidebarWidth } = useSidebarWidth('layout_sidebar_width')
 
 /** 当前选中的联系人/群组详情 ID */
 const detailUserId = ref<string | null>(null)
@@ -172,13 +170,15 @@ function backToContactList() {
   <div class="contacts-page" :class="{ 'contacts-page--pc': !isMobileView }">
     <!-- PC 端：左侧通讯录 + 右侧详情（容器间距对齐 UIKit demo，见 DEMO_CONTAINER_CONFIG） -->
     <template v-if="!isMobileView">
-      <!-- 通讯录宽度可拖拽调整（240~480），宽度持久化到 UIKIT 内部配置存储 -->
+      <!-- 通讯录宽度默认弹性（随窗口伸缩），可拖拽定宽（240~480），拖拽后持久化；无记忆时走 fluid -->
       <EmResizable
         v-model="sidebarWidth"
         :axis="DEMO_RESIZABLE_CONFIG.axis"
         :min="SIDEBAR_MIN_WIDTH"
         :max="SIDEBAR_MAX_WIDTH"
+        :initial="DEMO_SIDEBAR_CONFIG.defaultWidth"
         :handle-size="DEMO_RESIZABLE_CONFIG.handleSize"
+        fluid
         class="contacts-page__sidebar"
         @resize-end="persistSidebarWidth"
       >
@@ -304,6 +304,10 @@ function backToContactList() {
 
   &__sidebar {
     flex-shrink: 0;
+    /* 未拖拽时按 UIKIT 侧栏基准弹性取值（随窗口伸缩）；拖拽后由 EmResizable 内联宽度覆盖。
+       内部列表容器覆写 token 为 100% 填满拖拽壳（对齐 UIKit 官方 demo） */
+    width: clamp(var(--uikit-sidebar-min-width, 240px), 25%, var(--uikit-sidebar-max-width, 480px));
+    --uikit-sidebar-width: 100%;
     height: 100%;
     min-height: 0;
     overflow: hidden;
@@ -343,7 +347,12 @@ function backToContactList() {
     justify-content: center;
     gap: 12px;
     color: var(--color-text-secondary);
-    font-size: 14px;
+    font-size: calc(14px * var(--demo-font-scale, 1));
+
+    /* 全局 reset 收敛后 p 恢复浏览器默认外边距，此处显式清零 */
+    p {
+      margin: 0;
+    }
   }
 
   &__mobile-list,
@@ -361,6 +370,7 @@ function backToContactList() {
     gap: 8px;
     height: 48px;
     padding: 0 12px;
+    box-sizing: border-box;
     border-bottom: 1px solid var(--color-border);
     background: var(--color-bg);
   }
@@ -370,7 +380,7 @@ function backToContactList() {
     align-items: center;
     gap: 4px;
     padding: 6px 8px;
-    font-size: 14px;
+    font-size: calc(14px * var(--demo-font-scale, 1));
     color: var(--color-text);
     background: transparent;
     border: none;
@@ -381,7 +391,7 @@ function backToContactList() {
   &__mobile-title {
     flex: 1;
     min-width: 0;
-    font-size: 16px;
+    font-size: calc(16px * var(--demo-font-scale, 1));
     font-weight: 500;
     color: var(--color-text);
     overflow: hidden;

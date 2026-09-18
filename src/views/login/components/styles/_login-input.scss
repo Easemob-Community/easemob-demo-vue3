@@ -24,12 +24,14 @@
     border: none;
     outline: none;
     color: rgba(255, 255, 255, 0.9);
-    font-size: 14px;
+    font-size: calc(14px * var(--demo-font-scale, 1));
     font-weight: 500;
     font-family: 'Outfit', sans-serif;
     caret-color: $color-brand;
     width: 100%;
     padding: 13px 14px;
+    /* 全局 reset 收敛后为 content-box，显式声明避免 100% 宽 + 内边距撑破容器 */
+    box-sizing: border-box;
 
     &::placeholder {
       color: #b0bec5;

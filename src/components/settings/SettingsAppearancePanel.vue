@@ -12,12 +12,15 @@
  * - primaryColorHsl 作为取色器唯一数据源，由 ColorPickerPanel 展示并通过 setPrimaryColor 写回。
  * - Hex/RGB/HSB 标签页的颜色换算见 @/utils/color（纯函数）。
  */
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { EmInput, useLocale, useTheme as useUIKitTheme } from '@easemob/uikit-im'
+import { EmInput, useTheme as useUIKitTheme } from '@easemob/uikit-im'
 
 import ColorPickerPanel from './color-picker/ColorPickerPanel.vue'
+import { toUIKitLocale } from '@/composables/useUIKitConfig'
+import type { UIKitLocale } from '@/composables/useUIKitConfig'
 import { useTheme as useAppTheme } from '@/composables/useTheme'
+import type { AppLocale } from '@/locales'
 
 type InputVariant = 'default' | 'search' | 'filled' | 'ghost' | 'underline'
 type ThemeMode = 'light' | 'dark' | 'auto'
@@ -29,10 +32,20 @@ type FontSizePreset = 'normal' | 'large' | 'xlarge'
 type Density = 'compact' | 'normal' | 'comfortable'
 type AnimationLevel = 'subtle' | 'normal' | 'expressive'
 
-const { t } = useI18n()
+const { t, locale: appLocale } = useI18n()
 const appTheme = useAppTheme()
 const uikitTheme = useUIKitTheme()
-const { locale, setLocale } = useLocale()
+
+/** 当前语言（映射为 UIKit 的 zh-CN / en，用于高亮选中态） */
+const activeLocale = computed(() => toUIKitLocale(appLocale.value as AppLocale))
+
+/**
+ * 语言切换走 Demo 的 vue-i18n（面板文案、导航等 Demo 本体立即跟随），
+ * useUIKitConfig 中已有 watch 会把 Demo 语言同步给 UIKit（en-US → en）。
+ */
+function selectLocale(value: UIKitLocale) {
+  appLocale.value = value === 'en' ? 'en-US' : 'zh-CN'
+}
 
 const {
   primaryColorHsl,
@@ -123,7 +136,7 @@ function resetAll() {
   setActiveColor(undefined)
   setIconMutedColor(undefined)
   inputVariant.value = 'default'
-  setLocale('zh-CN')
+  appLocale.value = 'zh-CN'
 }
 </script>
 
@@ -673,15 +686,17 @@ function resetAll() {
         <div class="settings-appearance-panel__segmented">
           <button
             class="settings-appearance-panel__segmented-item"
-            :class="{ 'settings-appearance-panel__segmented-item--active': locale === 'zh-CN' }"
-            @click="setLocale('zh-CN')"
+            :class="{
+              'settings-appearance-panel__segmented-item--active': activeLocale === 'zh-CN',
+            }"
+            @click="selectLocale('zh-CN')"
           >
             {{ t('features.appearance.langZh') }}
           </button>
           <button
             class="settings-appearance-panel__segmented-item"
-            :class="{ 'settings-appearance-panel__segmented-item--active': locale === 'en' }"
-            @click="setLocale('en')"
+            :class="{ 'settings-appearance-panel__segmented-item--active': activeLocale === 'en' }"
+            @click="selectLocale('en')"
           >
             {{ t('features.appearance.langEn') }}
           </button>
@@ -705,12 +720,12 @@ function resetAll() {
   &__section {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: var(--demo-density-section-gap, 12px);
   }
 
   &__section-title {
     margin: 0;
-    font-size: 13px;
+    font-size: calc(13px * var(--demo-font-scale, 1));
     font-weight: 600;
     color: var(--color-text-secondary);
   }
@@ -719,8 +734,9 @@ function resetAll() {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-wrap: wrap;
     gap: 16px;
-    min-height: 44px;
+    min-height: var(--demo-density-row-height, 44px);
 
     &--bordered {
       padding-bottom: 12px;
@@ -748,21 +764,26 @@ function resetAll() {
   }
 
   &__label {
-    font-size: 15px;
+    font-size: calc(15px * var(--demo-font-scale, 1));
     font-weight: 500;
     color: var(--color-text);
   }
 
   &__desc {
     margin: -6px 0 0;
-    font-size: 12px;
+    font-size: calc(12px * var(--demo-font-scale, 1));
     color: var(--color-text-secondary);
     line-height: 1.5;
   }
 
-  /* 分段按钮 */
+  /* 分段按钮：语言/字号放大导致总宽超出行宽时允许换行，
+     避免被抽屉 overflow hidden 裁剪掉选项 */
   &__segmented {
     display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    row-gap: 4px;
+    max-width: 100%;
     padding: 3px;
     border-radius: 999px;
     background-color: var(--color-bg-secondary);
@@ -775,7 +796,7 @@ function resetAll() {
     border-radius: 999px;
     background: transparent;
     color: var(--color-text);
-    font-size: 13px;
+    font-size: calc(13px * var(--demo-font-scale, 1));
     cursor: pointer;
     transition: all 0.2s;
     white-space: nowrap;
@@ -793,6 +814,7 @@ function resetAll() {
     height: 28px;
     padding: 0;
     border: 1px solid var(--color-border);
+    box-sizing: border-box;
     border-radius: 6px;
     background: none;
     cursor: pointer;
@@ -812,7 +834,7 @@ function resetAll() {
     border: none;
     background: transparent;
     color: var(--color-text-secondary);
-    font-size: 13px;
+    font-size: calc(13px * var(--demo-font-scale, 1));
     cursor: pointer;
     transition: color 0.15s;
 
@@ -830,7 +852,7 @@ function resetAll() {
     border-radius: 8px;
     background-color: var(--color-bg);
     color: var(--color-text);
-    font-size: 14px;
+    font-size: calc(14px * var(--demo-font-scale, 1));
     outline: none;
     box-sizing: border-box;
 
@@ -863,6 +885,7 @@ function resetAll() {
       appearance: none;
       width: 16px;
       height: 16px;
+      box-sizing: border-box;
       border-radius: 50%;
       background: #ffffff;
       border: 2px solid var(--uikit-primary-color, var(--color-primary));
@@ -874,7 +897,7 @@ function resetAll() {
   &__range-value {
     min-width: 24px;
     text-align: right;
-    font-size: 14px;
+    font-size: calc(14px * var(--demo-font-scale, 1));
     color: var(--color-text-secondary);
   }
 
@@ -919,7 +942,7 @@ function resetAll() {
     border-radius: 999px;
     background-color: var(--color-bg);
     color: var(--color-text);
-    font-size: 14px;
+    font-size: calc(14px * var(--demo-font-scale, 1));
     cursor: pointer;
     outline: none;
     appearance: none;
@@ -947,7 +970,7 @@ function resetAll() {
     border-radius: 999px;
     background-color: var(--color-bg-secondary);
     color: var(--color-text);
-    font-size: 14px;
+    font-size: calc(14px * var(--demo-font-scale, 1));
     font-weight: 500;
     cursor: pointer;
     transition: background-color 0.2s;

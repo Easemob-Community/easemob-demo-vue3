@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 
+import aboutLogo from '@/assets/about/about-logo.svg'
 import bannerIllustration from '@/assets/about/banner-illustration.jpg'
 import bannerTitle from '@/assets/about/banner-title.svg'
-import aboutLogo from '@/assets/about/about-logo.svg'
 import { DEMO_VERSION, SDK_VERSION, UIKIT_VERSION } from '@/config/version'
 
 defineOptions({ name: 'AboutUs' })
@@ -42,7 +42,7 @@ const footerLinks = [
     </div>
 
     <div class="about-us__body">
-      <!-- banner：渐变底 + 右侧圆形遮罩插画 + 标题 / 标语 / 注册按钮，内部尺寸随宽度用 cqw 等比缩放 -->
+      <!-- banner：渐变底 + 右侧圆形遮罩插画 + 标题 / 标语 / 注册按钮，16px 边距 + 12px 圆角，内部尺寸随宽度用 cqw 等比缩放 -->
       <div class="about-us__banner">
         <img
           class="about-us__banner-illustration"
@@ -68,9 +68,14 @@ const footerLinks = [
         </div>
       </div>
 
+      <!-- 内容栏：设计稿为 520px 宽居中文本栏，窄屏下自适应 -->
       <div class="about-us__content">
         <div class="about-us__intro">
           <p class="about-us__welcome">{{ t('settings.about.welcome') }}</p>
+          <!--
+            logo 字标：原实现固定 261×48 而 SVG 实际比例是 257.9×36.6，
+            宽度被 max-width 压缩时高度不变导致字形挤压拉伸；改为 height: auto 后随宽度等比缩放，任何容器下不变形
+          -->
           <img class="about-us__logo" :src="aboutLogo" :alt="t('app.title')" />
           <p class="about-us__desc">{{ t('settings.about.description') }}</p>
 
@@ -128,18 +133,18 @@ const footerLinks = [
   min-height: 0;
   background: var(--color-bg);
 
-  /* 顶栏：60px + 18px 标题 + 底部细线（设计稿 top_bars/onlight） */
+  /* 顶栏：60px + 18px 标题，无底部分割线（与账户信息 / 通用设置面板头部统一） */
   &__header {
     flex-shrink: 0;
     display: flex;
     align-items: center;
     height: 60px;
     padding: 0 16px;
-    border-bottom: 1px solid var(--color-border);
+    box-sizing: border-box;
   }
 
   &__title {
-    font-size: 18px;
+    font-size: calc(18px * var(--demo-font-scale, 1));
     font-weight: 500;
     color: var(--color-text);
   }
@@ -219,7 +224,7 @@ const footerLinks = [
     }
   }
 
-  /* 内容栏：设计稿为 520px 宽居中文本栏 */
+  /* 内容栏：设计稿为 520px 宽居中文本栏，与 banner 间距 29px */
   &__content {
     max-width: 520px;
     margin: 29px auto 0;
@@ -236,17 +241,21 @@ const footerLinks = [
 
   &__welcome {
     margin: 0;
-    font-size: 16px;
+    font-size: calc(16px * var(--demo-font-scale, 1));
     font-weight: 500;
     letter-spacing: 0.64px;
     color: var(--color-text-secondary);
   }
 
+  /*
+   * logo 字标：261px 宽 + height auto（SVG 字标比例 257.9×36.6），
+   * 不再锁定 48px 高度，窄容器下 max-width: 100% 等比缩小，避免字形被挤压拉伸
+   */
   &__logo {
     display: block;
     width: 261px;
     max-width: 100%;
-    height: 48px;
+    height: auto;
 
     /* logo 为黑色 SVG 文字，深色模式下反白 */
     html.dark & {
@@ -256,7 +265,7 @@ const footerLinks = [
 
   &__desc {
     margin: 0;
-    font-size: 14px;
+    font-size: calc(14px * var(--demo-font-scale, 1));
     color: var(--color-text-tertiary);
   }
 
@@ -265,7 +274,7 @@ const footerLinks = [
     flex-wrap: wrap;
     align-items: center;
     gap: 16px;
-    font-size: 14px;
+    font-size: calc(14px * var(--demo-font-scale, 1));
     color: var(--color-text-tertiary);
   }
 
@@ -274,32 +283,35 @@ const footerLinks = [
   }
 
   &__version-divider {
-    font-size: 12px;
+    font-size: calc(12px * var(--demo-font-scale, 1));
   }
 
   &__links {
-    margin-top: 16px;
+    margin-top: 8px;
   }
 
+  /* 联系行：高 54px，左侧缩进 14px 的底部分隔线（设计稿 list_item/normal/onlight） */
   &__link-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
     height: 54px;
-    padding: 0 12px 0 14px;
+    padding-right: 12px;
+    margin-left: 14px;
+    box-sizing: border-box;
     color: inherit;
     text-decoration: none;
     border-bottom: 1px solid var(--color-border);
   }
 
   &__link-label {
-    font-size: 14px;
+    font-size: calc(14px * var(--demo-font-scale, 1));
     font-weight: 500;
     color: var(--color-text);
   }
 
   &__link-value {
-    font-size: 14px;
+    font-size: calc(14px * var(--demo-font-scale, 1));
     font-weight: 500;
     color: var(--color-primary);
 
@@ -327,7 +339,7 @@ const footerLinks = [
     flex: 1 1 0;
     min-width: fit-content;
     padding: 10px 0;
-    font-size: 12px;
+    font-size: calc(12px * var(--demo-font-scale, 1));
     font-weight: 500;
     color: var(--color-primary);
     text-decoration: none;
@@ -340,7 +352,7 @@ const footerLinks = [
 
   &__copyright {
     margin: 12px 0 0;
-    font-size: 12px;
+    font-size: calc(12px * var(--demo-font-scale, 1));
     color: var(--color-text-tertiary);
   }
 }

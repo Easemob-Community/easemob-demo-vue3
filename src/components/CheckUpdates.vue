@@ -58,6 +58,7 @@ onBeforeUnmount(stopPolling)
   &__content {
     width: 320px;
     padding: 20px;
+    box-sizing: border-box;
   }
 
   &__header {
@@ -65,14 +66,14 @@ onBeforeUnmount(stopPolling)
   }
 
   &__title {
-    font-size: 16px;
+    font-size: calc(16px * var(--demo-font-scale, 1));
     font-weight: 600;
     color: var(--color-text);
   }
 
   &__description {
     margin: 0;
-    font-size: 14px;
+    font-size: calc(14px * var(--demo-font-scale, 1));
     line-height: 1.6;
     color: var(--color-text-secondary);
   }
@@ -87,7 +88,7 @@ onBeforeUnmount(stopPolling)
     min-width: 0;
     height: 36px;
     padding: 0 12px;
-    font-size: 14px;
+    font-size: calc(14px * var(--demo-font-scale, 1));
     border: none;
     border-radius: 999px;
     cursor: pointer;

@@ -299,7 +299,7 @@ const colorModes: { key: ColorMode; label: string }[] = [
     border-radius: 999px;
     background: transparent;
     color: var(--color-text-secondary);
-    font-size: 13px;
+    font-size: calc(13px * var(--demo-font-scale, 1));
     cursor: pointer;
     transition: all 0.2s;
 
@@ -339,7 +339,7 @@ const colorModes: { key: ColorMode; label: string }[] = [
   &__color-value-prefix,
   &__color-value-unit,
   &__color-value-static {
-    font-size: 13px;
+    font-size: calc(13px * var(--demo-font-scale, 1));
     color: var(--color-text);
   }
 
@@ -353,7 +353,7 @@ const colorModes: { key: ColorMode; label: string }[] = [
     min-width: 0;
     border: none;
     background: transparent;
-    font-size: 13px;
+    font-size: calc(13px * var(--demo-font-scale, 1));
     color: var(--color-text);
     outline: none;
   }
@@ -367,7 +367,7 @@ const colorModes: { key: ColorMode; label: string }[] = [
     border-radius: 8px;
     background-color: var(--color-bg);
     color: var(--color-text);
-    font-size: 14px;
+    font-size: calc(14px * var(--demo-font-scale, 1));
     outline: none;
     box-sizing: border-box;
 

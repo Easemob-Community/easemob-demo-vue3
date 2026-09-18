@@ -2,6 +2,7 @@
 export default {
   app: {
     title: '环信 IM Demo',
+    newMessageNotice: '【您有新消息】',
   },
   common: {
     back: '返回',
@@ -16,8 +17,6 @@ export default {
   },
   autoLogin: {
     loading: '正在自动登录…',
-    failed: '自动登录失败',
-    relogin: '重新登录',
   },
   nav: {
     chat: '会话',
@@ -63,9 +62,6 @@ export default {
       showTyping: '显示输入状态',
       showTypingHint: '开启后，对方将看见你的输入状态',
       darkMode: '暗黑模式',
-      switchTheme: '切换主题',
-      themeClassic: '经典',
-      setColor: '设置颜色',
       language: '语言设置',
       langZh: '简体中文',
       langEn: 'English',
@@ -149,7 +145,8 @@ export default {
       avatarShape: '头像形状',
       avatarCircle: '圆形',
       avatarSquare: '方形',
-      avatarShapeDesc: '全局头像形状：圆形 / 方形（圆角矩形），作用于会话、通讯录、聊天等所有头像。',
+      avatarShapeDesc:
+        '全局头像形状：圆形 / 方形（圆角矩形），作用于会话、通讯录、聊天等所有头像。',
       componentsShape: '组件圆角',
       componentsGround: '圆润',
       componentsSquare: '方正',
@@ -408,6 +405,8 @@ export default {
       enableDraft: '会话列表草稿显示 (enableDraft)',
       enableMotion: '＠我 消息提醒 (enableMotion)',
       enableTyping: '对方正在输入提示 (enableTyping)',
+      showNicknameInSingleChat: '单聊展示对方昵称 (showNicknameInSingleChat)',
+      showNicknameInGroupChat: '群聊展示发送者昵称 (showNicknameInGroupChat)',
       fetchContacts: '自定义数据源 (fetchContacts)',
       fetchContactsDesc: '由业务接口接管拉取联系人',
       enableGroup: '群组体系 (enableGroup)',
@@ -421,7 +420,8 @@ export default {
       contactFetchModeDesc: 'page：SDK 未暴露分页游标接口，实际按全量返回处理；all：一次性全量拉取',
       notes: {
         afterEnable: '开启后：',
-        defaultAllOn: 'Provider 能力开关默认全部开启。关闭后对应功能不再拉取 / 渲染 / 发送。',
+        defaultAllOn:
+          'Provider 能力开关默认全部开启（单聊昵称默认关闭、自定义数据源默认关闭）。关闭后对应功能不再拉取 / 渲染 / 发送。',
         readOnMount:
           '注意：开关在 Provider 挂载时读取，登录后修改需重新登录（或刷新页面）才能完整生效。',
         customDataSource: '启用自定义数据源后，拉取好友将走示例接口（返回 Alice / Bob）而非 SDK。',
