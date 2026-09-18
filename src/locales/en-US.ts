@@ -207,10 +207,10 @@ export default {
       showStatusBannerDesc:
         'The connection/sync status banner at the top of the conversation list, displayed by priority: offline > connecting > syncing conversations > syncing messages',
       tabsVisibility: 'Tab Visibility',
-      showTabs: 'Show conversation tab bar',
+      showTabs: 'Show conversation Tab bar',
       showTabsDesc:
-        'Toggle the entire conversation tab bar: when off, the tabs array is cleared and the tab bar is hidden; when on, the original configuration is restored',
-      tabButtons: 'Show tab buttons',
+        'Toggle the entire conversation Tab bar: when off, the tabs array is cleared and the Tab bar is hidden; when on, the original configuration is restored',
+      tabButtons: 'Show Tab buttons',
       tabButtonsDesc:
         'For example, if your business only has single and group chats, you can check only "Single" and "Group"; drag the handle on the right to change the display order',
       tabLabels: {
@@ -236,7 +236,7 @@ export default {
       unreadBadgeDesc:
         'Unread count can be shown as a numeric badge or a dot (muted conversations always show a dot); the badge sits at the end of the info row by default, or can be moved onto the avatar as a corner badge in the top-right or bottom-right corner',
       takeover: 'Fully take over rendering (#tabs slot)',
-      useTabsSlot: 'Use #tabs slot to draw the tab bar (underline style)',
+      useTabsSlot: 'Use #tabs slot to draw the Tab bar (underline style)',
       useTabsSlotDesc:
         'Demonstrate useConversationTabs hook + #tabs slot fully taking over: demo-page maintains tabs / activeTab / selectTab through the hook, and the slot customizes the rendering buttons',
       resetAll: 'Reset All',

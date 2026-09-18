@@ -196,11 +196,11 @@ export default {
       showStatusBannerDesc:
         '会话列表顶部的连接 / 同步状态横幅，按 断网 > 连接中 > 会话同步 > 消息同步 的优先级展示',
       tabsVisibility: '分栏显隐',
-      showTabs: '展示会话分栏 tab 栏',
-      showTabsDesc: '会话分栏 tab 栏整体显隐：关闭后 tabs 数组置空、tab 栏整块隐藏，开启恢复原配置',
-      tabButtons: '展示 tab 按钮',
+      showTabs: '展示会话分栏 Tab 栏',
+      showTabsDesc: '会话分栏 Tab 栏整体显隐：关闭后 tabs 数组置空、Tab 栏整块隐藏，开启恢复原配置',
+      tabButtons: '展示 Tab 按钮',
       tabButtonsDesc:
-        '例如业务只有单聊或群聊，可只勾选「单聊」「群组」两个 tab，拖拽右侧可更改显示顺序',
+        '例如业务只有单聊或群聊，可只勾选「单聊」「群组」两个 Tab，拖拽右侧可更改显示顺序',
       tabLabels: {
         all: '全部',
         unread: '未读',
@@ -224,7 +224,7 @@ export default {
       unreadBadgeDesc:
         '未读数可切换为数字徽标或红点（免打扰会话强制红点）；徽标默认展示在信息区行尾，也可归位到头像角标，角标支持右上 / 右下两个位置',
       takeover: '完全接管渲染（#tabs 插槽）',
-      useTabsSlot: '使用 #tabs 插槽自绘 tab 栏（下划线风格）',
+      useTabsSlot: '使用 #tabs 插槽自绘 Tab 栏（下划线风格）',
       useTabsSlotDesc:
         '演示 useConversationTabs hook + #tabs 插槽完全接管：demo-page 通过 hook 维护 tabs、activeTab、selectTab，插槽自定义渲染按钮',
       resetAll: '一键重置',
