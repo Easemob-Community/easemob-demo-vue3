@@ -6,6 +6,7 @@ import {
   CONVERSATION_TYPE,
   EmContactContainer,
   EmContactDetail,
+  EmContactNoticeList,
   EmCreateGroupModal,
   EmGroupDetail,
   EmIcon,
@@ -13,7 +14,7 @@ import {
   useConversation,
   useUIKit,
 } from '@easemob/uikit-im'
-import type { UiContact, UiGroup } from '@easemob/uikit-core'
+import type { UiContact, UiContactInvite, UiGroup } from '@easemob/uikit-core'
 
 import AddContactModal from '@/components/contact/AddContactModal.vue'
 import { useDemoCreateGroup } from '@/composables/useDemoCreateGroup'
@@ -133,6 +134,22 @@ function onSendMessageToGroup(groupId: string) {
   gotoConversation(groupId, CONVERSATION_TYPE.GROUPCHAT, group?.groupName || groupId, group?.avatar)
 }
 
+/**
+ * 好友申请「通过」后直接进入与该用户的单聊：#notice 插槽接管默认通知列表，
+ * 复用上方详情卡「发消息」的同一跳转路径（补建本地会话 → selectConversation → 跳聊天页）。
+ * 群组邀请通过不跳转。
+ */
+function onInviteAccepted(invite: UiContactInvite) {
+  if (invite.type !== 'contact' || !invite.userId)
+    return
+  gotoConversation(
+    invite.userId,
+    CONVERSATION_TYPE.SINGLECHAT,
+    invite.nickname || invite.userId,
+    invite.avatarUrl,
+  )
+}
+
 /** 删除联系人/退出/解散群组后，关闭右侧详情回到列表 */
 function onContactDeleted() {
   detailUserId.value = null
@@ -182,7 +199,12 @@ function backToContactList() {
           @blocklist-item-click="onContactClick"
           @add-contact="showAddContactModal = true"
           @create-group="showCreateGroupModal = true"
-        />
+        >
+          <!-- 通知列表接管：好友申请「通过」后直接跳入单聊（默认渲染无此联动） -->
+          <template #notice>
+            <EmContactNoticeList @accept="onInviteAccepted" />
+          </template>
+        </EmContactContainer>
       </EmResizable>
       <div class="contacts-page__main">
         <EmContactDetail
@@ -225,7 +247,12 @@ function backToContactList() {
           @blocklist-item-click="onContactClick"
           @add-contact="showAddContactModal = true"
           @create-group="showCreateGroupModal = true"
-        />
+        >
+          <!-- 通知列表接管：好友申请「通过」后直接跳入单聊（默认渲染无此联动） -->
+          <template #notice>
+            <EmContactNoticeList @accept="onInviteAccepted" />
+          </template>
+        </EmContactContainer>
       </div>
       <div v-show="!!detailUserId || !!detailGroupId" class="contacts-page__mobile-detail">
         <div class="contacts-page__mobile-header safe-area-top">
