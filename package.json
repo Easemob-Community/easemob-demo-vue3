@@ -19,10 +19,10 @@
     "release": "node scripts/release.mjs"
   },
   "dependencies": {
-    "@easemob/uikit-core": "file:./easemob-uikit-core-2.8.4.tgz",
-    "@easemob/uikit-im": "file:./easemob-uikit-im-3.7.4.tgz",
-    "@easemob/uikit-sdk-contract": "file:./easemob-uikit-sdk-contract-1.2.1.tgz",
-    "@easemob/uikit-sdk-websdk5": "file:./easemob-uikit-sdk-websdk5-1.3.0.tgz",
+    "@easemob/uikit-core": "file:./easemob-uikit-core-2.8.5.tgz",
+    "@easemob/uikit-im": "file:./easemob-uikit-im-3.7.5.tgz",
+    "@easemob/uikit-sdk-contract": "file:./easemob-uikit-sdk-contract-1.3.0.tgz",
+    "@easemob/uikit-sdk-websdk5": "file:./easemob-uikit-sdk-websdk5-1.3.1.tgz",
     "@vueuse/core": "^14.4.0",
     "axios": "^1.19.0",
     "dayjs": "^1.11.23",
@@ -56,10 +56,10 @@
   },
   "pnpm": {
     "overrides": {
-      "@easemob/uikit-core": "file:./easemob-uikit-core-2.8.4.tgz",
-      "@easemob/uikit-im": "file:./easemob-uikit-im-3.7.4.tgz",
-      "@easemob/uikit-sdk-contract": "file:./easemob-uikit-sdk-contract-1.2.1.tgz",
-      "@easemob/uikit-sdk-websdk5": "file:./easemob-uikit-sdk-websdk5-1.3.0.tgz"
+      "@easemob/uikit-core": "file:./easemob-uikit-core-2.8.5.tgz",
+      "@easemob/uikit-im": "file:./easemob-uikit-im-3.7.5.tgz",
+      "@easemob/uikit-sdk-contract": "file:./easemob-uikit-sdk-contract-1.3.0.tgz",
+      "@easemob/uikit-sdk-websdk5": "file:./easemob-uikit-sdk-websdk5-1.3.1.tgz"
     }
   }
 }
