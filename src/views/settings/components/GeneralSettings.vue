@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { onClickOutside } from '@vueuse/core'
 import { EmIcon, useUIKit, useTheme as useUIKitTheme } from '@easemob/uikit-im'
 import { isKeyboardShortcutsEnabled, setKeyboardShortcutsEnabled } from '@easemob/uikit-core'
 
@@ -41,6 +42,16 @@ const keyboardEnabled = computed({
 /* ===== 下拉弹层（暗黑模式 / 语言设置）：同一时刻仅展开一个 ===== */
 const darkModeOpen = ref(false)
 const languageOpen = ref(false)
+const darkModeWrapperRef = ref<HTMLElement | null>(null)
+const languageWrapperRef = ref<HTMLElement | null>(null)
+
+/** 点击弹层外部时自动收起 */
+onClickOutside(darkModeWrapperRef, () => {
+  darkModeOpen.value = false
+})
+onClickOutside(languageWrapperRef, () => {
+  languageOpen.value = false
+})
 
 /** 暗黑模式选项：跟随系统 / 浅色 / 深色 */
 const darkModeOptions = computed(() => [
@@ -108,7 +119,7 @@ function selectLanguage(value: string) {
           <p class="general-settings__hint">{{ t('settings.general.showTypingHint') }}</p>
         </div>
 
-        <div class="general-settings__item general-settings__popup-wrapper">
+        <div ref="darkModeWrapperRef" class="general-settings__item general-settings__popup-wrapper">
           <div
             class="general-settings__row general-settings__row--clickable"
             @click="toggleDarkModePanel"
@@ -146,7 +157,7 @@ function selectLanguage(value: string) {
           </div>
         </div>
 
-        <div class="general-settings__item general-settings__popup-wrapper">
+        <div ref="languageWrapperRef" class="general-settings__item general-settings__popup-wrapper">
           <div
             class="general-settings__row general-settings__row--clickable"
             @click="toggleLanguagePanel"
