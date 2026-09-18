@@ -224,13 +224,14 @@ const { sidebarWidth, persistSidebarWidth } = useSidebarWidth('layout_sidebar_wi
     gap: 8px;
   }
 
-  /* 菜单项：54px 高、24px 图标 + 8px 间距、圆角 8px、常态底色 --color-bg-secondary */
+  /* 菜单项：64px 高（对齐设计稿 list_item 与 UIKit --uikit-cell-height）、24px 图标左距 12px、
+     文字左距 44px、圆角 8px、常态底色 neutral/98（--color-settings-cell-bg） */
   &__menu-item {
     display: flex;
     align-items: center;
     gap: 8px;
     width: 100%;
-    height: 54px;
+    height: 64px;
     flex-shrink: 0;
     padding: 0 12px;
     box-sizing: border-box;
@@ -238,12 +239,17 @@ const { sidebarWidth, persistSidebarWidth } = useSidebarWidth('layout_sidebar_wi
     font-weight: 500;
     color: var(--color-text);
     cursor: pointer;
-    background: var(--color-bg-secondary);
+    background: var(--color-settings-cell-bg);
     border: none;
     border-radius: 8px;
     transition:
       background-color 0.2s,
       color 0.2s;
+
+    /* 悬浮：UIKit 通用悬浮底色（浅色 #F5F5F5 / 深色 --uikit-bg-hover）；选中项保持选中态 */
+    &:not(&--active):hover {
+      background: var(--uikit-bg-hover);
+    }
 
     &--active {
       color: var(--color-primary);

@@ -35,11 +35,15 @@ const { presenceStatus } = usePresenceSubscription(userId)
       <div class="account-info__content">
         <ProfileDisplay :user-id="userId" :presence="presenceStatus" />
 
-        <ProfileEditor>
-          <template #avatar-row>
-            <AvatarSection />
-          </template>
-        </ProfileEditor>
+        <!-- 三行包一层：ProfileEditor / AvatarSection 为多根节点组件，不包层会被 content 的
+             gap 63px 当作独立子元素撑开行间间距（设计稿行间仅 1px 分割线、无间距） -->
+        <div class="account-info__rows">
+          <ProfileEditor>
+            <template #avatar-row>
+              <AvatarSection />
+            </template>
+          </ProfileEditor>
+        </div>
 
         <DangerZone />
       </div>
@@ -55,13 +59,24 @@ const { presenceStatus } = usePresenceSubscription(userId)
   min-height: 0;
   background: var(--color-bg);
 
-  /* 头部对齐设计稿 top_bars：60px 高、18px 标题，无底部分割线 */
+  /* 头部对齐设计稿 top_bars：60px 高、18px 标题，底部 1px 通宽分割线 */
   &__header {
+    position: relative;
     flex-shrink: 0;
     display: flex;
     align-items: center;
     min-height: 60px;
     padding: 0 16px;
+
+    &::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      height: 1px;
+      background: var(--color-border);
+    }
   }
 
   &__title {
@@ -87,6 +102,13 @@ const { presenceStatus } = usePresenceSubscription(userId)
     display: flex;
     flex-direction: column;
     gap: 63px;
+  }
+
+  /* 资料行组（昵称 / 头像 / 签名）：直接堆叠、行间仅 1px 分割线，行高 54 / 64 / 54 */
+  &__rows {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
   }
 }
 </style>
