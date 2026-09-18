@@ -14,6 +14,7 @@
 
 ### 新增
 
+- 页面缩放档位：外观面板新增「页面缩放」（复刻浏览器缩放，照抄 Chrome 档位 25%–500%），整页文字 / 图片 / 布局同比例缩放并持久化（`usePageZoom`）；满铺高度按缩放系数补偿，任何档位始终铺满视口
 - 新版本检测提示：轮询部署后 index.html 的 ETag/Last-Modified 指纹，检测到新构建后弹不可关闭弹窗引导刷新（`useCheckUpdates` + `CheckUpdates`，挂载于 AppLayout）
 - 添加联系人支持手机号或用户 ID：自定义添加联系人弹窗（`AddContactModal` + `useContactAdd`，替换 `useContactSearch`），手机号经 App Server 解析为用户 ID，前置拦截「添加自己 / 已是好友」，并覆盖 UIKit 内置弹窗文案（`uikit-locale.ts`）
 - 自动登录加载与失败态：刷新后自动登录期间全屏 loading，失败展示错误详情与「重新登录」入口（AppInitializer）

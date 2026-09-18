@@ -2,7 +2,8 @@
 
 .login-page {
   position: relative;
-  min-height: 100vh;
+  /* 满铺高度对页面缩放做补偿，始终铺满视口 */
+  min-height: calc(100vh / var(--demo-page-zoom, 1));
   width: 100%;
   display: flex;
   align-items: center;
@@ -132,7 +133,7 @@
     position: relative;
     z-index: 10;
     width: 100%;
-    min-height: 100vh;
+    min-height: calc(100vh / var(--demo-page-zoom, 1));
     display: flex;
     align-items: center;
     justify-content: center;

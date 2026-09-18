@@ -1,6 +1,8 @@
 .app-layout {
   display: flex;
-  height: 100vh;
+  /* 满铺高度对页面缩放做补偿：CSS zoom 下 vh 按未缩放视口解析，
+     缩小档会底部留白，除以缩放系数后始终满铺 */
+  height: calc(100vh / var(--demo-page-zoom, 1));
   background: var(--color-bg-secondary);
 
   &--mobile {
@@ -16,7 +18,7 @@
     flex-direction: column;
     align-items: center;
     width: 60px;
-    height: calc(100vh - 16px);
+    height: calc((100vh - 16px) / var(--demo-page-zoom, 1));
     padding: 10px 0;
     box-sizing: border-box;
     border-radius: 6px;

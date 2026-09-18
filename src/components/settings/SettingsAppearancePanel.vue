@@ -19,6 +19,7 @@ import { EmInput, useTheme as useUIKitTheme } from '@easemob/uikit-im'
 import ColorPickerPanel from './color-picker/ColorPickerPanel.vue'
 import { toUIKitLocale } from '@/composables/useUIKitConfig'
 import type { UIKitLocale } from '@/composables/useUIKitConfig'
+import { usePageZoom } from '@/composables/usePageZoom'
 import { useTheme as useAppTheme } from '@/composables/useTheme'
 import type { AppLocale } from '@/locales'
 
@@ -35,6 +36,8 @@ type AnimationLevel = 'subtle' | 'normal' | 'expressive'
 const { t, locale: appLocale } = useI18n()
 const appTheme = useAppTheme()
 const uikitTheme = useUIKitTheme()
+/** 页面缩放（复刻浏览器缩放档位，独立于 UIKit 主题 store） */
+const { zoom, zoomIn, zoomOut, resetZoom, canZoomIn, canZoomOut, isDefaultZoom } = usePageZoom()
 
 /** 当前语言（映射为 UIKit 的 zh-CN / en，用于高亮选中态） */
 const activeLocale = computed(() => toUIKitLocale(appLocale.value as AppLocale))
@@ -125,6 +128,7 @@ function resetAll() {
   setContainerGap(8)
   setFontSize('normal')
   setDensity('normal')
+  resetZoom()
   setHeaderBorder(false)
   setAnimationEnabled(true)
   setAnimationLevel('normal')
@@ -529,6 +533,37 @@ function resetAll() {
 
       <div class="settings-appearance-panel__row settings-appearance-panel__row--bordered">
         <span class="settings-appearance-panel__label">
+          {{ t('features.appearance.pageZoom') }}
+        </span>
+        <div class="settings-appearance-panel__zoom">
+          <button
+            class="settings-appearance-panel__zoom-btn"
+            :disabled="!canZoomOut"
+            @click="zoomOut"
+          >
+            −
+          </button>
+          <span class="settings-appearance-panel__zoom-value">{{ zoom }}%</span>
+          <button
+            class="settings-appearance-panel__zoom-btn"
+            :disabled="!canZoomIn"
+            @click="zoomIn"
+          >
+            +
+          </button>
+          <button
+            class="settings-appearance-panel__zoom-btn settings-appearance-panel__zoom-btn--reset"
+            :disabled="isDefaultZoom"
+            @click="resetZoom"
+          >
+            {{ t('features.appearance.pageZoomReset') }}
+          </button>
+        </div>
+      </div>
+      <p class="settings-appearance-panel__desc">{{ t('features.appearance.pageZoomDesc') }}</p>
+
+      <div class="settings-appearance-panel__row settings-appearance-panel__row--bordered">
+        <span class="settings-appearance-panel__label">
           {{ t('features.appearance.density') }}
         </span>
         <div class="settings-appearance-panel__segmented">
@@ -806,6 +841,63 @@ function resetAll() {
       color: #ffffff;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     }
+  }
+
+  /* 页面缩放控件：照抄 Chrome 缩放气泡（− 百分比 + 重置） */
+  &__zoom {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    padding: 3px;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    background-color: var(--color-bg);
+  }
+
+  &__zoom-btn {
+    min-width: 30px;
+    height: 30px;
+    padding: 0 10px;
+    border: none;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--color-text);
+    font-size: calc(15px * var(--demo-font-scale, 1));
+    line-height: 1;
+    cursor: pointer;
+    transition: background-color 0.15s;
+
+    &:hover:not(:disabled) {
+      background-color: var(--color-bg-secondary);
+    }
+
+    &:disabled {
+      color: var(--color-text-tertiary);
+      cursor: not-allowed;
+    }
+
+    &--reset {
+      border: 1px solid var(--uikit-primary-color, var(--color-primary));
+      color: var(--uikit-primary-color, var(--color-primary));
+      font-size: calc(13px * var(--demo-font-scale, 1));
+
+      &:hover:not(:disabled) {
+        background-color: var(--color-nav-icon-active-bg);
+      }
+
+      &:disabled {
+        border-color: var(--color-border);
+        color: var(--color-text-tertiary);
+      }
+    }
+  }
+
+  &__zoom-value {
+    min-width: 52px;
+    text-align: center;
+    font-size: calc(14px * var(--demo-font-scale, 1));
+    color: var(--color-text);
+    font-variant-numeric: tabular-nums;
   }
 
   /* 行内颜色选择 */

@@ -169,6 +169,10 @@ export default {
       fontSizeLarge: 'Large',
       fontSizeXlarge: 'Extra Large',
       fontSizeDesc: 'Global font size scale: Normal 1.0 / Large 1.125 / Extra Large 1.25',
+      pageZoom: 'Page Zoom',
+      pageZoomReset: 'Reset',
+      pageZoomDesc:
+        'Full-page zoom levels (same as browser zoom): text, images and layout scale together, 25% – 500%, persisted across reloads',
       density: 'Density',
       densityCompact: 'Compact',
       densityNormal: 'Normal',

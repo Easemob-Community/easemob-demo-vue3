@@ -163,6 +163,10 @@ export default {
       fontSizeLarge: '大',
       fontSizeXlarge: '特大',
       fontSizeDesc: '全局字号档位：标准 1.0 / 大 1.125 / 特大 1.25 倍',
+      pageZoom: '页面缩放',
+      pageZoomReset: '重置',
+      pageZoomDesc:
+        '整页缩放档位（等同浏览器缩放）：文字、图片、布局同比例缩放，范围 25% – 500%，刷新后保留',
       density: '密度',
       densityCompact: '紧凑',
       densityNormal: '标准',
