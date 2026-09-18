@@ -144,6 +144,10 @@
   margin-top: 2px;
   width: 16px;
   height: 16px;
+  /* reset 收敛后无通配清零，需显式覆盖浏览器 button 默认 padding（1px 6px），
+     否则 flex 内容盒被挤压、内部对勾 svg 缩至 2px 不可见 */
+  padding: 0;
+  box-sizing: border-box;
   border-radius: 4px;
   display: flex;
   align-items: center;
