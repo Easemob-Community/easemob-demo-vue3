@@ -1,8 +1,8 @@
 /**
- * Demo UIKIT特性开关 - Provider 能力开关域
+ * Demo UIKit 特性开关 - Provider 能力开关域
  *
  * 职责：
- * - 持有「UIKIT特性开关 - Provider」面板内各能力开关（对齐 DEMO_PROVIDER_CONFIG）
+ * - 持有「UIKit 特性开关 - Provider」面板内各能力开关（对齐 DEMO_PROVIDER_CONFIG）
  * - 由 App.vue 绑定到 EmUIKitProvider props；关闭后对应功能不再拉取 / 渲染 / 发送
  *
  * 注意：开关在 Provider 挂载时读取，登录后修改需重新登录（或刷新页面）才能完整生效。
@@ -16,7 +16,7 @@ import { ref } from 'vue'
 import { DEMO_PROVIDER_CONFIG } from '@/config/demo'
 
 function createProviderSettings() {
-  /* ===== Provider 能力开关（EmUIKitProvider，见「UIKIT特性开关 - Provider」面板） =====
+  /* ===== Provider 能力开关（EmUIKitProvider，见「UIKit 特性开关 - Provider」面板） =====
    * 默认对齐 DEMO_PROVIDER_CONFIG（除昵称展示/自定义数据源外默认全部开启），关闭后对应功能不再拉取 / 渲染 / 发送。
    * 注意：开关在 Provider 挂载时读取，登录后修改需重新登录（或刷新页面）才能完整生效。
    */

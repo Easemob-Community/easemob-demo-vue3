@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /**
- * UIKIT特性开关 - 消息通知面板
+ * UIKit 特性开关 - 消息通知面板
  *
  * 命名说明：
  * - 设计图里的「通知开关」控制的是 UIKit `useNotification` 能力：

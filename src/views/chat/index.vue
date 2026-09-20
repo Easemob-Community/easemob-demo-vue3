@@ -39,7 +39,7 @@ const { demoCreateGroup } = useDemoCreateGroup()
 
 const hasCurrentConversation = computed(() => !!currentConversation.value)
 
-/* ===== 会话UIKIT特性开关配置（由特性抽屉「会话」面板驱动） ===== */
+/* ===== 会话UIKit 特性开关配置（由特性抽屉「会话」面板驱动） ===== */
 const {
   statusBannerEnabled,
   conversationUnreadMode,
@@ -49,7 +49,7 @@ const {
   conversationTabsVisible,
   conversationTabsTakeover,
   conversationActiveTab,
-  // 聊天UIKIT特性开关
+  // 聊天UIKit 特性开关
   chatInputMode,
   chatInputStyle,
   chatInputFeatures,
@@ -124,7 +124,7 @@ const { stores } = useUIKit()
 // 基准 token（--uikit-sidebar-width，默认 clamp(240px, 25%, 480px)）随窗口伸缩
 const { sidebarWidth, persistSidebarWidth } = useSidebarWidth('layout_sidebar_width')
 
-/* ===== 聊天UIKIT特性开关配置（由特性抽屉「聊天」面板驱动） ===== */
+/* ===== 聊天UIKit 特性开关配置（由特性抽屉「聊天」面板驱动） ===== */
 const chatConfig = computed(() => ({
   ...DEMO_CHAT_CONFIG,
   // 抽屉挤出模式（对齐 UIKit demo 默认档）：好友 / 群信息面板作为独立平面区域挤压聊天区，

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /**
- * UIKIT特性开关 - 外观面板
+ * UIKit 特性开关 - 外观面板
  *
  * 按参考图片一比一布局，包含：
  * - 主题与颜色：主题模式、主题色取色器（ColorPickerPanel，含 2D 色板 / 色相条 / 明度条 / Hex/RGB/HSL/HSB 标签页）。

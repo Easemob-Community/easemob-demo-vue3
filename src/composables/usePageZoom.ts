@@ -3,7 +3,7 @@ import { computed, ref, watch } from 'vue'
 /**
  * 页面缩放（复刻 Chrome 页面缩放的档位行为）。
  *
- * 与「UIKIT特性开关 - 字号」（fontSizeScale，只放大文字）不同，这里通过
+ * 与「UIKit 特性开关 - 字号」（fontSizeScale，只放大文字）不同，这里通过
  * documentElement 的 CSS `zoom` 属性做整页缩放：px 单位、图片、布局全部
  * 按档位重排，媒体查询按缩放后的视口重新求值，效果等同浏览器 cmd+加号/减号。
  *

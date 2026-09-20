@@ -1,5 +1,5 @@
 /**
- * Demo UIKIT特性开关 - 聚合层
+ * Demo UIKit 特性开关 - 聚合层
  *
  * 职责：
  * - 按域拆分至 demo-settings/ 子目录（chat / conversation / contacts / notice / logger / ai / provider）

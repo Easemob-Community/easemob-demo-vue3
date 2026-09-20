@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /**
- * UIKIT特性开关 - 日志获取面板
+ * UIKit 特性开关 - 日志获取面板
  *
  * 能力：
  * - 收集 SDK 日志开关（UIKit 运行日志默认持久化，此开关额外控制 SDK 层日志）

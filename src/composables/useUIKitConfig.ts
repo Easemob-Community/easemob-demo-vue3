@@ -32,7 +32,7 @@ export const UIKIT_THEME_STORAGE_KEY = 'easemob_uikit_theme'
  * 背景：UIKit 主题 store 的 containerGap / hoverStyle 早期版本无持久化字段，
  * 旧缓存读取后这两个值为 undefined（store getter 无兜底），会导致
  * --uikit-container-gap 被写成 NaNpx。此前 useUIKitConfig 无条件用 Demo 常量强制
- * setContainerGap / setHoverStyle，会把用户在「UIKIT特性开关」面板调过并
+ * setContainerGap / setHoverStyle，会把用户在「UIKit 特性开关」面板调过并
  * 持久化的值在每次启动时踩回默认——这里改为只在字段缺失时补齐。
  */
 export function patchLegacyThemeStorage(storage?: Storage): void {
@@ -118,7 +118,7 @@ export function useUIKitConfig() {
     { immediate: true },
   )
 
-  // 容器间距对齐：运行期 UIKIT特性开关改动 containerGap 时，把 --uikit-container-gap
+  // 容器间距对齐：运行期 UIKit 特性开关改动 containerGap 时，把 --uikit-container-gap
   // 同步回 --demo-container-gap，让 Demo 布局（会话 / 通讯录 / 设置等外层卡片 gap/padding）
   // 与 UIKit 内部容器保持一致。启动初始化不再无条件 setContainerGap（会踩掉持久化值），
   // 旧缓存缺失字段由 patchLegacyThemeStorage 补齐。
@@ -155,7 +155,7 @@ export function useUIKitConfig() {
 
   // 全局字号联动：UIKit 主题 store 把 --uikit-font-scale 写在 <html> 上（UIKit 组件消费
   // --uikit-font-size-* 变量），这里镜像一份 --demo-font-scale，让 Demo 外壳样式以
-  // calc(Npx * var(--demo-font-scale, 1)) 跟随「UIKIT特性开关 - 字号」缩放（themes.scss 已定义兜底值 1）。
+  // calc(Npx * var(--demo-font-scale, 1)) 跟随「UIKit 特性开关 - 字号」缩放（themes.scss 已定义兜底值 1）。
   watch(
     uikitThemeApi.fontSizeScale,
     (scale) => {
@@ -166,7 +166,7 @@ export function useUIKitConfig() {
 
   // 密度联动：UIKit 以 data-uikit-density 驱动自身列表密度（Cell 高度 / 内边距），
   // Demo 侧镜像 data-demo-density 属性，themes.scss 按档位覆写 --demo-density-* 布局变量，
-  // 让设置面板等 Demo 列表行高 / 间距随「UIKIT特性开关 - 密度」同档调整。
+  // 让设置面板等 Demo 列表行高 / 间距随「UIKit 特性开关 - 密度」同档调整。
   watch(
     uikitThemeApi.density,
     (density) => {

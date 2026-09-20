@@ -101,7 +101,7 @@ export default {
     },
   },
   features: {
-    title: 'UIKIT Feature Switch',
+    title: 'UIKit Feature Switch',
     categories: {
       appearance: 'Appearance',
       conversation: 'Conversation',
@@ -122,7 +122,7 @@ export default {
       themeAuto: 'System',
       themeDesc: 'Global light/dark theme: Light / Dark / Follow system',
       themeColorHue: 'Theme Color Hue',
-      themeColorDesc: 'Adjust UIKIT theme color, affecting buttons, active states, links, etc.',
+      themeColorDesc: 'Adjust UIKit theme color, affecting buttons, active states, links, etc.',
       colorFineTune: 'Color Fine-tune (Bubble / Input / Chat Background)',
       bubbleOther: 'Other Bubble',
       bubbleSelf: 'Self Bubble',

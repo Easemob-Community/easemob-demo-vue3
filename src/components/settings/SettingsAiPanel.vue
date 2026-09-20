@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /**
- * UIKIT特性开关 - AI（流式输出）面板
+ * UIKit 特性开关 - AI（流式输出）面板
  *
  * 按设计图一比一还原，包含：
  * - 开启 AI 应答（mock 流式）开关

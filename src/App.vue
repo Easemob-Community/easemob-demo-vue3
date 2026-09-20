@@ -27,7 +27,7 @@ function handleTokenExpired() {
 // UIKit 与 Demo 本体联动：语言（en-US → en）与主题（light/dark）
 const { uikitLocale, uikitTheme } = useUIKitConfig()
 
-/* ===== Provider 能力开关（由「UIKIT特性开关 - Provider」面板驱动，默认全部开启） =====
+/* ===== Provider 能力开关（由「UIKit 特性开关 - Provider」面板驱动，默认全部开启） =====
  * 注意：这些开关在 Provider 挂载时读取，登录后修改需重新登录（或刷新页面）才能完整生效。
  */
 const {

@@ -94,7 +94,7 @@ export const DEMO_CONVERSATION_CONFIG = {
 /**
  * EmUIKitProvider 功能开关
  *
- * 与「UIKIT特性开关 - Provider」面板一一对应。
+ * 与「UIKit 特性开关 - Provider」面板一一对应。
  * 除昵称展示开关（showNicknameInSingleChat 默认关闭）与自定义数据源（enableFetchContacts 默认关闭）外，
  * 其余开关默认全部开启，见面板说明「Provider 能力开关默认全部开启」。
  * 由 useDemoSettings 读取作为默认值，App.vue 绑定到 EmUIKitProvider；运行期改动即时反映为 Provider props。

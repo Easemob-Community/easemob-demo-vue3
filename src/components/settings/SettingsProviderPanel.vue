@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /**
- * UIKIT特性开关 - Provider 面板
+ * UIKit 特性开关 - Provider 面板
  *
  * 按设计图一比一还原，包含：
  * - 8 项 Provider 能力开关（好友列表 / 黑名单 / 在线状态 / 草稿 / ＠我 / 正在输入 / 单聊昵称 / 群聊昵称）

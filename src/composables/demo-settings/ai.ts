@@ -1,5 +1,5 @@
 /**
- * Demo UIKIT特性开关 - AI 流式演示域
+ * Demo UIKit 特性开关 - AI 流式演示域
  *
  * 职责：
  * - 持有「AI 流式演示」特性面板的 mock AI 应答开关

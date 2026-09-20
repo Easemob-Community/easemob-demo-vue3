@@ -3,7 +3,7 @@
 // vue3-uikit 接入后遵循同一约定（html.dark + 同名变量）
 :root {
   // 全局字号缩放系数：由 useUIKitConfig watch UIKit 主题 store 的 fontSizeScale 写入
-  // （对应「UIKIT特性开关 - 字号」标准 1 / 大 1.125 / 特大 1.25），
+  // （对应「UIKit 特性开关 - 字号」标准 1 / 大 1.125 / 特大 1.25），
   // Demo 外壳字号统一写 calc(Npx * var(--demo-font-scale, 1)) 跟随缩放
   --demo-font-scale: 1;
   // 密度档布局变量：由 useUIKitConfig 把 UIKit density 镜像为 html[data-demo-density] 后按档覆写，
@@ -47,7 +47,7 @@ html.dark {
 
 // UIKit 主题变量覆写（仅明亮模式）：会话 / 联系人 / 设置 Cell 选中态背景 #EBF7FF。
 // 主色相关变量交由 UIKit 2.6.0+ 主题 store 管理（通过 useTheme setPrimaryColor），
-// 不再以 !important 覆写，避免与「UIKIT特性开关-外观」取色器冲突。
+// 不再以 !important 覆写，避免与「UIKit 特性开关-外观」取色器冲突。
 // 注意：不能并列 :root——它与 UIKit 的 [data-uikit-theme='dark'] 特异性相同且本文件加载在后，
 // 会把深色模式的选中态也覆盖成浅色 #EBF7FF（白字压亮底看不清）。
 [data-uikit-theme='light'] {
@@ -73,7 +73,7 @@ html.dark {
   --uikit-text-primary: var(--color-text); // 主文字 #e5e7eb
 }
 
-// ===== Demo 密度档覆写（对应「UIKIT特性开关 - 密度」） =====
+// ===== Demo 密度档覆写（对应「UIKit 特性开关 - 密度」） =====
 // useUIKitConfig 将 UIKit density 镜像到 html[data-demo-density]，这里按档调整 Demo 布局变量：
 // 紧凑档整体收紧（行高 / 区块间距缩小），宽松档放宽，默认（normal / 未设置）用 :root 值。
 html[data-demo-density='compact'] {
