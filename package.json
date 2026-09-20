@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@easemob/uikit-core": "file:./easemob-uikit-core-2.8.5.tgz",
-    "@easemob/uikit-im": "file:./easemob-uikit-im-3.7.5.tgz",
+    "@easemob/uikit-im": "file:./easemob-uikit-im-3.7.6.tgz",
     "@easemob/uikit-sdk-contract": "file:./easemob-uikit-sdk-contract-1.3.0.tgz",
     "@easemob/uikit-sdk-websdk5": "file:./easemob-uikit-sdk-websdk5-1.3.2.tgz",
     "@vueuse/core": "^14.4.0",
@@ -57,7 +57,7 @@
   "pnpm": {
     "overrides": {
       "@easemob/uikit-core": "file:./easemob-uikit-core-2.8.5.tgz",
-      "@easemob/uikit-im": "file:./easemob-uikit-im-3.7.5.tgz",
+      "@easemob/uikit-im": "file:./easemob-uikit-im-3.7.6.tgz",
       "@easemob/uikit-sdk-contract": "file:./easemob-uikit-sdk-contract-1.3.0.tgz",
       "@easemob/uikit-sdk-websdk5": "file:./easemob-uikit-sdk-websdk5-1.3.2.tgz"
     }
