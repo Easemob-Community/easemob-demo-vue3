@@ -10,6 +10,7 @@ import {
   useConversationStore,
   useOwnUserInfo,
 } from '@easemob/uikit-im'
+import type { UiContactInvite } from '@easemob/uikit-core'
 import { useRoute } from 'vue-router'
 
 import featurePromoImg from '@/assets/feature-promo.png'
@@ -71,9 +72,15 @@ const totalUnread = computed(() => {
   }, 0)
 })
 
-/** 联系人/群邀请待处理数量 */
+/** 联系人/群邀请待处理数量 + 我发出的申请被对方拒绝且未读的通知数 */
 const pendingNoticeCount = computed(() => {
-  return inviteList.value.filter((item) => item.status === 'pending').length
+  // installed store 的类型声明缺 unread 字段，以 contract 的 UiContactInvite 为准（运行时存在）
+  const list = inviteList.value as UiContactInvite[]
+  return list.filter(
+    (item) =>
+      item.status === 'pending' ||
+      (item.outgoing === true && item.status === 'declined' && item.unread === true),
+  ).length
 })
 
 /** 点击特性图标：打开/收起设置抽屉，并隐藏诱导红点 */
