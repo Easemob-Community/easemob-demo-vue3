@@ -23,7 +23,8 @@ export default {
     contacts: '通讯录',
     settings: '设置',
     features: '特性',
-    featurePromoAlt: 'Demo 特性控制台宣传图',
+    featurePromoTitle: 'UIKit 配置总览',
+    featurePromoDesc: '快速预览 UIKit\n可配置能力\n与界面效果。',
   },
   chat: {},
   settings: {

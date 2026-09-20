@@ -103,25 +103,30 @@
     pointer-events: none;
   }
 
-  /* 特性广告弹层：左侧 caret 直接附着在特性图标右侧 */
+  /* 特性广告弹层：定位在特性图标右侧，箭头对准图标中心。
+     容器尺寸固定（设计稿 707-3659 同款 246×142），不依赖图片加载，消除首开位移跳动 */
   &__feature-promo {
     position: absolute;
     /* 入口容器宽 60px，24px 图标居中后右侧位于 42px，用 calc 把弹层左边缘拉到图标右侧 */
     left: calc(100% - 18px);
     top: 50%;
     z-index: 20;
-    width: 240px;
-    /* caret 尖端位于图片约 81.5% 高度处，通过 translateY 把它对齐到图标中心 */
-    transform: translateY(-81.5%);
+    width: 246px;
+    height: 142px;
+    /* 箭头中心位于容器 84.2% 高度处（设计稿固定构图），translateY 将其对齐到图标中心。
+       该值为版式常量而非资产测量值，更换人物/标题素材不影响定位 */
+    transform: translateY(-84.2%);
     cursor: pointer;
     user-select: none;
+  }
 
-    img {
-      display: block;
-      width: 100%;
-    }
-
-    /* 默认呼吸动效吸引注意，鼠标移入时暂停 */
+  /* 弹层内容层：呼吸动画作用在这一层，避免与外层 Transition 的 transform 竞争 */
+  &__feature-promo-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 4px 8px rgba(23, 26, 28, 0.1))
+      drop-shadow(0 1px 3px rgba(70, 78, 83, 0.15));
     animation: feature-promo-breathe 1.6s ease-in-out infinite;
 
     &:hover {
@@ -129,32 +134,93 @@
     }
   }
 
-  /* 广告弹层呼吸动画：上下浮动 5px 并伴随 3% 缩放 */
-  @keyframes feature-promo-breathe {
-    0%,
-    100% {
-      transform: translateY(-81.5%) scale(1);
-    }
-    50% {
-      transform: translateY(-81.5%) translateY(-5px) scale(1.03);
-    }
+  /* 左侧箭头：CSS 三角形（设计稿 6×11，#2479FB），顶端圆角由描边近似 */
+  &__feature-promo-arrow {
+    position: absolute;
+    top: 114px;
+    left: 1px;
+    width: 0;
+    height: 0;
+    border-top: 5.5px solid transparent;
+    border-bottom: 5.5px solid transparent;
+    border-right: 6px solid #2479fb;
   }
 
-  /* 关闭热区：覆盖在图片右上角内置的 X 按钮上 */
+  /* 渐变卡片：119.78deg #008AFA → #CC26FF，右下留白给人物形象叠加 */
+  &__feature-promo-card {
+    position: absolute;
+    top: 49px;
+    left: 7px;
+    width: 199px;
+    height: 92px;
+    overflow: hidden;
+    background: linear-gradient(119.78deg, #008afa 1.14%, #cc26ff 88.7%);
+    border-radius: 6px;
+  }
+
+  /* 标题：白色半粗 16px（替换原艺术字资源为 DOM 文本，获得 i18n 能力） */
+  &__feature-promo-title {
+    position: absolute;
+    top: 8px;
+    left: 12px;
+    margin: 0;
+    font-size: calc(16px * var(--demo-font-scale, 1));
+    font-weight: 600;
+    line-height: calc(22px * var(--demo-font-scale, 1));
+    color: #ffffff;
+    white-space: nowrap;
+  }
+
+  /* 描述：12px 三行（换行来自 i18n 文案中的 \n），行宽控制在 8 个汉字内，避开右侧人物形象叠加区 */
+  &__feature-promo-desc {
+    position: absolute;
+    top: 36px;
+    left: 12px;
+    margin: 0;
+    font-size: calc(12px * var(--demo-font-scale, 1));
+    line-height: calc(16px * var(--demo-font-scale, 1));
+    color: #ffffff;
+    white-space: pre-line;
+  }
+
+  /* 人物形象：设计稿高 141px、右侧内缩 12.2px，底部与卡片底对齐 */
+  &__feature-promo-character {
+    position: absolute;
+    top: 0;
+    right: 12px;
+    height: 141px;
+  }
+
+  /* 关闭按钮：20×20 半透明白底圆形，定位基准为卡片右上角（原容器右上角基准
+     因人物形象被卡片 overflow 裁切而悬空），压住人物头部边缘 */
   &__feature-promo-close {
     position: absolute;
-    top: 4px;
-    right: 2px;
-    width: 32px;
-    height: 32px;
+    top: 6px;
+    right: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
     padding: 0;
-    background: transparent;
+    background: rgba(255, 255, 255, 0.6);
     border: none;
     border-radius: 50%;
     cursor: pointer;
   }
 
-  /* 广告弹层淡入淡出 */
+  /* 广告弹层呼吸动画：上下浮动 5px 并伴随 3% 缩放 */
+  @keyframes feature-promo-breathe {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: translateY(-5px) scale(1.03);
+    }
+  }
+
+  /* 广告弹层淡入淡出（仅外层过渡，呼吸动画在内层独立运行） */
   .feature-promo-enter-active,
   .feature-promo-leave-active {
     transition:
@@ -165,7 +231,7 @@
   .feature-promo-enter-from,
   .feature-promo-leave-to {
     opacity: 0;
-    transform: translateY(-81.5%) scale(0.92);
+    transform: translateY(-84.2%) scale(0.92);
   }
 
   &__tool-btn {

@@ -11,7 +11,7 @@ import { ref } from 'vue'
 /** 特性图标右下角的诱导红点 */
 const showRedDot = ref(false)
 
-/** 特性广告弹层（图二资源，定位在特性图标右侧） */
+/** 特性广告弹层（定位在特性图标右侧） */
 const showPromo = ref(false)
 
 /** 登录成功后调用：重置本次登录的诱导展示状态 */

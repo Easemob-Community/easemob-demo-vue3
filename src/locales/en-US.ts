@@ -23,7 +23,8 @@ export default {
     contacts: 'Contacts',
     settings: 'Settings',
     features: 'Features',
-    featurePromoAlt: 'Demo feature console promo',
+    featurePromoTitle: 'UIKit Overview',
+    featurePromoDesc: 'Preview UIKit\nfeatures and\nUI effects.',
   },
   chat: {},
   settings: {
