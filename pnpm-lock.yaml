@@ -153,7 +153,7 @@ packages:
     engines: {node: ^22.18.0 || >=24.11.0}
 
   '@easemob/uikit-core@file:easemob-uikit-core-2.8.5.tgz':
-    resolution: {integrity: sha512-J8dsp8rT51jmhX6S9eBTPPo1AvlwyjNkMDKdxD2egFt0NxMRb323Yavk2wFtNV6WqQlvWtudr+5ZwoEd3udxmA==, tarball: file:easemob-uikit-core-2.8.5.tgz}
+    resolution: {integrity: sha512-jcl4W+U3BWIZNMp9Pv+Q/AveEgO7t2lKqEE0Q8l0rK5lTUmjdka4pzoDg2zhqqfmkyQGx22Xb82J+Or5lNGPFQ==, tarball: file:easemob-uikit-core-2.8.5.tgz}
     version: 2.8.5
     peerDependencies:
       '@easemob/uikit-sdk-websdk5': 1.3.2
@@ -164,7 +164,7 @@ packages:
         optional: true
 
   '@easemob/uikit-im@file:easemob-uikit-im-3.7.5.tgz':
-    resolution: {integrity: sha512-j7/9TK+bVgKuR4x8KCoqUdL36/cPsMZh7/Z1PxisutNpMTctbbcUmD06Yt7I2rQbYjOV3BgpylncdiTMjH0lQA==, tarball: file:easemob-uikit-im-3.7.5.tgz}
+    resolution: {integrity: sha512-4N4Vy3DnRNoDB3e1/sqitWRAczWynA/YL9zTQQBWE+7KZgu9ytTpL7C3bocVu+61SZYKA11wn1jT+zG2BnThcA==, tarball: file:easemob-uikit-im-3.7.5.tgz}
     version: 3.7.5
     peerDependencies:
       '@easemob/uikit-sdk-webim4': ^1.3.2
@@ -182,7 +182,7 @@ packages:
     version: 1.3.0
 
   '@easemob/uikit-sdk-websdk5@file:easemob-uikit-sdk-websdk5-1.3.2.tgz':
-    resolution: {integrity: sha512-Tng18KXLSUcQ8oNw51MY4I3GdE3Rvt+sUFUCXLA9D7mCqRleUvLRxcwJvp/oHsTF3ZK7M2DajAdW5zFG1XSzJg==, tarball: file:easemob-uikit-sdk-websdk5-1.3.2.tgz}
+    resolution: {integrity: sha512-t9tDQydfq3ZHaDcIozGcOTsJa+0kXL47ucIRE6+w4CvOhdf22O20ncUjCWi/DvN0PppggnOpn6nxBSTEqT+l9w==, tarball: file:easemob-uikit-sdk-websdk5-1.3.2.tgz}
     version: 1.3.2
     peerDependencies:
       pinia: ^2.1.0 || ^4.0.0
