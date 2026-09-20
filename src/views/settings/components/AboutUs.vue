@@ -42,7 +42,7 @@ const footerLinks = [
     </div>
 
     <div class="about-us__body">
-      <!-- banner：渐变底 + 右侧圆形遮罩插画 + 标题 / 标语 / 注册按钮，16px 边距 + 12px 圆角，内部尺寸随宽度用 cqw 等比缩放 -->
+      <!-- banner：渐变底 + 右侧圆形遮罩插画 + 标题 / 标语，16px 边距 + 12px 圆角，内部尺寸随宽度用 cqw 等比缩放 -->
       <div class="about-us__banner">
         <img
           class="about-us__banner-illustration"
@@ -57,14 +57,6 @@ const footerLinks = [
             :alt="t('settings.about.bannerAlt')"
           />
           <p class="about-us__banner-slogan">{{ t('settings.about.bannerSlogan') }}</p>
-          <a
-            class="about-us__register-btn"
-            href="https://console.easemob.com/user/register?utm_source=demo"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {{ t('settings.about.registerButton') }}
-          </a>
         </div>
       </div>
 
@@ -156,72 +148,61 @@ const footerLinks = [
     padding: 16px;
   }
 
-  /* banner：796:223 蓝紫渐变；自身作为容器查询上下文，内部元素按 cqw 等比缩放 */
+  /* banner：796:188 蓝紫渐变；自身作为容器查询上下文，内部元素按 cqw 等比缩放 */
   &__banner {
     position: relative;
     width: 100%;
-    aspect-ratio: 796 / 223;
+    aspect-ratio: 796 / 188;
     overflow: hidden;
     border-radius: 12px;
     background: linear-gradient(180deg, #2b94e1 1.6%, #874dd7 103%);
     container-type: inline-size;
   }
 
-  /* 右侧插画：旋转 21° 溢出右下角，圆形径向遮罩边缘渐隐 */
+  /*
+   * 右侧插画：旋转 21° 溢出右下角；遮罩为设计稿导出的圆形柔和边缘蒙版
+   * （不透明至 86% 半径、100% 处透明），mask 在 64.88cqw 方形盒内尺寸 92.29%、位置 18.86%/15.82%
+   */
   &__banner-illustration {
     position: absolute;
-    right: -7.4cqw;
-    bottom: -21.4cqw;
-    width: 71.9cqw;
+    right: -10.77cqw;
+    bottom: -26.47cqw;
+    width: 64.88cqw;
+    aspect-ratio: 1;
+    object-fit: cover;
     transform: rotate(21.15deg);
-    mask-image: radial-gradient(circle, #000 58%, transparent 74%);
+    mask-image: url('@/assets/about/banner-mask.svg');
+    mask-repeat: no-repeat;
+    mask-size: 92.29%;
+    mask-position: 18.86% 15.82%;
     pointer-events: none;
   }
 
+  /* 文案区：设计稿定位距左 27px、距顶 31.47px，宽 268px，标题与标语间距 2px */
   &__banner-content {
     position: absolute;
-    left: 3.4cqw;
-    top: 50%;
-    transform: translateY(-50%);
+    left: 3.39cqw;
+    top: 3.95cqw;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.75cqw;
+    gap: 0.25cqw;
+    width: 33.67cqw;
   }
 
   &__banner-title {
     display: block;
-    width: 33.7cqw;
+    width: 31.16cqw;
     height: auto;
   }
 
   &__banner-slogan {
     margin: 0;
-    font-size: clamp(10px, 1.76cqw, 15px);
+    font-size: clamp(10px, 1.63cqw, 15px);
     font-weight: 700;
     color: #fff;
     letter-spacing: -0.3px;
     white-space: nowrap;
-  }
-
-  /* 「即刻接入」胶囊按钮：青色渐变白字 */
-  &__register-btn {
-    display: inline-flex;
-    align-items: center;
-    margin-top: 0.5cqw;
-    padding: 1cqw 3cqw;
-    font-size: clamp(10px, 1.76cqw, 15px);
-    font-weight: 700;
-    color: #fff;
-    text-decoration: none;
-    white-space: nowrap;
-    background: linear-gradient(102deg, #00c4ff 0%, #0099ff 100%);
-    border-radius: 999px;
-    transition: filter 0.15s;
-
-    &:hover {
-      filter: brightness(1.06);
-    }
   }
 
   /* 内容栏：设计稿为 520px 宽居中文本栏，与 banner 间距 29px */

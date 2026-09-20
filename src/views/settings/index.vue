@@ -198,7 +198,7 @@ const { sidebarWidth, persistSidebarWidth } = useSidebarWidth('layout_sidebar_wi
     height: 100%;
   }
 
-  /* 头部对齐设计稿 top_bars：60px 高、18px 标题 */
+  /* 头部对齐设计稿 top_bars：60px 高；标题与会话/联系人 header 同源（UIKit token，随 UIKit 字号联动） */
   &__header {
     flex-shrink: 0;
     display: flex;
@@ -208,9 +208,10 @@ const { sidebarWidth, persistSidebarWidth } = useSidebarWidth('layout_sidebar_wi
   }
 
   &__title {
-    font-size: calc(18px * var(--demo-font-scale, 1));
-    font-weight: 500;
-    color: var(--color-text);
+    font-size: var(--uikit-font-size-16, calc(16px * var(--demo-font-scale, 1)));
+    font-weight: var(--uikit-font-weight-medium, 500);
+    line-height: 22px;
+    color: var(--uikit-text-primary, var(--color-text));
   }
 
   /* 菜单列表：左右 8px 内边距、项间距 8px（对齐设计稿 conversation_list） */
@@ -225,7 +226,7 @@ const { sidebarWidth, persistSidebarWidth } = useSidebarWidth('layout_sidebar_wi
   }
 
   /* 菜单项：64px 高（对齐设计稿 list_item 与 UIKit --uikit-cell-height）、24px 图标左距 12px、
-     文字左距 44px、圆角 8px、常态底色 neutral/98（--color-settings-cell-bg） */
+     文字左距 44px、圆角 8px；常态无底色（与白色侧栏卡片融为一体），hover / 选中才变色 */
   &__menu-item {
     display: flex;
     align-items: center;
@@ -239,7 +240,7 @@ const { sidebarWidth, persistSidebarWidth } = useSidebarWidth('layout_sidebar_wi
     font-weight: 500;
     color: var(--color-text);
     cursor: pointer;
-    background: var(--color-settings-cell-bg);
+    background: var(--color-bg);
     border: none;
     border-radius: 8px;
     transition:

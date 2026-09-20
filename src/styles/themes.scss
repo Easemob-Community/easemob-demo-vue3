@@ -22,9 +22,10 @@
   --color-nav-icon-inactive: #b7c1c7;
   --color-nav-icon-active: #009eff;
   --color-nav-icon-active-bg: #ebf7ff;
-  // 设置页菜单 Cell 常态底色（对齐设计稿 neutral/98）
-  --color-settings-cell-bg: #f9fafa;
   --color-badge-red: #ff0055;
+  // 账户信息页头像在线状态徽标（对齐设计稿 707-3659 Badge/onlight：4px 白环 + 绿心，深浅色同值）
+  --color-presence-online: #00ff95;
+  --color-presence-ring: #ffffff;
 }
 
 html.dark {
@@ -41,7 +42,6 @@ html.dark {
   --color-nav-icon-inactive: #4b5563;
   --color-nav-icon-active: #0094fa;
   --color-nav-icon-active-bg: rgba(0, 148, 250, 0.12);
-  --color-settings-cell-bg: #1f1f1f;
   --color-badge-red: #ff4d4f;
 }
 
