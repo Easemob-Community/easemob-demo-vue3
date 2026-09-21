@@ -13,9 +13,11 @@ import {
 import type { UiContactInvite } from '@easemob/uikit-core'
 import { useRoute } from 'vue-router'
 
+import featurePromoArrowImg from '@/assets/feature-promo-arrow.svg'
 import featurePromoCharacterImg from '@/assets/feature-promo-character.png'
 import featurePromoCloseImg from '@/assets/feature-promo-close.svg'
 import CheckUpdates from '@/components/CheckUpdates.vue'
+import FeaturePromoTitle from '@/components/FeaturePromoTitle.vue'
 import { useFeaturePromo } from '@/composables/useFeaturePromo'
 import { useMobileView } from '@/composables/useMobileView'
 import { useSettingsDrawer } from '@/composables/useSettingsDrawer'
@@ -151,7 +153,7 @@ function handlePromoClick() {
             </span>
           </button>
           <!-- 特性广告弹层：登录后默认展示，关闭后下次登录再次展示。
-               结构（箭头/卡片/关闭钮）全部 DOM 化、容器尺寸固定，图片仅作内容填充，
+               结构容器尺寸固定（设计稿 755-13747），图片仅作内容填充，
                弹层定位不依赖图片加载与资产内嵌坐标，换素材无需重新校准 -->
           <Transition name="feature-promo">
             <div
@@ -160,24 +162,29 @@ function handlePromoClick() {
               @click="handlePromoClick"
             >
               <div class="app-layout__feature-promo-inner">
-                <span class="app-layout__feature-promo-arrow" aria-hidden="true" />
+                <img
+                  class="app-layout__feature-promo-arrow"
+                  :src="featurePromoArrowImg"
+                  alt=""
+                  aria-hidden="true"
+                />
                 <div class="app-layout__feature-promo-card">
-                  <p class="app-layout__feature-promo-title">{{ t('nav.featurePromoTitle') }}</p>
+                  <FeaturePromoTitle class="app-layout__feature-promo-title" />
                   <p class="app-layout__feature-promo-desc" v-text="t('nav.featurePromoDesc')" />
-                  <img
-                    class="app-layout__feature-promo-character"
-                    :src="featurePromoCharacterImg"
-                    alt=""
-                  />
-                  <button
-                    type="button"
-                    class="app-layout__feature-promo-close"
-                    :aria-label="t('common.close')"
-                    @click.stop="closePromo"
-                  >
-                    <img :src="featurePromoCloseImg" alt="" />
-                  </button>
                 </div>
+                <img
+                  class="app-layout__feature-promo-character"
+                  :src="featurePromoCharacterImg"
+                  alt=""
+                />
+                <button
+                  type="button"
+                  class="app-layout__feature-promo-close"
+                  :aria-label="t('common.close')"
+                  @click.stop="closePromo"
+                >
+                  <img :src="featurePromoCloseImg" alt="" />
+                </button>
               </div>
             </div>
           </Transition>

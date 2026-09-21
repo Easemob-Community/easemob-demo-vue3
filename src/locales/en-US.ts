@@ -23,8 +23,7 @@ export default {
     contacts: 'Contacts',
     settings: 'Settings',
     features: 'Features',
-    featurePromoTitle: 'UIKit Overview',
-    featurePromoDesc: 'Preview UIKit\nfeatures and\nUI effects.',
+    featurePromoDesc: 'Preview UIKit\nfeatures and UI effects',
   },
   chat: {
     antiFraud: {

@@ -23,8 +23,7 @@ export default {
     contacts: '通讯录',
     settings: '设置',
     features: '特性',
-    featurePromoTitle: 'UIKit 配置总览',
-    featurePromoDesc: '快速预览 UIKit\n可配置能力\n与界面效果。',
+    featurePromoDesc: '快速预览 UIKit\n可配置能力与界面效果',
   },
   chat: {
     antiFraud: {

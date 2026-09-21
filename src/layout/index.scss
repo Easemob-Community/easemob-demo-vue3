@@ -103,18 +103,19 @@
     pointer-events: none;
   }
 
-  /* 特性广告弹层：定位在特性图标右侧，箭头对准图标中心。
-     容器尺寸固定（设计稿 707-3659 同款 246×142），不依赖图片加载，消除首开位移跳动 */
+  /* 特性广告弹层：定位在特性图标右侧，箭头对准图标中心（与设计稿逐一标定：
+     箭头中心与图标中心齐平、箭头尖距图标右缘约 9px、图标中心位于卡片顶下方 61.5px） */
   &__feature-promo {
     position: absolute;
-    /* 入口容器宽 60px，24px 图标居中后右侧位于 42px，用 calc 把弹层左边缘拉到图标右侧 */
-    left: calc(100% - 18px);
+    /* 入口容器宽 60px；设计稿中箭头尖距图标右缘 8.8px、图标字形宽 19.6px 居中，
+       反推弹层左缘 = 60 - 13px（= 图标右缘 39.8 + 8.8 - 箭头尖内缩 1.8） */
+    left: calc(100% - 13px);
     top: 50%;
     z-index: 20;
-    width: 246px;
+    width: 263px;
     height: 142px;
-    /* 箭头中心位于容器 84.2% 高度处（设计稿固定构图），translateY 将其对齐到图标中心。
-       该值为版式常量而非资产测量值，更换人物/标题素材不影响定位 */
+    /* 箭头图形中心位于容器 84.2% 高度处（设计稿 y≈119.5/142），
+       translateY 将其对齐到图标中心；该值为版式常量而非资产测量值 */
     transform: translateY(-84.2%);
     cursor: pointer;
     user-select: none;
@@ -134,47 +135,48 @@
     }
   }
 
-  /* 左侧箭头：CSS 三角形（设计稿 6×11，#2479FB），顶端圆角由描边近似 */
+  /* 左侧箭头：设计稿切图（6×92，箭头朝左，中心 y≈70.5） */
   &__feature-promo-arrow {
     position: absolute;
-    top: 114px;
+    top: 49px;
     left: 1px;
-    width: 0;
-    height: 0;
-    border-top: 5.5px solid transparent;
-    border-bottom: 5.5px solid transparent;
-    border-right: 6px solid #2479fb;
+    width: 6px;
+    height: 92px;
   }
 
-  /* 渐变卡片：119.78deg #008AFA → #CC26FF，右下留白给人物形象叠加 */
+  /* 渐变卡片：124.55deg #008AFA → #CC26FF，右侧留白给人物形象叠加 */
   &__feature-promo-card {
     position: absolute;
-    top: 49px;
+    top: 58px;
     left: 7px;
-    width: 199px;
-    height: 92px;
+    width: 216px;
+    height: 83px;
     overflow: hidden;
-    background: linear-gradient(119.78deg, #008afa 1.14%, #cc26ff 88.7%);
+    background: linear-gradient(124.55deg, #008afa 1.14%, #cc26ff 88.7%);
     border-radius: 6px;
   }
 
   /* 标题：白色半粗 16px（替换原艺术字资源为 DOM 文本，获得 i18n 能力） */
+  /* 标题：设计稿 SVG 艺术字（120×17，内联组件，fill 走 currentColor 随主题变量切换） */
   &__feature-promo-title {
     position: absolute;
-    top: 8px;
+    top: 14px;
     left: 12px;
-    margin: 0;
-    font-size: calc(16px * var(--demo-font-scale, 1));
-    font-weight: 600;
-    line-height: calc(22px * var(--demo-font-scale, 1));
+    width: 120px;
+    height: 17px;
     color: #ffffff;
-    white-space: nowrap;
+
+    svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
   }
 
-  /* 描述：12px 三行（换行来自 i18n 文案中的 \n），行宽控制在 8 个汉字内，避开右侧人物形象叠加区 */
+  /* 描述：12px 两行（换行来自 i18n 文案中的 \n），行宽控制在 10 个汉字内，避开右侧人物形象叠加区 */
   &__feature-promo-desc {
     position: absolute;
-    top: 36px;
+    top: 39px;
     left: 12px;
     margin: 0;
     font-size: calc(12px * var(--demo-font-scale, 1));
@@ -183,20 +185,21 @@
     white-space: pre-line;
   }
 
-  /* 人物形象：设计稿高 141px、右侧内缩 12.2px，底部与卡片底对齐 */
+  /* 人物形象：容器级定位（头部伸出卡片上方），设计稿 113×133、右侧内缩 16px */
   &__feature-promo-character {
     position: absolute;
-    top: 0;
-    right: 12px;
-    height: 141px;
+    top: 8px;
+    right: 16px;
+    width: auto;
+    height: 133px;
   }
 
-  /* 关闭按钮：20×20 半透明白底圆形，定位基准为卡片右上角（原容器右上角基准
-     因人物形象被卡片 overflow 裁切而悬空），压住人物头部边缘 */
+  /* 关闭按钮：20×20 半透明白底圆形，容器右上角基准（人物头部伸出卡片上方，
+     关闭钮需压在人物头部边缘），盖住人物形象 */
   &__feature-promo-close {
     position: absolute;
-    top: 6px;
-    right: 6px;
+    top: 2px;
+    right: 2px;
     display: flex;
     align-items: center;
     justify-content: center;
