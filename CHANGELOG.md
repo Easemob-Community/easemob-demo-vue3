@@ -20,6 +20,7 @@
 - 自动登录加载与失败态：刷新后自动登录期间全屏 loading，失败展示错误详情与「重新登录」入口（AppInitializer）
 - 特性抽屉新增外观档位：头像形状（圆形/方形）、组件圆角（圆润/方正，联动 Demo 卡片圆角与按钮胶囊化让步）、Header 分隔线、按钮波纹，Hover 风格补充「方正」档
 - 特性抽屉新增会话未读徽标开关：数字/红点模式、信息区行尾/头像角标归位、角标位置（`EmConversationContainer` 的 unreadMode / unreadPlacement / badgePlacement）
+- 聊天区防诈骗提示条：基于 `EmChatContainer` `#notice` 插槽（im 3.7.9）挂载 `AntiFraudBanner`，位于聊天 header 与消息列表之间，PC / H5 均已接入；「点我举报」为成功 toast，关闭仅对当前会话生效、切换会话重新展示
 
 ### 修复
 
@@ -27,7 +28,9 @@
 
 ### 变更
 
-- uikit tgz 刷新至 core 2.8.1 / im 3.7.1 / websdk5 1.3.0
+- uikit tgz 刷新至 core 2.8.6 / im 3.7.9 / sdk-contract 1.3.1 / websdk5 1.3.3
+- 已读回执因正式 Prod 集群问题默认关闭：Provider 新增 `enableReadReceipt` 总开关（`DEMO_PROVIDER_CONFIG.enableReadReceipt: false`，关闭后不发消息级回执且不展示己方消息已读状态），「聊天」面板群已读回执开关同步默认 false；Prod 恢复后把两处改回 true 即可
+- 特性广告弹层与关于我们 banner 对齐设计稿：弹层箭头改为切图、标题改为内联 SVG 艺术字（fill 随主题变量）、人物形象改为容器级定位；关于我们 banner 加高至 796:223 并新增「即刻接入」注册按钮
 - 设置各子面板头部对齐 UIKit 会话列表头部（48px、无底线），关于我们注册链接补充 utm 参数
 - 导航与工具图标统一迁移至 UIKit EmIcon（聚焦面性 / 常态线性），移除自维护 SVG 图标组件
 - 全面对齐新设计稿：主题色与弱文字色、按钮胶囊化（999px）、设置页与关于我们改造、头像在线状态点 8px + 2px 白边
