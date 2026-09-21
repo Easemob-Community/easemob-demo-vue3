@@ -95,7 +95,8 @@ export const DEMO_CONVERSATION_CONFIG = {
  * EmUIKitProvider 功能开关
  *
  * 与「UIKit 特性开关 - Provider」面板一一对应。
- * 除昵称展示开关（showNicknameInSingleChat 默认关闭）与自定义数据源（enableFetchContacts 默认关闭）外，
+ * 除昵称展示开关（showNicknameInSingleChat 默认关闭）、自定义数据源（enableFetchContacts 默认关闭）
+ * 与已读回执总开关（enableReadReceipt 因 Prod 集群已读回执问题临时默认关闭）外，
  * 其余开关默认全部开启，见面板说明「Provider 能力开关默认全部开启」。
  * 由 useDemoSettings 读取作为默认值，App.vue 绑定到 EmUIKitProvider；运行期改动即时反映为 Provider props。
  */
@@ -115,6 +116,13 @@ export const DEMO_PROVIDER_CONFIG = {
   enableAtMe: true,
   /** 是否启用对方正在输入提示（enableTyping） */
   enableTyping: true,
+  /**
+   * 是否启用消息已读回执（enableReadReceipt，Provider 全局开关，默认 true）。
+   * 因正式 Prod 集群已读回执（已读/未读状态变更）问题，Demo 默认关闭：
+   * 关闭后不再发送消息级已读回执（单聊/群聊），UI 不展示已读状态；
+   * 群聊发送方回执请求另由「聊天」面板的群已读回执开关控制。
+   */
+  enableReadReceipt: false,
   /** 单聊消息列表是否展示对方昵称（showNicknameInSingleChat，默认关闭） */
   showNicknameInSingleChat: false,
   /** 群聊消息列表是否展示发送者昵称（showNicknameInGroupChat，默认开启） */

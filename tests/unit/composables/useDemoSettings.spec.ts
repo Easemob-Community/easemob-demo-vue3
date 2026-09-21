@@ -22,7 +22,7 @@ describe('useDemoSettings（会话UIKIT特性开关）', () => {
     expect(settings.chatInputMode.value).toBe('simple')
     expect(settings.chatInputStyle.value).toBe('toolbar-top')
     expect(settings.chatInputFeatures.value.emoji).toBe(true)
-    expect(settings.groupReadReceiptEnabled.value).toBe(true)
+    expect(settings.groupReadReceiptEnabled.value).toBe(false)
     expect(settings.chatMessageSearchEnabled.value).toBe(false)
     expect(settings.contactShowHomeSearch.value).toBe(true)
     expect(settings.contactShowContactSearch.value).toBe(true)
@@ -105,7 +105,7 @@ describe('useDemoSettings（会话UIKIT特性开关）', () => {
     settings.chatInputAutoFocus.value = true
     settings.chatInputFocusBorderColor.value = '#ff0000'
     settings.chatInputMaxLength.value = 100
-    settings.groupReadReceiptEnabled.value = false
+    settings.groupReadReceiptEnabled.value = true
     settings.groupReadReceiptMaxSize.value = 50
     settings.chatShowTime.value = 'hover'
     settings.chatMessageSearchEnabled.value = true
@@ -138,7 +138,7 @@ describe('useDemoSettings（会话UIKIT特性开关）', () => {
     expect(settings.chatInputAutoFocus.value).toBe(false)
     expect(settings.chatInputFocusBorderColor.value).toBe('')
     expect(settings.chatInputMaxLength.value).toBe(0)
-    expect(settings.groupReadReceiptEnabled.value).toBe(true)
+    expect(settings.groupReadReceiptEnabled.value).toBe(false)
     expect(settings.groupReadReceiptMaxSize.value).toBe(200)
     expect(settings.chatShowTime.value).toBe(false)
     expect(settings.chatMessageSearchEnabled.value).toBe(false)
@@ -207,7 +207,7 @@ describe('useDemoSettings（会话UIKIT特性开关）', () => {
     expect(settings.noticeTone.value).toBe('default')
   })
 
-  it('Provider 能力开关默认全部开启（单聊昵称除外），自定义数据源默认关闭', () => {
+  it('Provider 能力开关默认全部开启（单聊昵称、已读回执除外），自定义数据源默认关闭', () => {
     const settings = useDemoSettings()
 
     expect(settings.providerEnableContact.value).toBe(true)
@@ -216,6 +216,8 @@ describe('useDemoSettings（会话UIKIT特性开关）', () => {
     expect(settings.providerEnableDraft.value).toBe(true)
     expect(settings.providerEnableMotion.value).toBe(true)
     expect(settings.providerEnableTyping.value).toBe(true)
+    // 已读回执因 Prod 集群已读回执问题临时默认关闭
+    expect(settings.providerEnableReadReceipt.value).toBe(false)
     expect(settings.providerShowNicknameInSingleChat.value).toBe(false)
     expect(settings.providerShowNicknameInGroupChat.value).toBe(true)
     expect(settings.providerEnableFetchContacts.value).toBe(false)
@@ -235,6 +237,7 @@ describe('useDemoSettings（会话UIKIT特性开关）', () => {
     settings.providerEnableDraft.value = false
     settings.providerEnableMotion.value = false
     settings.providerEnableTyping.value = false
+    settings.providerEnableReadReceipt.value = true
     settings.providerShowNicknameInSingleChat.value = true
     settings.providerShowNicknameInGroupChat.value = false
     settings.providerEnableFetchContacts.value = true
@@ -253,6 +256,7 @@ describe('useDemoSettings（会话UIKIT特性开关）', () => {
     expect(settings.providerEnableDraft.value).toBe(true)
     expect(settings.providerEnableMotion.value).toBe(true)
     expect(settings.providerEnableTyping.value).toBe(true)
+    expect(settings.providerEnableReadReceipt.value).toBe(false)
     expect(settings.providerShowNicknameInSingleChat.value).toBe(false)
     expect(settings.providerShowNicknameInGroupChat.value).toBe(true)
     expect(settings.providerEnableFetchContacts.value).toBe(false)

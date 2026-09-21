@@ -409,6 +409,8 @@ export default {
       enableDraft: '会话列表草稿显示 (enableDraft)',
       enableMotion: '＠我 消息提醒 (enableMotion)',
       enableTyping: '对方正在输入提示 (enableTyping)',
+      enableReadReceipt: '消息已读回执 (enableReadReceipt)',
+      enableReadReceiptDesc: 'Prod 集群已读回执问题临时关闭：不发已读回执、不展示已读状态',
       showNicknameInSingleChat: '单聊显示对方昵称 (showNicknameInSingleChat)',
       showNicknameInGroupChat: '群聊显示发送者昵称 (showNicknameInGroupChat)',
       fetchContacts: '自定义数据源 (fetchContacts)',

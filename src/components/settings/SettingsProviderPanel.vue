@@ -27,6 +27,7 @@ const {
   providerEnableDraft,
   providerEnableMotion,
   providerEnableTyping,
+  providerEnableReadReceipt,
   providerShowNicknameInSingleChat,
   providerShowNicknameInGroupChat,
   providerEnableFetchContacts,
@@ -139,6 +140,25 @@ const {
           <span class="settings-provider-panel__switch-thumb" />
         </button>
       </div>
+
+      <div class="settings-provider-panel__switch-item">
+        <span class="settings-provider-panel__label">
+          {{ t('features.provider.enableReadReceipt') }}
+        </span>
+        <button
+          type="button"
+          class="settings-provider-panel__switch"
+          :class="{ 'settings-provider-panel__switch--active': providerEnableReadReceipt }"
+          :aria-checked="providerEnableReadReceipt"
+          role="switch"
+          @click="providerEnableReadReceipt = !providerEnableReadReceipt"
+        >
+          <span class="settings-provider-panel__switch-thumb" />
+        </button>
+      </div>
+      <p class="settings-provider-panel__row-desc">
+        {{ t('features.provider.enableReadReceiptDesc') }}
+      </p>
 
       <div class="settings-provider-panel__switch-item">
         <span class="settings-provider-panel__label">

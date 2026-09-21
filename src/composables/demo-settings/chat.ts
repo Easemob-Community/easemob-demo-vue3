@@ -30,7 +30,8 @@ function createChatSettings() {
   const chatInputMaxLength = ref(0)
 
   /* ===== 群已读回执配置 ===== */
-  const groupReadReceiptEnabled = ref(true)
+  /* 因正式 Prod 集群已读回执（已读/未读状态变更）问题，默认关闭；另受 Provider 面板「已读回执」总开关控制 */
+  const groupReadReceiptEnabled = ref(false)
   const groupReadReceiptMaxSize = ref(200)
 
   /* ===== 消息列表配置 ===== */
@@ -78,7 +79,7 @@ function createChatSettings() {
     chatInputCaretColor.value = ''
     chatInputSelectionColor.value = ''
     chatInputMaxLength.value = 0
-    groupReadReceiptEnabled.value = true
+    groupReadReceiptEnabled.value = false
     groupReadReceiptMaxSize.value = 200
     chatShowTime.value = false
     chatMessageSearchEnabled.value = false

@@ -27,7 +27,7 @@ function handleTokenExpired() {
 // UIKit 与 Demo 本体联动：语言（en-US → en）与主题（light/dark）
 const { uikitLocale, uikitTheme } = useUIKitConfig()
 
-/* ===== Provider 能力开关（由「UIKit 特性开关 - Provider」面板驱动，默认全部开启） =====
+/* ===== Provider 能力开关（由「UIKit 特性开关 - Provider」面板驱动；已读回执因 Prod 集群问题默认关闭，其余默认开启） =====
  * 注意：这些开关在 Provider 挂载时读取，登录后修改需重新登录（或刷新页面）才能完整生效。
  */
 const {
@@ -38,6 +38,7 @@ const {
   // 面板标签为 enableMotion，实际映射 Provider 的 enableAtMe
   providerEnableMotion,
   providerEnableTyping,
+  providerEnableReadReceipt,
   providerShowNicknameInSingleChat,
   providerShowNicknameInGroupChat,
   providerEnableFetchContacts,
@@ -86,6 +87,7 @@ const providerDataSource = computed<UIKitDataSource | undefined>(() =>
     :enable-draft="providerEnableDraft"
     :enable-at-me="providerEnableMotion"
     :enable-typing="providerEnableTyping"
+    :enable-read-receipt="providerEnableReadReceipt"
     :show-nickname-in-single-chat="providerShowNicknameInSingleChat"
     :show-nickname-in-group-chat="providerShowNicknameInGroupChat"
     :data-source="providerDataSource"

@@ -432,6 +432,9 @@ export default {
       enableDraft: 'Show conversation draft (enableDraft)',
       enableMotion: '＠Me message reminder (enableMotion)',
       enableTyping: 'Other side typing indicator (enableTyping)',
+      enableReadReceipt: 'Message read receipts (enableReadReceipt)',
+      enableReadReceiptDesc:
+        'Temporarily off due to Prod cluster read receipt issue: no receipts sent, no read state shown',
       showNicknameInSingleChat: 'Show peer nickname in single chat (showNicknameInSingleChat)',
       showNicknameInGroupChat: 'Show sender nickname in group chat (showNicknameInGroupChat)',
       fetchContacts: 'Custom data source (fetchContacts)',

@@ -34,6 +34,11 @@ function createProviderSettings() {
   const providerEnableMotion = ref(DEMO_PROVIDER_CONFIG.enableAtMe as boolean)
   /** 对方正在输入提示（标签 enableTyping） */
   const providerEnableTyping = ref(DEMO_PROVIDER_CONFIG.enableTyping as boolean)
+  /**
+   * 消息已读回执总开关（标签 enableReadReceipt）。
+   * 因 Prod 集群已读回执问题临时默认关闭；群聊发送方回执请求另由「聊天」面板的群已读回执开关控制。
+   */
+  const providerEnableReadReceipt = ref(DEMO_PROVIDER_CONFIG.enableReadReceipt as boolean)
   /** 单聊消息列表展示对方昵称（标签 showNicknameInSingleChat，默认关闭） */
   const providerShowNicknameInSingleChat = ref(DEMO_PROVIDER_CONFIG.showNicknameInSingleChat as boolean)
   /** 群聊消息列表展示发送者昵称（标签 showNicknameInGroupChat，默认开启） */
@@ -65,6 +70,7 @@ function createProviderSettings() {
     providerEnableDraft.value = DEMO_PROVIDER_CONFIG.enableDraft
     providerEnableMotion.value = DEMO_PROVIDER_CONFIG.enableAtMe
     providerEnableTyping.value = DEMO_PROVIDER_CONFIG.enableTyping
+    providerEnableReadReceipt.value = DEMO_PROVIDER_CONFIG.enableReadReceipt
     providerShowNicknameInSingleChat.value = DEMO_PROVIDER_CONFIG.showNicknameInSingleChat
     providerShowNicknameInGroupChat.value = DEMO_PROVIDER_CONFIG.showNicknameInGroupChat
     providerEnableFetchContacts.value = DEMO_PROVIDER_CONFIG.enableFetchContacts
@@ -84,6 +90,7 @@ function createProviderSettings() {
     providerEnableDraft,
     providerEnableMotion,
     providerEnableTyping,
+    providerEnableReadReceipt,
     providerShowNicknameInSingleChat,
     providerShowNicknameInGroupChat,
     providerEnableFetchContacts,
