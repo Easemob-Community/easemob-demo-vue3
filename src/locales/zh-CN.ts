@@ -26,7 +26,14 @@ export default {
     featurePromoTitle: 'UIKit 配置总览',
     featurePromoDesc: '快速预览 UIKit\n可配置能力\n与界面效果。',
   },
-  chat: {},
+  chat: {
+    antiFraud: {
+      text: '请勿轻信转账、汇款、中奖等信息，谨慎接听陌生来电，谨防诈骗。发现可疑情况请立即举报。',
+      report: '点我举报',
+      close: '关闭防诈骗提示',
+      reportToast: '感谢您的举报，我们将尽快处理',
+    },
+  },
   settings: {
     account: {
       title: '账户信息',

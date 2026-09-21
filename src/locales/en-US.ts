@@ -26,7 +26,14 @@ export default {
     featurePromoTitle: 'UIKit Overview',
     featurePromoDesc: 'Preview UIKit\nfeatures and\nUI effects.',
   },
-  chat: {},
+  chat: {
+    antiFraud: {
+      text: 'Do not trust messages about transfers, remittances, or prizes. Be cautious with calls from unknown numbers. Report suspicious activity immediately.',
+      report: 'Report now',
+      close: 'Dismiss anti-fraud notice',
+      reportToast: 'Thank you for your report. We will look into it as soon as possible.',
+    },
+  },
   settings: {
     account: {
       title: 'Account Info',

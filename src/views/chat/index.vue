@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   EmChatContainer,
@@ -9,12 +9,14 @@ import {
   EmResizable,
   useConversation,
   useConversationTabs,
+  useToast,
   useUIKit,
   useViewport,
 } from '@easemob/uikit-im'
 import type { ConversationTabKey, UiMessage } from '@easemob/uikit-im'
 
 import MarkdownStreamMessage from '@/components/ai/MarkdownStreamMessage.vue'
+import AntiFraudBanner from '@/components/chat/AntiFraudBanner.vue'
 import AddContactModal from '@/components/contact/AddContactModal.vue'
 import { useDemoCreateGroup } from '@/composables/useDemoCreateGroup'
 import { useDemoSettings } from '@/composables/useDemoSettings'
@@ -115,6 +117,19 @@ const takeoverTabLabels = computed<Record<string, string>>(() => ({
 /** H5：返回会话列表 */
 function backToConversationList() {
   leaveConversation()
+}
+
+/* ===== 防诈骗提示条（#notice 插槽，关闭态仅当前会话内隐藏，切换会话重新展示——对齐 React demo 行为） ===== */
+const { success: showToastSuccess } = useToast()
+const antiFraudBannerClosed = ref(false)
+
+// 切换会话时重新展示防诈骗提示条
+watch(currentConversation, () => {
+  antiFraudBannerClosed.value = false
+})
+
+function onAntiFraudReport() {
+  showToastSuccess(t('chat.antiFraud.reportToast'))
 }
 
 /* ===== 会话列表宽度（参照 UIKit demo：默认弹性 + EmResizable 拖拽定宽 + localStorage 持久化） ===== */
@@ -267,6 +282,13 @@ watch(
         <!-- card 档位（对齐 UIKit demo）：圆角卡片壳（细边框 + 圆角 + 底色）由容器自绘，
              宿主壳退化为纯定位容器，避免双层卡片 -->
         <EmChatContainer variant="card" :config="chatConfig">
+          <template #notice>
+            <AntiFraudBanner
+              v-if="!antiFraudBannerClosed"
+              @close="antiFraudBannerClosed = true"
+              @report="onAntiFraudReport"
+            />
+          </template>
           <template #message-text="{ message }">
             <MarkdownStreamMessage :message="message as UiMessage" />
           </template>
@@ -319,6 +341,13 @@ watch(
         </div>
         <div class="chat-page__mobile-body">
           <EmChatContainer :config="chatConfig">
+            <template #notice>
+              <AntiFraudBanner
+                v-if="!antiFraudBannerClosed"
+                @close="antiFraudBannerClosed = true"
+                @report="onAntiFraudReport"
+              />
+            </template>
             <template #message-text="{ message }">
               <MarkdownStreamMessage :message="message as UiMessage" />
             </template>
