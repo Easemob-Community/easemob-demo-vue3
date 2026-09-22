@@ -12,6 +12,8 @@
 
 ## [Unreleased]
 
+## [0.4.2] - 2026-09-22
+
 ### 修复
 
 - 会话 / 通讯录 / 设置侧边栏默认宽度未与设置对齐：无拖拽记忆时走 UIKit fluid 弹性基准（clamp(240px, 25%, 480px)），宽窗口下可达 480px；改为按 `DEMO_SIDEBAR_CONFIG.defaultWidth`（360px）定宽渲染，拖拽后仍持久化
@@ -26,6 +28,7 @@
 
 - 发版流程补充「合入 main」步骤：release 提交推送 dev 后须快进合入 main 并推送（release skill 与 `scripts/release.mjs` 完成提示同步更新）
 - 发版流程补充「重新构建再部署」说明：`pnpm release` 的全量检查构建发生在版本号提升之前，dist 内版本号会落后一个版本，部署前需重新 `pnpm build`
+
 
 ## [0.4.1] - 2026-09-22
 
