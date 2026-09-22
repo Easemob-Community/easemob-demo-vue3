@@ -12,6 +12,10 @@
 
 ## [Unreleased]
 
+### 文档
+
+- 发版流程补充「合入 main」步骤：release 提交推送 dev 后须快进合入 main 并推送（release skill 与 `scripts/release.mjs` 完成提示同步更新）
+
 ## [0.4.1] - 2026-09-22
 
 ### 修复
