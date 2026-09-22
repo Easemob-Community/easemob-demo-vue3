@@ -111,6 +111,19 @@ pnpm release     # 正式打版：node scripts/release.mjs <major|minor|patch>�
 
 通过 `pnpm build` 产出静态资源到 `dist/`，可用 `pnpm preview` 本地预览。目前仓库中没有 CI/CD、Docker 等部署配置。
 
+- **产物预压缩**：`vite.config.ts` 内置 `demo-build-compression` 插件，构建时为 js/css/html 等文本资源生成同名 `.gz` / `.br` 文件（原始文件保留）。这些文件只有在静态服务器开启「优先返回预压缩文件」时才生效，nginx 参考配置：
+
+  ```nginx
+  gzip_static on;        # 直接返回 .gz（无需 ngx_brotli 模块）
+  brotli_static on;      # 直接返回 .br（需 ngx_brotli 模块）
+  # 无法装 brotli 模块时退化为动态压缩：
+  gzip on;
+  gzip_types text/css application/javascript application/json image/svg+xml;
+  gzip_min_length 1k;
+  ```
+
+  若部署在 CDN / 托管平台（多数会按需自动 gzip/brotli），生成的预压缩文件无副作用，可忽略上述配置。
+
 ## Skills
 
 项目级 skills 存放在 `.agent/skills/`，按需加载：

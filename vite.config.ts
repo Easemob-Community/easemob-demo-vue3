@@ -1,9 +1,11 @@
 import { existsSync, rmSync, statSync } from 'node:fs'
 import { basename, join } from 'node:path'
 import { fileURLToPath, URL } from 'node:url'
+import { brotliCompressSync, constants as zlibConstants, gzipSync } from 'node:zlib'
 
 import vue from '@vitejs/plugin-vue'
 import { defineConfig, loadEnv } from 'vite'
+import type { Plugin } from 'vite'
 
 import { resolveWebsdkVersion } from './scripts/resolve-websdk-version.mjs'
 
@@ -38,11 +40,47 @@ if (existsSync(viteCacheDir)) {
 }
 
 // https://vite.dev/config/
+
+/** 需要预压缩的文本类产物扩展名（图片等二进制跳过） */
+const COMPRESSIBLE_RE = /\.(?:js|mjs|css|html|svg|json|ico|txt|xml|webmanifest)$/
+
+/**
+ * 构建产物预压缩：为文本资源生成同名 .gz（gzip level 9）与 .br（brotli q11）文件，
+ * 供静态服务器直接返回（nginx 需开启 gzip_static / brotli_static，见 AGENTS.md 部署小节），
+ * 首次打开传输量可从约 2.9MB 降到约 850KB。原始文件保留，兼容不支持预压缩文件的服务器。
+ * 不引入第三方压缩插件（对 rolldown 版 Vite 的兼容性不确定），直接用内置 zlib 实现。
+ */
+function buildCompressionPlugin(): Plugin {
+  return {
+    name: 'demo-build-compression',
+    apply: 'build',
+    generateBundle(_options, bundle) {
+      for (const [fileName, item] of Object.entries(bundle)) {
+        if (!COMPRESSIBLE_RE.test(fileName)) continue
+        const source = item.type === 'chunk' ? item.code : item.source
+        const buf = Buffer.isBuffer(source) ? source : Buffer.from(source as Uint8Array | string)
+        this.emitFile({
+          type: 'asset',
+          fileName: `${fileName}.gz`,
+          source: gzipSync(buf, { level: 9 }),
+        })
+        this.emitFile({
+          type: 'asset',
+          fileName: `${fileName}.br`,
+          source: brotliCompressSync(buf, {
+            params: { [zlibConstants.BROTLI_PARAM_QUALITY]: 11 },
+          }),
+        })
+      }
+    },
+  }
+}
+
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd())
 
   return {
-    plugins: [vue()],
+    plugins: [vue(), buildCompressionPlugin()],
     define: {
       // 注入实际安装的 easemob-websdk 版本号（「关于我们 / 登录页」展示用，见 src/config/version.ts）
       __SDK_VERSION__: JSON.stringify(resolveWebsdkVersion()),
