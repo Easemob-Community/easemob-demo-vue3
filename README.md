@@ -1,6 +1,6 @@
 # easemob-demo-vue3
 
-一款全新的社区维护版 Vue Demo，底层基于社区维护的 Vue3 UIKit。
+Easemob Demo Vue3 是基于环信 IM SDK构建的 Web 即时通讯 Demo，为开发者提供可直接体验的 IM 功能演示与集成参考。项目覆盖单聊、群聊、消息收发、群组管理、联系人等常用即时通讯能力，同时提供环信 Vue3 UIKit 功能概览，可直观体验 UIKit 的组件能力及可配置效果，助力开发者快速了解环信 Web IM 的产品能力与接入方式。
 
 ## 技术栈
 
