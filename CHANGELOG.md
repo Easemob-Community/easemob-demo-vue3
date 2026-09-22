@@ -12,6 +12,17 @@
 
 ## [Unreleased]
 
+## [0.4.1] - 2026-09-22
+
+### 修复
+
+- 404 页面补全样式：原为无样式占位（浏览器默认排版），改为整页居中布局——大号 404、标题文案与主色「返回首页」按钮，适配深色模式与字号缩放
+
+### 变更
+
+- 构建产物预压缩：`vite.config.ts` 新增 `demo-build-compression` 插件，构建时为 js/css/html 等文本资源生成同名 `.gz`（gzip level 9）与 `.br`（brotli q11）文件，静态服务器开启 `gzip_static` / `brotli_static` 后可直接返回（nginx 参考配置见 AGENTS.md 部署小节）
+
+
 ## [0.4.0] - 2026-09-22
 
 ### 新增
