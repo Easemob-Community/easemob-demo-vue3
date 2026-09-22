@@ -9,10 +9,11 @@
  *
  * 接入方式：在 `<EmChatContainer>` 上写 `#message-txt` 插槽即可。
  */
-import { computed } from 'vue'
-import MarkdownIt from 'markdown-it'
+import { computed, onMounted, ref } from 'vue'
 import { EmTextMessage, STREAM_MESSAGE_STATUS } from '@easemob-community/uikit-im'
 import type { TextMessageType, UiMessage } from '@easemob-community/uikit-im'
+
+type MarkdownItInstance = InstanceType<typeof import('markdown-it').default>
 
 export interface MarkdownStreamMessageProps {
   message: UiMessage
@@ -38,21 +39,32 @@ const isStreamError = computed(() =>
   (props.message as { stream?: { status?: string } }).stream?.status === STREAM_MESSAGE_STATUS.ERROR,
 )
 
-/** markdown-it 实例：html 关闭（防 XSS），linkify 开启 URL 识别，breaks 开启换行。 */
-const md = new MarkdownIt({ html: false, linkify: true, breaks: true })
+/** markdown-it 实例延迟创建：本组件仅在 AI markdown 流式气泡渲染时才挂载，动态 import
+ * 可把 markdown-it 移出 chat 路由 chunk；首次渲染有一帧等待，期间展示原始文本兜底。 */
+const md = ref<MarkdownItInstance | null>(null)
 
 // 过滤危险 URL 协议（javascript:、data:、vbscript: 等），防止钓鱼/脚本注入
 const safeLinkValidator = (url: string) => {
   const normalized = url.trim().toLowerCase()
   return !normalized.startsWith('javascript:') && !normalized.startsWith('data:') && !normalized.startsWith('vbscript:')
 }
-md.validateLink = safeLinkValidator
 
-/** 渲染后的 markdown HTML */
+onMounted(() => {
+  void import('markdown-it').then(({ default: MarkdownItCtor }) => {
+    const instance = new MarkdownItCtor({ html: false, linkify: true, breaks: true })
+    instance.validateLink = safeLinkValidator
+    md.value = instance
+  })
+})
+
+/** 渲染后的 markdown HTML（实例未就绪前为空，模板侧展示原始文本兜底） */
 const renderedHtml = computed(() => {
   const content = (props.message.body as { content?: string }).content || ''
-  return md.render(content)
+  return md.value ? md.value.render(content) : ''
 })
+
+/** markdown-it 就绪前的兜底原始文本 */
+const rawContent = computed(() => (props.message.body as { content?: string }).content || '')
 </script>
 
 <template>
@@ -66,7 +78,8 @@ const renderedHtml = computed(() => {
   <div v-else class="md-stream-msg" :class="{ 'md-stream-msg--self': message.isSelf }">
     <div class="md-stream-msg__bubble">
       <!-- eslint-disable-next-line vue/no-v-html -->
-      <div class="md-stream-msg__body" v-html="renderedHtml" />
+      <div v-if="md" class="md-stream-msg__body" v-html="renderedHtml" />
+      <div v-else class="md-stream-msg__body">{{ rawContent }}</div>
       <span v-if="isStreaming" class="md-stream-msg__cursor" aria-hidden="true" />
     </div>
     <div v-if="isStreamError" class="md-stream-msg__error">
