@@ -1,7 +1,7 @@
 import { computed, watch } from 'vue'
 import { tryOnBeforeUnmount } from '@vueuse/core'
 
-import { useUIKit } from '@easemob/uikit-im'
+import { useUIKit } from '@easemob-community/uikit-im'
 
 import i18n from '@/locales'
 

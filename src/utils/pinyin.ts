@@ -1,4 +1,4 @@
-import { setPinyinAdapter } from '@easemob/uikit-im'
+import { setPinyinAdapter } from '@easemob-community/uikit-im'
 import { pinyin } from 'pinyin-pro'
 
 /**

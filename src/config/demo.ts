@@ -1,5 +1,5 @@
-import type { EmojiStickerPack } from '@easemob/uikit-im'
-import type { UiContact } from '@easemob/uikit-core'
+import type { EmojiStickerPack } from '@easemob-community/uikit-im'
+import type { UiContact } from '@easemob-community/uikit-im'
 
 /**
  * 项目 Demo 配置常量
@@ -243,8 +243,6 @@ export const DEMO_ICON_SIZE = {
   tool: 18,
   /** 返回按钮图标尺寸（px） */
   back: 20,
-  /** 空状态占位大图标尺寸（px） */
-  empty: 48,
 } as const
 
 /** ===== UIKit 文档配置 ===== */

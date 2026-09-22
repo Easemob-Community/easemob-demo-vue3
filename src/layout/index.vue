@@ -9,8 +9,8 @@ import {
   useContact,
   useConversationStore,
   useOwnUserInfo,
-} from '@easemob/uikit-im'
-import type { UiContactInvite } from '@easemob/uikit-core'
+} from '@easemob-community/uikit-im'
+import type { UiContactInvite } from '@easemob-community/uikit-im'
 import { useRoute } from 'vue-router'
 
 import featurePromoArrowImg from '@/assets/feature-promo-arrow.svg'

@@ -10,7 +10,7 @@ describe('version 版本信息', () => {
 
   it('UIKIT_VERSION 从 package.json 的 uikit-im tgz 依赖名提取，带 VUE 前缀', () => {
     expect(UIKIT_VERSION).toMatch(/^VUE \d+\.\d+\.\d+$/)
-    const tgzVersion = pkg.dependencies['@easemob/uikit-im'].match(/(\d+\.\d+\.\d+)/)?.[1]
+    const tgzVersion = pkg.dependencies['@easemob-community/uikit-im'].match(/(\d+\.\d+\.\d+)/)?.[1]
     expect(UIKIT_VERSION).toBe(`VUE ${tgzVersion}`)
   })
 

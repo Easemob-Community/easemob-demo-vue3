@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { EmPopup } from '@easemob/uikit-im'
+import { EmPopup } from '@easemob-community/uikit-im'
 
 import { useCheckUpdates } from '@/composables/useCheckUpdates'
 

@@ -104,11 +104,10 @@ describe('组件静态属性配置（uikit 组件模板中的静态值）', () =
     expect(DEMO_AVATAR_CONFIG.presenceSize).toBe(11)
   })
 
-  it('图标尺寸：导航 24 / 工具 18 / 返回 20 / 空状态 48', () => {
+  it('图标尺寸：导航 24 / 工具 18 / 返回 20', () => {
     expect(DEMO_ICON_SIZE.nav).toBe(24)
     expect(DEMO_ICON_SIZE.tool).toBe(18)
     expect(DEMO_ICON_SIZE.back).toBe(20)
-    expect(DEMO_ICON_SIZE.empty).toBe(48)
   })
 })
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { EmIcon, EmInput, EmPopup, useOwnUserInfo, useToast } from '@easemob/uikit-im'
+import { EmIcon, EmInput, EmPopup, useOwnUserInfo, useToast } from '@easemob-community/uikit-im'
 
 defineOptions({ name: 'ProfileEditor' })
 

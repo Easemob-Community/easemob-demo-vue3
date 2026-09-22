@@ -157,11 +157,11 @@ const footerLinks = [
     padding: 16px;
   }
 
-  /* banner：796:223 蓝紫渐变；自身作为容器查询上下文，内部元素按 cqw 等比缩放 */
+  /* banner：796:188 蓝紫渐变（设计稿原始高度，矮屏下保证官网联系行首屏可见）；自身作为容器查询上下文，内部元素按 cqw 等比缩放 */
   &__banner {
     position: relative;
     width: 100%;
-    aspect-ratio: 796 / 223;
+    aspect-ratio: 796 / 188;
     overflow: hidden;
     border-radius: 12px;
     background: linear-gradient(180deg, #2b94e1 1.6%, #874dd7 103%);
@@ -171,8 +171,8 @@ const footerLinks = [
   /*
    * 右侧插画：旋转 21° 溢出右下角；遮罩为设计稿导出的圆形柔和边缘蒙版
    * （不透明至 86% 半径、100% 处透明），mask 在 64.88cqw 方形盒内尺寸 92.29%、位置 18.86%/15.82%
-   * 用 top 而非 bottom 锁位：设计稿把 banner 加高到 223 时插画相对顶边不动，
-   * top: -14.8cqw 等价于 188 高时的 bottom: -26.47cqw，保证画面不下沉
+   * 用 top 而非 bottom 锁位：top: -14.8cqw 等价于 188 高时的 bottom: -26.47cqw，
+   * 插画相对顶边不动，画面不下沉
    */
   &__banner-illustration {
     position: absolute;
@@ -189,15 +189,19 @@ const footerLinks = [
     pointer-events: none;
   }
 
-  /* 文案区：设计稿定位距左 27px、距顶 30.47px，宽 268px，块间距 6px */
+  /*
+   * 文案区：设计稿定位距左 27px、距顶 30.47px，宽 268px，块间距 6px；
+   * banner 改回 188 高后纵向预算 23.62cqw，文案整体（top/间距/行高/按钮内边距）
+   * 按比例下压收紧，保证「即刻接入」按钮不被底边裁切
+   */
   &__banner-content {
     position: absolute;
     left: 3.39cqw;
-    top: 3.83cqw;
+    top: 3.2cqw;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.75cqw;
+    gap: 0.6cqw;
     width: 33.67cqw;
   }
 
@@ -206,14 +210,14 @@ const footerLinks = [
     display: block;
     width: 31.16cqw;
     height: auto;
-    margin: 1.18cqw 0;
+    margin: 0.8cqw 0;
   }
 
   &__banner-slogan {
     margin: 0;
     font-size: clamp(10px, 1.76cqw, 15px);
     font-weight: 700;
-    line-height: 2.2;
+    line-height: 1.6;
     color: #fff;
     letter-spacing: -0.3px;
     white-space: nowrap;
@@ -224,7 +228,7 @@ const footerLinks = [
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 1.005cqw 3.015cqw;
+    padding: 0.75cqw 3.015cqw;
     font-size: clamp(10px, 1.76cqw, 15px);
     font-weight: 700;
     line-height: 1.714;
@@ -242,10 +246,10 @@ const footerLinks = [
     }
   }
 
-  /* 内容栏：设计稿为 520px 宽居中文本栏，与 banner 间距 29px */
+  /* 内容栏：设计稿为 520px 宽居中文本栏，与 banner 间距 20px（较设计稿 29px 收紧，矮屏下保证官网联系行首屏可见） */
   &__content {
     max-width: 520px;
-    margin: 29px auto 0;
+    margin: 20px auto 0;
     text-align: left;
   }
 

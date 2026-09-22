@@ -26,7 +26,7 @@ import {
   useConversation,
   useMessageStore,
   useNotification,
-} from '@easemob/uikit-im'
+} from '@easemob-community/uikit-im'
 
 import { useDemoSettings } from '@/composables/useDemoSettings'
 

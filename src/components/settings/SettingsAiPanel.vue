@@ -11,7 +11,7 @@
  * 状态来自 useDemoSettings，由 chat/index.vue 监听并注入 mock AI 回复。
  */
 import { useI18n } from 'vue-i18n'
-import { useUIKit } from '@easemob/uikit-im'
+import { useUIKit } from '@easemob-community/uikit-im'
 
 import { useDemoSettings } from '@/composables/useDemoSettings'
 import {

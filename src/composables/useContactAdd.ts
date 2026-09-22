@@ -1,4 +1,4 @@
-import { useContact, useUIKit } from '@easemob/uikit-im'
+import { useContact, useUIKit } from '@easemob-community/uikit-im'
 
 import { PHONE_REGEX } from '@/api/sms'
 import { getUserByPhoneApi, mapPhoneQueryError } from '@/api/user'

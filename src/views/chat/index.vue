@@ -12,11 +12,13 @@ import {
   useToast,
   useUIKit,
   useViewport,
-} from '@easemob/uikit-im'
-import type { ConversationTabKey, UiMessage } from '@easemob/uikit-im'
+} from '@easemob-community/uikit-im'
+import type { ConversationTabKey, UiMessage } from '@easemob-community/uikit-im'
 
 import MarkdownStreamMessage from '@/components/ai/MarkdownStreamMessage.vue'
 import AntiFraudBanner from '@/components/chat/AntiFraudBanner.vue'
+import ChatWatermark from '@/components/chat/ChatWatermark.vue'
+import EmptyStateNotice from '@/components/common/EmptyStateNotice.vue'
 import AddContactModal from '@/components/contact/AddContactModal.vue'
 import { useDemoCreateGroup } from '@/composables/useDemoCreateGroup'
 import { useDemoSettings } from '@/composables/useDemoSettings'
@@ -282,6 +284,14 @@ watch(
         <!-- card 档位（对齐 UIKit demo）：圆角卡片壳（细边框 + 圆角 + 底色）由容器自绘，
              宿主壳退化为纯定位容器，避免双层卡片 -->
         <EmChatContainer variant="card" :config="chatConfig">
+          <!-- 空状态文案注入（未选中会话时展示）：图标沿用 UIKit EmEmpty 的 bubble/rect/2，
+               文案替换为 Figma 新 Demo 空状态两行提示 -->
+          <template #empty>
+            <EmptyStateNotice />
+          </template>
+          <template #watermark>
+            <ChatWatermark :text="t('chat.watermark')" />
+          </template>
           <template #notice>
             <AntiFraudBanner
               v-if="!antiFraudBannerClosed"
@@ -341,6 +351,9 @@ watch(
         </div>
         <div class="chat-page__mobile-body">
           <EmChatContainer :config="chatConfig">
+            <template #watermark>
+              <ChatWatermark :text="t('chat.watermark')" />
+            </template>
             <template #notice>
               <AntiFraudBanner
                 v-if="!antiFraudBannerClosed"
@@ -405,6 +418,23 @@ watch(
     flex-direction: column;
     overflow: hidden;
     background: transparent;
+
+    /* 空状态对齐 Figma：图标 100px / #ccc（EmIcon 尺寸是 svg 属性，CSS 可直接覆盖；
+       颜色经 EmEmpty 消费的 --uikit-empty-icon-color 变量下发）；
+       EmEmpty 默认 gap 12px 改为设计稿的 8px；内容组垂直中心上移 13.5px（设计稿 top: 50% - 13.5px） */
+    :deep(.chat__empty) {
+      --uikit-empty-icon-color: var(--color-text-quaternary);
+      padding-bottom: 27px;
+
+      .uikit-empty {
+        gap: 8px;
+      }
+
+      .uikit-empty__icon {
+        width: 100px;
+        height: 100px;
+      }
+    }
   }
 
   &__mobile-list,

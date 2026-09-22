@@ -1,5 +1,5 @@
 import { computed, ref, watch } from 'vue'
-import { createUIKitStorageKey, useUIKit } from '@easemob/uikit-im'
+import { createUIKitStorageKey, useUIKit } from '@easemob-community/uikit-im'
 
 import { DEMO_SIDEBAR_CONFIG } from '@/config/demo'
 

@@ -7,7 +7,7 @@ import { useNewMessageNotice } from '@/composables/useNewMessageNotice'
 /** 可变的 messageMap 数据源，模拟 uikit message store */
 const messageMap = reactive<Record<string, unknown[]>>({})
 
-vi.mock('@easemob/uikit-im', () => ({
+vi.mock('@easemob-community/uikit-im', () => ({
   useUIKit: () => ({
     stores: {
       message: {

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { EmAddContactModal, useToast } from '@easemob/uikit-im'
+import { EmAddContactModal, useToast } from '@easemob-community/uikit-im'
 
 import { useContactAdd } from '@/composables/useContactAdd'
 

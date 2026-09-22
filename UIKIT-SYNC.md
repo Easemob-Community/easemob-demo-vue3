@@ -7,7 +7,7 @@
 ## 一、背景与适用阶段
 
 - demo（本仓库 `easemob-demo-vue3`）通过**本地 tgz** 集成 uikit：
-  `@easemob/uikit-im` / `@easemob/uikit-core` 均以 `file:./easemob-uikit-<pkg>-<version>.tgz` 引用（tgz 位于仓库根目录、不入库）。
+  `@easemob-community/uikit-im` / `@easemob-community/uikit-core` 均以 `file:./easemob-uikit-<pkg>-<version>.tgz` 引用（tgz 位于仓库根目录、不入库）。
 - uikit 源码仓库：`../UIKIT/easemob-uikit-vue`（相对本仓库）。
 - 典型节奏：demo 开发中发现 uikit 问题/缺能力 → 在 uikit 仓库改源码 → 提交 → 打新 tgz → 同步到 demo → 验证。
 
@@ -24,8 +24,8 @@ node scripts/check-version-sync.mjs                                             
 
 ### 2. 若有未提交改动：验证 + 提交
 ```bash
-pnpm -F @easemob/uikit-im exec vue-tsc --noEmit        # 类型检查（门禁）
-pnpm -F @easemob/uikit-core build && pnpm -F @easemob/uikit-im build   # 构建（门禁）
+pnpm -F @easemob-community/uikit-im exec vue-tsc --noEmit        # 类型检查（门禁）
+pnpm -F @easemob-community/uikit-core build && pnpm -F @easemob-community/uikit-im build   # 构建（门禁）
 git add <改动的文件> && git commit -m "中文 message"
 # 提交前确认未混入产物：git diff --cached --name-only | grep -E 'dist/|node_modules/|\.tgz$' 应为空
 # 不主动 push（除非用户明确要求）
@@ -47,7 +47,7 @@ git add <改动的文件> && git commit -m "中文 message"
 ```bash
 cp <两个新 tgz> /Users/neohuang/Desktop/WorkCommonUse/Demo/easemob-demo-vue3/   # 覆盖
 # 更新 demo package.json：
-#   dependencies 与 pnpm.overrides 中 @easemob/uikit-im / @easemob/uikit-core 的 file: 指向
+#   dependencies 与 pnpm.overrides 中 @easemob-community/uikit-im / @easemob-community/uikit-core 的 file: 指向
 #   （版本号变了 → 换成新文件名）
 pnpm install    # pnpm 按 tgz 完整性校验重新安装
 ```

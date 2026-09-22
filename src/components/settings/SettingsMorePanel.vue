@@ -6,7 +6,7 @@
  * 后续可在此继续追加其他辅助入口。
  */
 import { useI18n } from 'vue-i18n'
-import { EmIcon } from '@easemob/uikit-im'
+import { EmIcon } from '@easemob-community/uikit-im'
 
 import { DEMO_ICON_SIZE, DEMO_UIKIT_DOCS_CONFIG } from '@/config/demo'
 

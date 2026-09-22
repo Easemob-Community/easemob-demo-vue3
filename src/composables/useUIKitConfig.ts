@@ -1,7 +1,7 @@
 import { computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useLocale, useNotification, useTheme as useUIKitTheme } from '@easemob/uikit-im'
-import type { NotificationHandler } from '@easemob/uikit-im'
+import { useLocale, useNotification, useTheme as useUIKitTheme } from '@easemob-community/uikit-im'
+import type { NotificationHandler } from '@easemob-community/uikit-im'
 
 import { useDemoSettings } from './useDemoSettings'
 import { useTheme } from './useTheme'
@@ -23,7 +23,7 @@ export function toUIKitLocale(locale: AppLocale): UIKitLocale {
   return UIKIT_LOCALE_MAP[locale] ?? 'zh-CN'
 }
 
-/** UIKit 主题 store 的 localStorage 缓存键（与 @easemob/uikit-core 内部一致） */
+/** UIKit 主题 store 的 localStorage 缓存键（与 @easemob-community/uikit-core 内部一致） */
 export const UIKIT_THEME_STORAGE_KEY = 'easemob_uikit_theme'
 
 /**

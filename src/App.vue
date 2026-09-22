@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { EmUIKitProvider } from '@easemob/uikit-im'
-import type { UIKitDataSource } from '@easemob/uikit-im'
+import { EmUIKitProvider } from '@easemob-community/uikit-im'
+import type { UIKitDataSource } from '@easemob-community/uikit-im'
 
 import AppInitializer from '@/components/AppInitializer.vue'
 import { DEMO_CUSTOM_CONTACTS } from '@/config/demo'

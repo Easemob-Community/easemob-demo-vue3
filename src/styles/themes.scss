@@ -16,6 +16,8 @@
   --color-text-tertiary: #999999;
   // 三级弱文字（个人信息页 ID / 复制图标，对齐设计稿 neutral/7）
   --color-text-tertiary: #acb4b9;
+  // 四级弱文字（页面级空状态占位文案 / 图标，对齐 Figma 新 Demo 空状态 #ccc）
+  --color-text-quaternary: #cccccc;
   --color-bg: #ffffff;
   --color-bg-secondary: #f5f6f7;
   --color-border: #e5e6eb;
@@ -36,6 +38,8 @@ html.dark {
   --color-text-secondary: #9ca3af;
   --color-text-tertiary: #6b7280;
   --color-text-tertiary: #6b7280;
+  // 四级弱文字（深色下空状态占位：比三级更弱一档）
+  --color-text-quaternary: #4b5563;
   --color-bg: #141414;
   --color-bg-secondary: #1f1f1f;
   --color-border: #303030;

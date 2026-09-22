@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { EmIcon, EmResizable } from '@easemob/uikit-im'
+import { EmIcon, EmResizable } from '@easemob-community/uikit-im'
 
 import { useMobileView } from '@/composables/useMobileView'
 import { useSidebarWidth } from '@/composables/useSidebarWidth'

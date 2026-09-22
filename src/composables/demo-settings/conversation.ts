@@ -10,8 +10,8 @@
  * - 模块级单例，保证面板修改能实时作用到页面
  */
 import { ref } from 'vue'
-import { DEFAULT_CONVERSATION_TABS } from '@easemob/uikit-im'
-import type { ConversationTabKey } from '@easemob/uikit-im'
+import { DEFAULT_CONVERSATION_TABS } from '@easemob-community/uikit-im'
+import type { ConversationTabKey } from '@easemob-community/uikit-im'
 
 function createConversationSettings() {
   /* ===== 状态横幅配置（EmStatusBanner） ===== */

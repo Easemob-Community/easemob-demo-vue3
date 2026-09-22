@@ -8,8 +8,8 @@ import {
   type MaybeRefOrGetter,
   type Ref,
 } from 'vue'
-import type { UiPresence } from '@easemob/uikit-core'
-import { usePresence } from '@easemob/uikit-im'
+import type { UiPresence } from '@easemob-community/uikit-im'
+import { usePresence } from '@easemob-community/uikit-im'
 
 export interface UsePresenceSubscriptionReturn {
   /** 订阅到的 presence 原始数据（无数据时为 undefined） */

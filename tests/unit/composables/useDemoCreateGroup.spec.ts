@@ -5,7 +5,7 @@ const mocks = vi.hoisted(() => ({
   updateConversation: vi.fn(),
 }))
 
-vi.mock('@easemob/uikit-im', () => ({
+vi.mock('@easemob-community/uikit-im', () => ({
   useGroup: () => ({
     createGroup: mocks.createGroup,
   }),
@@ -18,7 +18,7 @@ vi.mock('@easemob/uikit-im', () => ({
   }),
 }))
 
-import type { CreateGroupParams } from '@easemob/uikit-im'
+import type { CreateGroupParams } from '@easemob-community/uikit-im'
 
 import { useDemoCreateGroup } from '@/composables/useDemoCreateGroup'
 

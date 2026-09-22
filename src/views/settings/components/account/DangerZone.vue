@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
-import { EmIcon, EmModal, useToast, useUIKit } from '@easemob/uikit-im'
+import { EmIcon, EmModal, useToast, useUIKit } from '@easemob-community/uikit-im'
 
 import { deleteAccount } from '@/api/user'
 import { useUserStore } from '@/store/modules/user'

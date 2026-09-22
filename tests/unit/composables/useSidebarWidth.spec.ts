@@ -1,6 +1,6 @@
 import { nextTick } from 'vue'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { useUIKit } from '@easemob/uikit-im'
+import { useUIKit } from '@easemob-community/uikit-im'
 
 import { useSidebarWidth } from '@/composables/useSidebarWidth'
 import { DEMO_SIDEBAR_CONFIG } from '@/config/demo'
@@ -8,7 +8,7 @@ import { DEMO_SIDEBAR_CONFIG } from '@/config/demo'
 // 模拟 uikit 的 client 状态（appKey / 当前登录用户），用例中可直接改写以触发重新读取
 const clientState = vi.hoisted(() => ({ appKey: 'app-key-1', currentUser: 'user-1' }))
 
-vi.mock('@easemob/uikit-im', async () => {
+vi.mock('@easemob-community/uikit-im', async () => {
   const { reactive } = await import('vue')
   // 缓存同一份响应式代理，保证 composable 与用例读写的是同一状态
   const client = reactive(clientState)

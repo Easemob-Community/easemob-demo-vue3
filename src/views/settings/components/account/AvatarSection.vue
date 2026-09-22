@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useUserInfoStore } from '@easemob/uikit-core'
-import { EmAvatar, EmIcon, useOwnUserInfo, useToast, useUIKit } from '@easemob/uikit-im'
+import { useUserInfoStore } from '@easemob-community/uikit-im'
+import { EmAvatar, EmIcon, useOwnUserInfo, useToast, useUIKit } from '@easemob-community/uikit-im'
 
 import { uploadAvatar } from '@/api/user'
 import { useUserStore } from '@/store/modules/user'

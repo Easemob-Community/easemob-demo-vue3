@@ -19,10 +19,8 @@
     "release": "node scripts/release.mjs"
   },
   "dependencies": {
-    "@easemob/uikit-core": "file:./easemob-uikit-core-2.8.6.tgz",
-    "@easemob/uikit-im": "file:./easemob-uikit-im-3.7.9.tgz",
-    "@easemob/uikit-sdk-contract": "file:./easemob-uikit-sdk-contract-1.3.1.tgz",
-    "@easemob/uikit-sdk-websdk5": "file:./easemob-uikit-sdk-websdk5-1.3.3.tgz",
+    "@easemob-community/uikit-im": "^3.7.11",
+    "@easemob-community/uikit-sdk-websdk5": "^1.3.4",
     "@vueuse/core": "^14.4.0",
     "axios": "^1.19.0",
     "dayjs": "^1.11.23",
@@ -53,13 +51,5 @@
     "vite": "^8.2.2",
     "vitest": "^4.1.11",
     "vue-tsc": "^3.3.11"
-  },
-  "pnpm": {
-    "overrides": {
-      "@easemob/uikit-core": "file:./easemob-uikit-core-2.8.6.tgz",
-      "@easemob/uikit-im": "file:./easemob-uikit-im-3.7.9.tgz",
-      "@easemob/uikit-sdk-contract": "file:./easemob-uikit-sdk-contract-1.3.1.tgz",
-      "@easemob/uikit-sdk-websdk5": "file:./easemob-uikit-sdk-websdk5-1.3.3.tgz"
-    }
   }
 }

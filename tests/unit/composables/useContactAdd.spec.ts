@@ -28,7 +28,7 @@ vi.mock('@/store/modules/user', () => ({
   }),
 }))
 
-vi.mock('@easemob/uikit-im', () => ({
+vi.mock('@easemob-community/uikit-im', () => ({
   useContact: () => ({
     contactList: { value: mocks.contacts },
     addContact: mocks.addContact,

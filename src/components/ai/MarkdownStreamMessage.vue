@@ -11,8 +11,8 @@
  */
 import { computed } from 'vue'
 import MarkdownIt from 'markdown-it'
-import { EmTextMessage, STREAM_MESSAGE_STATUS } from '@easemob/uikit-im'
-import type { TextMessageType, UiMessage } from '@easemob/uikit-im'
+import { EmTextMessage, STREAM_MESSAGE_STATUS } from '@easemob-community/uikit-im'
+import type { TextMessageType, UiMessage } from '@easemob-community/uikit-im'
 
 export interface MarkdownStreamMessageProps {
   message: UiMessage

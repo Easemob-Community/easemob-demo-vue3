@@ -26,12 +26,18 @@ export default {
     featurePromoDesc: '快速预览 UIKit\n可配置能力与界面效果',
   },
   chat: {
+    watermark: '环信Demo 仅供参考，谨防诈骗！',
     antiFraud: {
+      title: '环信 IM Demo｜仅供功能体验丨数据每日 00:00 清除',
       text: '请勿轻信转账、汇款、中奖等信息，谨慎接听陌生来电，谨防诈骗。发现可疑情况请立即举报。',
       report: '点我举报',
       close: '关闭防诈骗提示',
       reportToast: '感谢您的举报，我们将尽快处理',
     },
+  },
+  emptyState: {
+    title: '环信 IM Demo丨仅供功能体验',
+    tip: '请勿轻信转账、汇款、中奖等信息,谨慎接听陌生来电，谨防诈骗',
   },
   settings: {
     account: {
@@ -97,7 +103,6 @@ export default {
     },
   },
   contacts: {
-    empty: '选择联系人或群组查看详情',
     userNotExist: '此用户不存在',
     alreadyFriend: '此联系人已存在',
     addSelfError: '不能添加自己为好友',

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import type { UiPresence } from '@easemob/uikit-core'
-import { EmAvatar, EmIcon, useOwnUserInfo, useToast } from '@easemob/uikit-im'
+import type { UiPresence } from '@easemob-community/uikit-im'
+import { EmAvatar, EmIcon, useOwnUserInfo, useToast } from '@easemob-community/uikit-im'
 
 interface Props {
   userId: string

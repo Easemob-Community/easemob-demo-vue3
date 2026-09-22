@@ -1,14 +1,14 @@
 import { createPinia, setActivePinia } from 'pinia'
 import { describe, expect, it } from 'vitest'
 
-import { useConversationStore } from '@easemob/uikit-im'
+import { useConversationStore } from '@easemob-community/uikit-im'
 
 /**
- * 消费者验证冒烟：@easemob/uikit-im（tgz 产物）运行在 pinia 4.x 下。
+ * 消费者验证冒烟：@easemob-community/uikit-im（tgz 产物）运行在 pinia 4.x 下。
  * uikit-im 的 peer 范围为 pinia ^2.1.0，本用例验证 2.x 风格 setup store
  * 在 pinia 4 下的实例化 / 响应式更新兼容性。
  */
-describe('@easemob/uikit-im @ pinia 4 兼容性冒烟', () => {
+describe('@easemob-community/uikit-im @ pinia 4 兼容性冒烟', () => {
   it('setup store 可在 pinia 4 下实例化并响应式更新', () => {
     setActivePinia(createPinia())
     const store = useConversationStore()

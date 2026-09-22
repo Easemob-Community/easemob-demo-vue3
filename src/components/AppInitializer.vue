@@ -2,7 +2,7 @@
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { useClient } from '@easemob/uikit-im'
+import { useClient } from '@easemob-community/uikit-im'
 
 import { useUserStore } from '@/store/modules/user'
 import { initUIKit } from '@/utils/uikit'

@@ -1,6 +1,6 @@
 import { effectScope, nextTick, ref } from 'vue'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import type { UiPresence } from '@easemob/uikit-im'
+import type { UiPresence } from '@easemob-community/uikit-im'
 
 import { usePresenceSubscription } from '@/composables/usePresenceSubscription'
 
@@ -11,7 +11,7 @@ const presenceApi = vi.hoisted(() => ({
   presenceState: {} as Record<string, UiPresence>,
 }))
 
-vi.mock('@easemob/uikit-im', async () => {
+vi.mock('@easemob-community/uikit-im', async () => {
   const { computed } = await import('vue')
   const { subscribePresence, unsubscribePresence, presenceState } = presenceApi
   return {

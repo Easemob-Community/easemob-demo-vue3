@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useUIKit } from '@easemob/uikit-im'
+import { useUIKit } from '@easemob-community/uikit-im'
 
 import { usePresenceSubscription } from '@/composables/usePresenceSubscription'
 import { useUserStore } from '@/store/modules/user'

@@ -2,8 +2,8 @@
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { onClickOutside } from '@vueuse/core'
-import { EmIcon, useUIKit, useTheme as useUIKitTheme } from '@easemob/uikit-im'
-import { isKeyboardShortcutsEnabled, setKeyboardShortcutsEnabled } from '@easemob/uikit-core'
+import { EmIcon, useUIKit, useTheme as useUIKitTheme } from '@easemob-community/uikit-im'
+import { isKeyboardShortcutsEnabled, setKeyboardShortcutsEnabled } from '@easemob-community/uikit-im'
 
 import { useDemoSettings } from '@/composables/useDemoSettings'
 import { useTheme, type ThemeMode } from '@/composables/useTheme'

@@ -1,5 +1,5 @@
-import { useGroup, useUIKit } from '@easemob/uikit-im'
-import type { CreateGroupParams } from '@easemob/uikit-im'
+import { useGroup, useUIKit } from '@easemob-community/uikit-im'
+import type { CreateGroupParams } from '@easemob-community/uikit-im'
 
 /**
  * 创建群组接管（EmCreateGroupModal 的 create-fn）：demo 造数时把群名改为

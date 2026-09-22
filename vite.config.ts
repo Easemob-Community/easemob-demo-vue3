@@ -8,10 +8,9 @@ import { defineConfig, loadEnv } from 'vite'
 import { resolveWebsdkVersion } from './scripts/resolve-websdk-version.mjs'
 
 /**
- * 防呆：vue3-uikit 以本地 tgz 方式联调（file:./easemob-uikit-*.tgz）。
- * vite 会把依赖预打包缓存到 node_modules/.vite；换新 tgz + pnpm install 后，
- * 若不重启 dev server，vite 会继续服务旧版本的预打包产物（典型症状：
- * 黑名单等新功能不出现、样式无变化）。
+ * 防呆：vue3-uikit 经 npm registry（@easemob-community/*）引入，升级版本 pnpm install 后，
+ * vite 会把依赖预打包缓存到 node_modules/.vite；若不重启 dev server，
+ * vite 会继续服务旧版本的预打包产物（典型症状：黑名单等新功能不出现、样式无变化）。
  * 这里在 dev/build 启动时检测：已安装的 uikit 产物（im/core dist）比 .vite 缓存新
  * → 自动清空缓存，强制本次启动重新预打包。详见 .agent/skills/uikit-tgz-integration。
  */
@@ -20,12 +19,8 @@ const depsDir = join(viteCacheDir, 'deps')
 /** dist 产物 → 对应 vite 预打包文件（.vite/deps 内文件名以实际 import 名生成） */
 const uikitPairs = [
   {
-    dist: join(process.cwd(), 'node_modules/@easemob/uikit-im/dist/easemob-uikit-im.js'),
-    pre: join(depsDir, '@easemob_uikit-im.js'),
-  },
-  {
-    dist: join(process.cwd(), 'node_modules/@easemob/uikit-core/dist/easemob-uikit-core.js'),
-    pre: join(depsDir, '@easemob_uikit-core.js'),
+    dist: join(process.cwd(), 'node_modules/@easemob-community/uikit-im/dist/easemob-uikit-im.js'),
+    pre: join(depsDir, '@easemob-community_uikit-im.js'),
   },
 ]
 if (existsSync(viteCacheDir)) {

@@ -10,8 +10,8 @@
  * - 模块级单例，保证面板修改能实时作用到页面
  */
 import { computed, ref } from 'vue'
-import { NOTICE_EVENT_TYPE } from '@easemob/uikit-im'
-import type { NoticeConfig } from '@easemob/uikit-im'
+import { NOTICE_EVENT_TYPE } from '@easemob-community/uikit-im'
+import type { NoticeConfig } from '@easemob-community/uikit-im'
 
 function createNoticeSettings() {
   /* ===== 新消息提醒配置（useNotification） ===== */

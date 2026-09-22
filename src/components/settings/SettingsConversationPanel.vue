@@ -14,7 +14,7 @@
  */
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import type { ConversationTabKey } from '@easemob/uikit-im'
+import type { ConversationTabKey } from '@easemob-community/uikit-im'
 
 import { useDemoSettings } from '@/composables/useDemoSettings'
 

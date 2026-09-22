@@ -1,4 +1,4 @@
-import { mergeLocaleMessages } from '@easemob/uikit-im'
+import { mergeLocaleMessages } from '@easemob-community/uikit-im'
 
 /**
  * 覆盖 UIKit 内置文案，对齐 Demo 业务约定。

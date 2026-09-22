@@ -1,4 +1,4 @@
-import type { useClient } from '@easemob/uikit-im'
+import type { useClient } from '@easemob-community/uikit-im'
 
 type ClientInit = ReturnType<typeof useClient>['init']
 

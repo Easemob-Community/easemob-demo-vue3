@@ -13,10 +13,11 @@ import {
   EmResizable,
   useConversation,
   useUIKit,
-} from '@easemob/uikit-im'
-import type { UiContact, UiContactInvite, UiGroup } from '@easemob/uikit-core'
+} from '@easemob-community/uikit-im'
+import type { UiContact, UiContactInvite, UiGroup } from '@easemob-community/uikit-im'
 
 import AddContactModal from '@/components/contact/AddContactModal.vue'
+import EmptyStateNotice from '@/components/common/EmptyStateNotice.vue'
 import { useDemoCreateGroup } from '@/composables/useDemoCreateGroup'
 import { useDemoSettings } from '@/composables/useDemoSettings'
 import { useMobileView } from '@/composables/useMobileView'
@@ -220,9 +221,9 @@ function backToContactList() {
           @leaved="onGroupClosed"
           @destroyed="onGroupClosed"
         />
+        <!-- 空状态占位（未选中联系人/群组）：对齐 Figma 新 Demo 空状态（person/double 图标 + 两行提示） -->
         <div v-else class="contacts-page__empty">
-          <EmIcon name="person/list" :size="DEMO_ICON_SIZE.empty" />
-          <p>{{ t('contacts.empty') }}</p>
+          <EmptyStateNotice icon="person/double" />
         </div>
       </div>
     </template>
@@ -339,20 +340,15 @@ function backToContactList() {
     }
   }
 
+  /* 空状态占位：仅负责居中，图标 / 文案样式由 EmptyStateNotice 自带（对齐 Figma）；
+     padding-bottom 27px 让内容组垂直中心上移 13.5px（设计稿 top: 50% - 13.5px） */
   &__empty {
     flex: 1;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 12px;
-    color: var(--color-text-secondary);
-    font-size: calc(14px * var(--demo-font-scale, 1));
-
-    /* 全局 reset 收敛后 p 恢复浏览器默认外边距，此处显式清零 */
-    p {
-      margin: 0;
-    }
+    padding-bottom: 27px;
+    box-sizing: border-box;
   }
 
   &__mobile-list,

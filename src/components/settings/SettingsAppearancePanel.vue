@@ -14,7 +14,7 @@
  */
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { EmInput, useTheme as useUIKitTheme } from '@easemob/uikit-im'
+import { EmInput, useTheme as useUIKitTheme } from '@easemob-community/uikit-im'
 
 import ColorPickerPanel from './color-picker/ColorPickerPanel.vue'
 import { toUIKitLocale } from '@/composables/useUIKitConfig'

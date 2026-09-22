@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import { EmIcon } from '@easemob/uikit-im'
+import { EmIcon } from '@easemob-community/uikit-im'
 
 defineOptions({ name: 'AntiFraudBanner' })
 
@@ -16,15 +16,18 @@ const { t } = useI18n()
 
 <template>
   <div class="anti-fraud-banner" role="alert">
-    <!-- 图标 + 文案行（对应设计稿 Frame 615：单行时整体垂直居中） -->
+    <!-- 图标 + 标题/正文（对应设计稿 Frame 2923:18442：图标与标题行顶部对齐） -->
     <div class="anti-fraud-banner__main">
       <EmIcon class="anti-fraud-banner__icon" name="circle/bang" :size="18" />
-      <p class="anti-fraud-banner__text">
-        {{ t('chat.antiFraud.text') }}
-        <button type="button" class="anti-fraud-banner__report" @click="emit('report')">
-          {{ t('chat.antiFraud.report') }}
-        </button>
-      </p>
+      <div class="anti-fraud-banner__content">
+        <p class="anti-fraud-banner__title">{{ t('chat.antiFraud.title') }}</p>
+        <p class="anti-fraud-banner__body">
+          {{ t('chat.antiFraud.text') }}
+          <button type="button" class="anti-fraud-banner__report" @click="emit('report')">
+            {{ t('chat.antiFraud.report') }}
+          </button>
+        </p>
+      </div>
     </div>
     <button
       type="button"
@@ -49,7 +52,7 @@ const { t } = useI18n()
   display: flex;
   align-items: flex-start;
   gap: 8px;
-  padding: 12px;
+  padding: 12px 12px 10px;
   border-radius: 8px;
   background: var(--anti-fraud-banner-bg);
   box-shadow: 1px 0 2px 0 rgb(26 26 26 / 10%);
@@ -58,7 +61,7 @@ const { t } = useI18n()
     flex: 1;
     min-width: 0;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 8px;
   }
 
@@ -68,11 +71,24 @@ const { t } = useI18n()
     color: var(--anti-fraud-banner-link);
   }
 
-  // 全局 reset 不清 p 的 UA 默认 margin（见 reset.scss 头注释），需显式清零，
-  // 否则 12px 默认 margin 会把整行顶起、破坏单行垂直居中
-  &__text {
+  &__content {
     flex: 1;
     min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  // 全局 reset 不清 p 的 UA 默认 margin（见 reset.scss 头注释），需显式清零
+  &__title {
+    margin: 0;
+    font-size: calc(16px * var(--demo-font-scale, 1));
+    font-weight: 500;
+    line-height: calc(18px * var(--demo-font-scale, 1));
+    color: var(--anti-fraud-banner-text);
+  }
+
+  &__body {
     margin: 0;
     font-size: calc(12px * var(--demo-font-scale, 1));
     line-height: calc(18px * var(--demo-font-scale, 1));
@@ -84,7 +100,7 @@ const { t } = useI18n()
     padding: 0;
     border: none;
     font-size: inherit;
-    line-height: inherit;
+    line-height: calc(16px * var(--demo-font-scale, 1));
     font-weight: 500;
     color: var(--anti-fraud-banner-link);
     background: transparent;

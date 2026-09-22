@@ -10,7 +10,7 @@
  * - 按设计图要求：无「一键重置」按钮，无「开发者友好模式」
  */
 import { useI18n } from 'vue-i18n'
-import { clearPersistedLogs, exportPersistedLogs } from '@easemob/uikit-im'
+import { clearPersistedLogs, exportPersistedLogs } from '@easemob-community/uikit-im'
 
 import { useDemoSettings } from '@/composables/useDemoSettings'
 

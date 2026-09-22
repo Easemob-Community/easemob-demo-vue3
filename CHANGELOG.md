@@ -83,7 +83,7 @@ UIKit 接入后的首轮结构优化：消除复制样板、拆分巨型组件�
 ### 变更
 
 - **移除 px→vw 转换**：删除 `postcss-px-to-viewport-8-plugin` 依赖与 `postcss.config.js`，H5 适配回归纯响应式（768px 断点切换 + 固定 px 布局），样式一律直接写 px；约定与历史背景见 `.agent/skills/h5-adaptation`
-- uikit 升级：`@easemob/uikit-core` 1.3.0 → 1.5.2，`@easemob/uikit-im` 2.5.0 → 2.8.2（本地 tgz 方式）
+- uikit 升级：`@easemob-community/uikit-core` 1.3.0 → 1.5.2，`@easemob-community/uikit-im` 2.5.0 → 2.8.2（本地 tgz 方式）
 - 消息通知总开关默认状态由开启改为关闭
 - 登录页接入短信验证码（含生产环境阿里云验证码 2.0 配置项，见 `.env.production.local.example`）
 - 开发者模式相关组合式函数（`useDevMode` / `useUIKitConfig`）完善

@@ -26,12 +26,18 @@ export default {
     featurePromoDesc: 'Preview UIKit\nfeatures and UI effects',
   },
   chat: {
+    watermark: 'Easemob Demo · For reference only · Beware of scams!',
     antiFraud: {
+      title: 'Easemob IM Demo | For feature trial only | Data cleared daily at 00:00',
       text: 'Do not trust messages about transfers, remittances, or prizes. Be cautious with calls from unknown numbers. Report suspicious activity immediately.',
       report: 'Report now',
       close: 'Dismiss anti-fraud notice',
       reportToast: 'Thank you for your report. We will look into it as soon as possible.',
     },
+  },
+  emptyState: {
+    title: 'Easemob IM Demo | For feature trial only',
+    tip: 'Do not trust messages about transfers, remittances, or prizes. Be cautious with calls from unknown numbers and beware of scams.',
   },
   settings: {
     account: {
@@ -98,7 +104,6 @@ export default {
     },
   },
   contacts: {
-    empty: 'Select a contact or group to view details',
     userNotExist: 'User does not exist',
     alreadyFriend: 'This contact already exists',
     addSelfError: 'You cannot add yourself as a contact',

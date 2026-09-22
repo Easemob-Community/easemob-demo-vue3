@@ -2,7 +2,7 @@
 import { computed, ref } from 'vue'
 import type { Component } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { EmIcon } from '@easemob/uikit-im'
+import { EmIcon } from '@easemob-community/uikit-im'
 
 import SettingsAiPanel from '@/components/settings/SettingsAiPanel.vue'
 import SettingsAppearancePanel from '@/components/settings/SettingsAppearancePanel.vue'
