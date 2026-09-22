@@ -29,6 +29,7 @@
 ### 变更
 
 - uikit tgz 刷新至 core 2.8.6 / im 3.7.9 / sdk-contract 1.3.1 / websdk5 1.3.3
+- uikit 依赖从本地 tgz 切换至 npm registry（`@easemob-community` 组织）：直接依赖收敛为 `@easemob-community/uikit-im` ^3.7.11 与 `@easemob-community/uikit-sdk-websdk5` ^1.3.4，业务 import 统一走 uikit-im 主入口；新增 `.npmrc` 固定 scope 指向官方 registry，本地 tgz 联调降级为备选方式
 - 已读回执因正式 Prod 集群问题默认关闭：Provider 新增 `enableReadReceipt` 总开关（`DEMO_PROVIDER_CONFIG.enableReadReceipt: false`，关闭后不发消息级回执且不展示己方消息已读状态），「聊天」面板群已读回执开关同步默认 false；Prod 恢复后把两处改回 true 即可
 - 特性广告弹层与关于我们 banner 对齐设计稿：弹层箭头改为切图、标题改为内联 SVG 艺术字（fill 随主题变量）、人物形象改为容器级定位；关于我们 banner 加高至 796:223 并新增「即刻接入」注册按钮
 - 设置各子面板头部对齐 UIKit 会话列表头部（48px、无底线），关于我们注册链接补充 utm 参数
