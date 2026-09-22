@@ -16,6 +16,12 @@
 
 - 会话 / 通讯录 / 设置侧边栏默认宽度未与设置对齐：无拖拽记忆时走 UIKit fluid 弹性基准（clamp(240px, 25%, 480px)），宽窗口下可达 480px；改为按 `DEMO_SIDEBAR_CONFIG.defaultWidth`（360px）定宽渲染，拖拽后仍持久化
 
+### 变更
+
+- 首屏体积优化：pinyin-pro 完整词典（约 280KB）移出首屏关键链——拼音适配器改为应用挂载后动态 import 再注册（UIKit 调用时才读取 adapter，无注册时机要求），注册前自动降级为字符串匹配，注册后拼音搜索 / 分组恢复
+- markdown-it（约 110KB）移出 chat 路由 chunk：改为首个 AI markdown 流式气泡挂载时动态加载，实例就绪前展示原始文本兜底，不使用 AI 对话则不下载
+- 首屏预载链体积：上述两项优化后，预载链 brotli 后由约 700KB 降至约 580KB
+
 ### 文档
 
 - 发版流程补充「合入 main」步骤：release 提交推送 dev 后须快进合入 main 并推送（release skill 与 `scripts/release.mjs` 完成提示同步更新）
