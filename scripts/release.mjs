@@ -71,3 +71,5 @@ run('git', ['commit', '-m', `chore(release): ${next}`])
 run('git', ['tag', '-a', `v${next}`, '-m', `release ${next}`])
 
 console.log(`\n完成。请执行：git push --follow-tags origin $(git branch --show-current)\n`)
+console.log(`推送后别忘了把 release 提交合入 main：`)
+console.log(`  git checkout main && git merge --ff-only dev && git push origin main && git checkout dev\n`)

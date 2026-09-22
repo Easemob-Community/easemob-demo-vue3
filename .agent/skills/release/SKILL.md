@@ -34,5 +34,12 @@ description: 提交规范（Conventional Commits）与正式打版发布流程�
    - 把 `[Unreleased]` 小节转为 `[x.y.z] - 当天日期`，并重建空的 `[Unreleased]`；
    - 提交 `chore(release): x.y.z` 并打 tag `vx.y.z`。
 3. **推送**：脚本不自动 push，完成后手动执行输出的 `git push --follow-tags origin <branch>`。
+4. **合入 main**：发版在 `dev` 分支进行，推送后必须把 release 提交合入 `main` 并推送（`main` 始终是 `dev` 的祖先，走快进合并即可）：
+
+   ```bash
+   git checkout main && git merge --ff-only dev && git push origin main && git checkout dev
+   ```
+
+   tag 打在 release 提交上，快进合并后 `main` 自然带上该 tag；合完切回 `dev` 继续日常开发。若合并时报 non-fast-forward（main 被单独改过），停下来确认差异，不要强推。
 
 注意：`pnpm release` 要求 `[Unreleased]` 非空，空则拒绝发版——强迫先写 changelog。紧急 hotfix 可直接指定精确版本号：`pnpm release 0.2.1`。
