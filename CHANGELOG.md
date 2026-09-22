@@ -15,6 +15,7 @@
 ### 文档
 
 - 发版流程补充「合入 main」步骤：release 提交推送 dev 后须快进合入 main 并推送（release skill 与 `scripts/release.mjs` 完成提示同步更新）
+- 发版流程补充「重新构建再部署」说明：`pnpm release` 的全量检查构建发生在版本号提升之前，dist 内版本号会落后一个版本，部署前需重新 `pnpm build`
 
 ## [0.4.1] - 2026-09-22
 

@@ -41,5 +41,6 @@ description: 提交规范（Conventional Commits）与正式打版发布流程�
    ```
 
    tag 打在 release 提交上，快进合并后 `main` 自然带上该 tag；合完切回 `dev` 继续日常开发。若合并时报 non-fast-forward（main 被单独改过），停下来确认差异，不要强推。
+5. **重新构建再部署**：脚本的全量检查构建发生在提升版本号**之前**，release 完成时 `dist/` 里打包的仍是旧版本号（`DEMO_VERSION` 构建期从 package.json 读入）。部署前必须再跑一次 `pnpm build`，否则线上底部版本号会落后一个版本。
 
 注意：`pnpm release` 要求 `[Unreleased]` 非空，空则拒绝发版——强迫先写 changelog。紧急 hotfix 可直接指定精确版本号：`pnpm release 0.2.1`。
