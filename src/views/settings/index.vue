@@ -58,12 +58,12 @@ function selectTab(tab: SettingsTab) {
   }
 }
 
-/* ===== 设置面板宽度（与会话/联系人侧边栏完全对齐：同一存储 key + 同一弹性基准，三页宽度始终一致） ===== */
+/* ===== 设置面板宽度（与会话/联系人侧边栏完全对齐：同一存储 key + 同一默认宽度，三页宽度始终一致） ===== */
 
 const SETTINGS_SIDEBAR_MIN = DEMO_SIDEBAR_CONFIG.minWidth
 const SETTINGS_SIDEBAR_MAX = DEMO_SIDEBAR_CONFIG.maxWidth
 
-// 无记忆时 sidebarWidth 为 undefined：走 fluid 弹性基准（三页同一存储 key，宽度联动一致）
+// 无记忆时回退默认宽度 360px（三页同一存储 key，宽度联动一致）
 const { sidebarWidth, persistSidebarWidth } = useSidebarWidth('layout_sidebar_width')
 </script>
 
@@ -78,7 +78,6 @@ const { sidebarWidth, persistSidebarWidth } = useSidebarWidth('layout_sidebar_wi
         :max="SETTINGS_SIDEBAR_MAX"
         :initial="DEMO_SIDEBAR_CONFIG.defaultWidth"
         :handle-size="DEMO_RESIZABLE_CONFIG.handleSize"
-        fluid
         class="settings-page__sidebar"
         @resize-end="persistSidebarWidth"
       >

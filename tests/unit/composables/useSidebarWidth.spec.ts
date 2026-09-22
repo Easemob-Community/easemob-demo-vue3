@@ -39,9 +39,9 @@ describe('useSidebarWidth', () => {
     mockClient().currentUser = 'user-1'
   })
 
-  it('无持久化值时为 undefined（EmResizable 走 fluid 弹性基准，不写内联宽度）', () => {
+  it('无持久化值时回退默认宽度（360px 定宽，不走 UIKit fluid 弹性基准）', () => {
     const { sidebarWidth } = useSidebarWidth(SUFFIX)
-    expect(sidebarWidth.value).toBeUndefined()
+    expect(sidebarWidth.value).toBe(DEMO_SIDEBAR_CONFIG.defaultWidth)
   })
 
   it('读取范围内的持久化宽度', () => {
@@ -60,10 +60,10 @@ describe('useSidebarWidth', () => {
     expect(tooWide.sidebarWidth.value).toBe(DEMO_SIDEBAR_CONFIG.maxWidth)
   })
 
-  it('持久化值非法（非数字）时为 undefined（走弹性基准）', () => {
+  it('持久化值非法（非数字）时回退默认宽度', () => {
     localStorage.setItem(currentStorageKey(SUFFIX), 'abc')
     const { sidebarWidth } = useSidebarWidth(SUFFIX)
-    expect(sidebarWidth.value).toBeUndefined()
+    expect(sidebarWidth.value).toBe(DEMO_SIDEBAR_CONFIG.defaultWidth)
   })
 
   it('登录用户变化时按新 key 重新读取', async () => {
@@ -72,10 +72,10 @@ describe('useSidebarWidth', () => {
     const { sidebarWidth } = useSidebarWidth(SUFFIX)
     expect(sidebarWidth.value).toBe(360)
 
-    // 切换用户：新用户无记忆 → undefined（弹性基准）
+    // 切换用户：新用户无记忆 → 回退默认宽度
     mockClient().currentUser = 'user-2'
     await nextTick()
-    expect(sidebarWidth.value).toBeUndefined()
+    expect(sidebarWidth.value).toBe(DEMO_SIDEBAR_CONFIG.defaultWidth)
 
     // 给新用户写入记忆后再切回，按各自 key 独立读取
     localStorage.setItem(currentStorageKey(SUFFIX), '400')

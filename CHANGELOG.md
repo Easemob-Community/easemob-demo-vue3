@@ -12,6 +12,10 @@
 
 ## [Unreleased]
 
+### 修复
+
+- 会话 / 通讯录 / 设置侧边栏默认宽度未与设置对齐：无拖拽记忆时走 UIKit fluid 弹性基准（clamp(240px, 25%, 480px)），宽窗口下可达 480px；改为按 `DEMO_SIDEBAR_CONFIG.defaultWidth`（360px）定宽渲染，拖拽后仍持久化
+
 ### 文档
 
 - 发版流程补充「合入 main」步骤：release 提交推送 dev 后须快进合入 main 并推送（release skill 与 `scripts/release.mjs` 完成提示同步更新）

@@ -48,7 +48,7 @@ const {
 const SIDEBAR_MIN_WIDTH = DEMO_SIDEBAR_CONFIG.minWidth
 const SIDEBAR_MAX_WIDTH = DEMO_SIDEBAR_CONFIG.maxWidth
 
-// 无记忆时 sidebarWidth 为 undefined：走 fluid 弹性基准（与会话页同一存储 key，宽度联动一致）
+// 无记忆时回退默认宽度 360px（与会话页同一存储 key，宽度联动一致）
 const { sidebarWidth, persistSidebarWidth } = useSidebarWidth('layout_sidebar_width')
 
 /** 当前选中的联系人/群组详情 ID */
@@ -171,7 +171,7 @@ function backToContactList() {
   <div class="contacts-page" :class="{ 'contacts-page--pc': !isMobileView }">
     <!-- PC 端：左侧通讯录 + 右侧详情（容器间距对齐 UIKit demo，见 DEMO_CONTAINER_CONFIG） -->
     <template v-if="!isMobileView">
-      <!-- 通讯录宽度默认弹性（随窗口伸缩），可拖拽定宽（240~480），拖拽后持久化；无记忆时走 fluid -->
+      <!-- 通讯录宽度默认 360px，可拖拽定宽（240~480），拖拽后持久化 -->
       <EmResizable
         v-model="sidebarWidth"
         :axis="DEMO_RESIZABLE_CONFIG.axis"
@@ -179,7 +179,6 @@ function backToContactList() {
         :max="SIDEBAR_MAX_WIDTH"
         :initial="DEMO_SIDEBAR_CONFIG.defaultWidth"
         :handle-size="DEMO_RESIZABLE_CONFIG.handleSize"
-        fluid
         class="contacts-page__sidebar"
         @resize-end="persistSidebarWidth"
       >

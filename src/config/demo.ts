@@ -255,10 +255,11 @@ export const DEMO_UIKIT_DOCS_CONFIG = {
 
 /**
  * 会话列表侧边栏宽度（px），对齐 UIKit demo 的 EmResizable 可拖拽范围（240~480）。
- * 无记忆时侧边栏不按固定宽度渲染，走 UIKIT 弹性基准（clamp(240px, 25%, 480px)）随窗口伸缩。
+ * 无拖拽记忆时按 defaultWidth 固定渲染（不走 UIKit fluid 弹性基准 clamp(240px, 25%, 480px)，
+ * 宽窗口下 25% 可达 480px、与默认宽度设置不一致）。
  */
 export const DEMO_SIDEBAR_CONFIG = {
-  /** 侧边栏基准宽度（px）：仅作 fluid 模式下首次拖拽测量失败时的兜底初值（约 1440px 窗口下的弹性值） */
+  /** 侧边栏默认宽度（px）：无拖拽记忆时的渲染宽度 */
   defaultWidth: 360,
   /** 侧边栏最小宽度（px） */
   minWidth: 240,

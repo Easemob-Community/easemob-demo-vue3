@@ -134,11 +134,11 @@ function onAntiFraudReport() {
   showToastSuccess(t('chat.antiFraud.reportToast'))
 }
 
-/* ===== 会话列表宽度（参照 UIKit demo：默认弹性 + EmResizable 拖拽定宽 + localStorage 持久化） ===== */
+/* ===== 会话列表宽度（默认 360px + EmResizable 拖拽定宽 + localStorage 持久化） ===== */
 
 const { stores } = useUIKit()
-// 无记忆时 sidebarWidth 为 undefined：EmResizable 走 fluid 弹性模式，宽度交给 UIKIT 侧栏
-// 基准 token（--uikit-sidebar-width，默认 clamp(240px, 25%, 480px)）随窗口伸缩
+// 无记忆时 sidebarWidth 回退默认宽度 360px（不走 UIKit fluid 弹性基准，宽窗口下 25% 过宽）；
+// 拖拽后持久化，三页（会话 / 通讯录 / 设置）同一存储 key，宽度联动一致
 const { sidebarWidth, persistSidebarWidth } = useSidebarWidth('layout_sidebar_width')
 
 /* ===== 聊天UIKit 特性开关配置（由特性抽屉「聊天」面板驱动） ===== */
@@ -234,8 +234,7 @@ watch(
   <div class="chat-page" :class="{ 'chat-page--pc': !isMobileView }">
     <!-- PC 端：左侧会话列表 + 右侧聊天窗口（容器间距对齐 UIKit demo，见 DEMO_CONTAINER_CONFIG） -->
     <template v-if="!isMobileView">
-      <!-- 会话列表宽度默认弹性（随窗口伸缩，基准 clamp(240px, 25%, 480px)），可拖拽定宽（240~480），
-           拖拽后持久化到 UIKIT 内部配置存储；无记忆时不写内联宽度（fluid） -->
+      <!-- 会话列表宽度默认 360px，可拖拽定宽（240~480），拖拽后持久化到 UIKIT 内部配置存储 -->
       <EmResizable
         v-model="sidebarWidth"
         :axis="DEMO_RESIZABLE_CONFIG.axis"
@@ -243,7 +242,6 @@ watch(
         :max="DEMO_SIDEBAR_CONFIG.maxWidth"
         :initial="DEMO_SIDEBAR_CONFIG.defaultWidth"
         :handle-size="DEMO_RESIZABLE_CONFIG.handleSize"
-        fluid
         class="chat-page__sidebar"
         @resize-end="persistSidebarWidth"
       >
