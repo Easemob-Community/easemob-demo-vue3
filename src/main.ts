@@ -15,7 +15,6 @@ import { applyUIKitLocaleOverrides } from './config/uikit-locale'
 import { useDevMode } from './composables/useDevMode'
 import { useTheme } from './composables/useTheme'
 import { isMobile } from './utils/env'
-import { setupPinyinAdapter } from './utils/pinyin'
 
 import 'nprogress/nprogress.css'
 import './styles/index.scss'
@@ -28,9 +27,6 @@ applyDemoContainerConfig()
 
 // 覆盖 UIKit 内置文案（添加联系人弹窗输入框支持手机号或用户 ID）
 applyUIKitLocaleOverrides()
-
-// 注入拼音适配器（请在 app.use(UIKit) 之前调用，实现见 src/utils/pinyin.ts）
-setupPinyinAdapter()
 
 // H5 真机调试面板：移动端跟随开发者模式开关，开启时动态加载、关闭时销毁
 if (isMobile) {
@@ -58,3 +54,8 @@ app.use(router)
 app.use(i18n)
 
 app.mount('#app')
+
+// 挂载后延迟注入拼音适配器（实现见 src/utils/pinyin.ts）：UIKit 调用时才读取 adapter
+// （模块级变量，注册时无快照），动态 import 把 pinyin-pro 完整词典移出首屏关键链；
+// 注册前 UIKit 自动降级为字符串匹配，注册后拼音搜索 / 分组即恢复。
+void import('./utils/pinyin').then((m) => m.setupPinyinAdapter())
