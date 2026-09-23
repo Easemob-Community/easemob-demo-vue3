@@ -19,7 +19,7 @@
     "release": "node scripts/release.mjs"
   },
   "dependencies": {
-    "@easemob-community/uikit-im": "^3.7.11",
+    "@easemob-community/uikit-im": "^3.8.0",
     "@easemob-community/uikit-sdk-websdk5": "^1.3.4",
     "@vueuse/core": "^14.4.0",
     "axios": "^1.19.0",
