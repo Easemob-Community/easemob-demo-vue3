@@ -15,6 +15,7 @@ import { applyUIKitLocaleOverrides } from './config/uikit-locale'
 import { useDevMode } from './composables/useDevMode'
 import { useTheme } from './composables/useTheme'
 import { isMobile } from './utils/env'
+import { setupBaiduAnalytics } from './utils/analytics'
 
 import 'nprogress/nprogress.css'
 import './styles/index.scss'
@@ -27,6 +28,9 @@ applyDemoContainerConfig()
 
 // 覆盖 UIKit 内置文案（添加联系人弹窗输入框支持手机号或用户 ID）
 applyUIKitLocaleOverrides()
+
+// 百度统计：仅生产环境加载（import.meta.env.PROD 守卫，见 src/utils/analytics.ts）
+setupBaiduAnalytics()
 
 // H5 真机调试面板：移动端跟随开发者模式开关，开启时动态加载、关闭时销毁
 if (isMobile) {

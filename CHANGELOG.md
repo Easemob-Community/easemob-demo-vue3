@@ -12,6 +12,10 @@
 
 ## [Unreleased]
 
+### 新增
+
+- 接入百度统计：生产构建运行时注入 `hm.baidu.com` 统计脚本（`import.meta.env.PROD` 守卫，开发环境不计入统计）；站点 ID 为公开信息，硬编码于 `src/utils/analytics.ts`；CSP `script-src` 常驻加白 `hm.baidu.com`
+
 ### 变更
 
 - uikit-im 升级至 3.8.0

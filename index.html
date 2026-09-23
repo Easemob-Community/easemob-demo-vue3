@@ -13,12 +13,13 @@
          且部分环境（如内网/测试集群）走 ws:// 明文，逐一加白名单不可维护；生产环境应按实际部署收紧。
          media-src / img-src 放行 blob:/data:/http:：语音、视频消息播放与缩略图使用 blob URL，测试集群附件地址为 http:// 明文。
          alicdn 三域（o/g/x.alicdn.com）为阿里云验证码 2.0 官方资源域名（动态 JS / 样式 / 字体）；
+         hm.baidu.com 为百度统计脚本域名（仅生产环境由 src/utils/analytics.ts 动态注入，CSP 需常驻放行）；
          若部署环境另下发了 CSP 响应头，须与这里保持一致，否则更严格的一方会生效并拦截验证码资源。
          script-src 的 sha256 对应下方「首帧同步主题」内联脚本，改脚本内容后需重新计算（内容变化则 hash 失效、脚本静默不执行）；
          frame-ancestors 经 meta 下发会被浏览器忽略，故不下发，生产环境请改用 HTTP 响应头 -->
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self' 'sha256-srrM7rkwcelunNjhOT0qFH9wpHG9OBGw5rEV3gMVGFY=' https://o.alicdn.com https://g.alicdn.com https://x.alicdn.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://g.alicdn.com https://x.alicdn.com; img-src 'self' data: blob: http: https:; media-src 'self' data: blob: http: https:; font-src 'self' data: https://fonts.gstatic.com https://g.alicdn.com https://x.alicdn.com; connect-src 'self' http: https: ws: wss:; object-src 'none'; base-uri 'self'; form-action 'self'"
+      content="default-src 'self'; script-src 'self' 'sha256-srrM7rkwcelunNjhOT0qFH9wpHG9OBGw5rEV3gMVGFY=' https://o.alicdn.com https://g.alicdn.com https://x.alicdn.com https://hm.baidu.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://g.alicdn.com https://x.alicdn.com; img-src 'self' data: blob: http: https:; media-src 'self' data: blob: http: https:; font-src 'self' data: https://fonts.gstatic.com https://g.alicdn.com https://x.alicdn.com; connect-src 'self' http: https: ws: wss:; object-src 'none'; base-uri 'self'; form-action 'self'"
     />
     <!-- H5 状态栏主题色，随深色模式由 useTheme 动态更新 -->
     <meta name="theme-color" content="#ffffff" />
