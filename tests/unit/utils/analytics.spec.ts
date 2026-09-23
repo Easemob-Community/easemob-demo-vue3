@@ -29,7 +29,7 @@ describe('setupBaiduAnalytics', () => {
     expect(appendSpy).toHaveBeenCalledTimes(1)
     const script = appendSpy.mock.calls[0][0] as HTMLScriptElement
     expect(script.tagName).toBe('SCRIPT')
-    expect(script.src).toContain('hm.baidu.com/hm.js?5719ef70ea308944b3b2e885ef2acc5c')
+    expect(script.src).toContain('hm.baidu.com/hm.js?fe4106b5ec311f704294a641def7bbb3')
     expect(script.async).toBe(true)
   })
 })

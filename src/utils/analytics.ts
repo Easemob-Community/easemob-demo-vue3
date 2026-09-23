@@ -1,5 +1,5 @@
 // 百度统计站点 ID：公开信息（任何访客查看页面源码均可见），非密钥，无需脱敏或走 env
-const BAIDU_TONGJI_ID = '5719ef70ea308944b3b2e885ef2acc5c'
+const BAIDU_TONGJI_ID = 'fe4106b5ec311f704294a641def7bbb3'
 
 // 加载百度统计脚本，仅生产环境生效（开发环境不计入统计）。
 // 用动态 script 而非 index.html 内联片段：CSP 的 script-src 无 'unsafe-inline'，内联脚本会被拦截；
