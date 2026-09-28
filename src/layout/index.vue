@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   EmBadge,
@@ -30,7 +30,11 @@ defineOptions({ name: 'AppLayout' })
 
 const isMobileView = useMobileView()
 const { isTabbarHidden } = useMobileTabbar()
-const { isOpen: isSettingsDrawerOpen, toggle: toggleSettingsDrawer } = useSettingsDrawer()
+const {
+  isOpen: isSettingsDrawerOpen,
+  toggle: toggleSettingsDrawer,
+  close: closeSettingsDrawer,
+} = useSettingsDrawer()
 const {
   showRedDot: showFeatureRedDot,
   showPromo: showFeaturePromo,
@@ -116,6 +120,13 @@ function handleFeaturesClick() {
   dismissRedDot()
   toggleSettingsDrawer()
 }
+
+/* 路由切换（H5 底部 tabbar / PC 侧边栏导航）时自动收起设置抽屉：
+   抽屉是布局级浮层，跨页面保留会让它罩在无关页面上 */
+watch(
+  () => route.path,
+  () => closeSettingsDrawer(),
+)
 
 /** 点击广告弹层：进入特性控制台（设置抽屉）并关闭弹层 */
 function handlePromoClick() {
