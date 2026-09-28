@@ -279,9 +279,10 @@
     left: 0;
     right: 0;
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    gap: 16px;
+    gap: 4px 16px;
     padding-bottom: 40px;
     z-index: 20;
 
@@ -295,6 +296,8 @@
       /* 全局 reset 收敛后 p 恢复浏览器默认外边距，此处显式清零 */
       margin: 0;
       color: rgba(255, 255, 255, 0.35);
+      /* 版权文本不允许内部折行（窄屏整体换到下一行，而不是「环信」被挤到第二行） */
+      white-space: nowrap;
     }
 
     span {
@@ -311,6 +314,26 @@
 
       &:hover {
         color: rgba(255, 255, 255, 0.6);
+      }
+    }
+  }
+
+  /* H5 窄屏：底部信息纵向堆叠（版权一行、版本号一行居中），隐藏竖线分隔符 */
+  @media (max-width: 767px) {
+    &__footer {
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding-bottom: 24px;
+
+      span {
+        display: none;
+      }
+
+      button {
+        padding: 0 16px;
+        text-align: center;
+        line-height: 1.5;
       }
     }
   }
