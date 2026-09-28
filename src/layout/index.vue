@@ -45,9 +45,18 @@ const conversationStore = useConversationStore()
 const { inviteList } = useContact()
 
 /* 导航图标对齐设计稿图标资源：聚焦为面性（filled），不聚焦为线性（stroked） */
-const tabs = [
+interface NavTab {
+  key: string
+  icon: string
+  activeIcon: string
+  label: string
+  to: string
+  size: number
+}
+
+const tabs: NavTab[] = [
   {
-    key: 'chat' as const,
+    key: 'chat',
     icon: 'bubble/rect',
     activeIcon: 'filled/bubble/rect/empty',
     label: t('nav.chat'),
@@ -55,7 +64,7 @@ const tabs = [
     size: 24,
   },
   {
-    key: 'contacts' as const,
+    key: 'contacts',
     icon: 'person/list',
     activeIcon: 'filled/person/list',
     label: t('nav.contacts'),
@@ -65,9 +74,23 @@ const tabs = [
 ]
 
 /** 当前路由命中时返回面性图标，否则返回线性图标 */
-function navIcon(tab: (typeof tabs)[number]) {
+function navIcon(tab: NavTab) {
   return route.path.startsWith(tab.to) ? tab.activeIcon : tab.icon
 }
+
+/* H5 tabbar 在导航两项之后追加「设置」入口（PC 的设置入口在侧边栏工具区，不进 tabs）；
+   hamburger 图标无 filled 变体，选中态靠主色区分 */
+const mobileTabs: NavTab[] = [
+  ...tabs,
+  {
+    key: 'settings',
+    icon: 'hamburger',
+    activeIcon: 'hamburger',
+    label: t('nav.settings'),
+    to: '/settings',
+    size: 24,
+  },
+]
 
 /** 会话未读总数（忽略静音会话） */
 const totalUnread = computed(() => {
@@ -209,7 +232,7 @@ function handlePromoClick() {
 
     <!-- H5：底部 tabbar 导航（会话聊天态下隐藏，见 useMobileTabbar） -->
     <nav v-if="isMobileView && !isTabbarHidden" class="app-layout__tabbar safe-area-bottom">
-      <router-link v-for="tab in tabs" :key="tab.key" class="app-layout__tab" :to="tab.to">
+      <router-link v-for="tab in mobileTabs" :key="tab.key" class="app-layout__tab" :to="tab.to">
         <EmBadge
           v-if="tab.key === 'chat' && totalUnread > 0"
           :count="totalUnread"

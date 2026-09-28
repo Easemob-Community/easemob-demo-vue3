@@ -3,7 +3,9 @@ import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { EmIcon, EmResizable } from '@easemob-community/uikit-im'
 
+import { useFeaturePromo } from '@/composables/useFeaturePromo'
 import { useMobileView } from '@/composables/useMobileView'
+import { useSettingsDrawer } from '@/composables/useSettingsDrawer'
 import { useSidebarWidth } from '@/composables/useSidebarWidth'
 import { DEMO_RESIZABLE_CONFIG, DEMO_SIDEBAR_CONFIG } from '@/config/demo'
 
@@ -17,6 +19,14 @@ defineOptions({ name: 'SettingsPage' })
 
 const { t } = useI18n()
 const isMobileView = useMobileView()
+const { open: openSettingsDrawer } = useSettingsDrawer()
+const { showRedDot: showFeatureRedDot, dismissRedDot: dismissFeatureRedDot } = useFeaturePromo()
+
+/** H5 特性控制台入口：打开设置抽屉并隐藏诱导红点（对齐 PC 侧边栏特性图标的交互） */
+function handleFeaturesEntryClick() {
+  dismissFeatureRedDot()
+  openSettingsDrawer()
+}
 
 const activeTab = ref<SettingsTab>('account')
 const showMobileDetail = ref(false)
@@ -113,6 +123,16 @@ const { sidebarWidth, persistSidebarWidth } = useSidebarWidth('layout_sidebar_wi
         <span class="settings-page__mobile-title">{{ t('nav.settings') }}</span>
       </div>
       <div class="settings-page__mobile-body">
+        <!-- H5 特性控制台入口：对齐 PC 侧边栏特性图标（红点诱导 + 打开设置抽屉），PC 入口在侧边栏故此处仅 H5 渲染 -->
+        <button type="button" class="settings-page__menu-item" @click="handleFeaturesEntryClick">
+          <span class="settings-page__feature-icon">
+            <EmIcon name="console" :size="24" class="settings-page__menu-icon" />
+            <span v-if="showFeatureRedDot" class="settings-page__feature-dot" />
+          </span>
+          <span class="settings-page__menu-label">{{ t('features.title') }}</span>
+        </button>
+        <div class="settings-page__divider" />
+
         <button
           v-for="item in menuItems"
           :key="item.key"
@@ -265,6 +285,26 @@ const { sidebarWidth, persistSidebarWidth } = useSidebarWidth('layout_sidebar_wi
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  /* H5 特性控制台入口：红点附着在 24px 图标右下角（样式口径对齐 layout 侧边栏红点） */
+  &__feature-icon {
+    position: relative;
+    display: inline-flex;
+    flex-shrink: 0;
+  }
+
+  &__feature-dot {
+    position: absolute;
+    right: -1px;
+    bottom: -1px;
+    width: 8px;
+    height: 8px;
+    box-sizing: border-box;
+    border: 2px solid var(--color-bg);
+    border-radius: 50%;
+    background: var(--color-badge-red);
+    pointer-events: none;
   }
 
   &__divider {
