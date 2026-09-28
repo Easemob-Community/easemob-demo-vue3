@@ -78,7 +78,10 @@ const { sidebarWidth, persistSidebarWidth } = useSidebarWidth('layout_sidebar_wi
 </script>
 
 <template>
-  <div class="settings-page" :class="{ 'settings-page--pc': !isMobileView }">
+  <div
+    class="settings-page"
+    :class="{ 'settings-page--pc': !isMobileView, 'settings-page--mobile': isMobileView }"
+  >
     <!-- PC 端：左侧设置列表 + 右侧详情（容器间距对齐 UIKit demo） -->
     <template v-if="!isMobileView">
       <EmResizable
@@ -123,16 +126,6 @@ const { sidebarWidth, persistSidebarWidth } = useSidebarWidth('layout_sidebar_wi
         <span class="settings-page__mobile-title">{{ t('nav.settings') }}</span>
       </div>
       <div class="settings-page__mobile-body">
-        <!-- H5 特性控制台入口：对齐 PC 侧边栏特性图标（红点诱导 + 打开设置抽屉），PC 入口在侧边栏故此处仅 H5 渲染 -->
-        <button type="button" class="settings-page__menu-item" @click="handleFeaturesEntryClick">
-          <span class="settings-page__feature-icon">
-            <EmIcon name="console" :size="24" class="settings-page__menu-icon" />
-            <span v-if="showFeatureRedDot" class="settings-page__feature-dot" />
-          </span>
-          <span class="settings-page__menu-label">{{ t('features.title') }}</span>
-        </button>
-        <div class="settings-page__divider" />
-
         <button
           v-for="item in menuItems"
           :key="item.key"
@@ -143,6 +136,16 @@ const { sidebarWidth, persistSidebarWidth } = useSidebarWidth('layout_sidebar_wi
         >
           <EmIcon :name="menuIcon(item)" :size="24" class="settings-page__menu-icon" />
           <span class="settings-page__menu-label">{{ item.label }}</span>
+        </button>
+
+        <!-- H5 特性控制台入口：作为菜单列表末尾的列表项，与账户信息/通用/关于我们同一容器；
+             交互对齐 PC 侧边栏特性图标（红点诱导 + 打开设置抽屉），PC 入口在侧边栏故此处仅 H5 渲染 -->
+        <button type="button" class="settings-page__menu-item" @click="handleFeaturesEntryClick">
+          <span class="settings-page__feature-icon">
+            <EmIcon name="console" :size="24" class="settings-page__menu-icon" />
+            <span v-if="showFeatureRedDot" class="settings-page__feature-dot" />
+          </span>
+          <span class="settings-page__menu-label">{{ t('features.title') }}</span>
         </button>
 
         <!-- H5 详情页：点击菜单后全屏展示 -->
@@ -191,6 +194,12 @@ const { sidebarWidth, persistSidebarWidth } = useSidebarWidth('layout_sidebar_wi
     padding: var(--demo-container-padding, 8px);
     box-sizing: border-box;
     background: var(--color-bg-secondary);
+  }
+
+  /* H5：根节点默认是横向 flex（服务 PC 的侧栏 + 主区），移动端必须显式切纵向，
+     否则 header 会被挤成与列表并排的一列（标题与首个 cell 同行） */
+  &--mobile {
+    flex-direction: column;
   }
 
   &__sidebar {
@@ -307,12 +316,6 @@ const { sidebarWidth, persistSidebarWidth } = useSidebarWidth('layout_sidebar_wi
     pointer-events: none;
   }
 
-  &__divider {
-    height: 1px;
-    margin: 8px 0;
-    background: var(--color-border);
-  }
-
   &__main {
     flex: 1;
     min-width: 0;
@@ -330,20 +333,23 @@ const { sidebarWidth, persistSidebarWidth } = useSidebarWidth('layout_sidebar_wi
     }
   }
 
+  /* H5 头部：对齐通讯录 UIKit contact-list__header（min-height 56px、左右 20px 内边距、标题居左），
+     标题 token 与 PC header 同源（UIKit 字号/字重/文本色，随 UIKit 主题联动） */
   &__mobile-header {
     flex-shrink: 0;
     display: flex;
     align-items: center;
-    justify-content: center;
-    height: 48px;
-    padding: 0 12px;
+    min-height: 56px;
+    padding: 12px 20px;
+    box-sizing: border-box;
     background: var(--color-bg);
   }
 
   &__mobile-title {
-    font-size: calc(16px * var(--demo-font-scale, 1));
-    font-weight: 500;
-    color: var(--color-text);
+    font-size: var(--uikit-font-size-16, calc(16px * var(--demo-font-scale, 1)));
+    font-weight: var(--uikit-font-weight-medium, 500);
+    line-height: 22px;
+    color: var(--uikit-text-primary, var(--color-text));
   }
 
   &__mobile-body {
