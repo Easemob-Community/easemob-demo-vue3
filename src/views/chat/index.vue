@@ -25,6 +25,7 @@ import { useDemoSettings } from '@/composables/useDemoSettings'
 import { useMobileView } from '@/composables/useMobileView'
 import { useSidebarWidth } from '@/composables/useSidebarWidth'
 import { getMockAiReply, simulateStreamMessage } from '@/composables/useStreamDemo'
+import { trackEvent } from '@/utils/analytics'
 import {
   DEMO_CHAT_CONFIG,
   DEMO_CONVERSATION_CONFIG,
@@ -216,6 +217,8 @@ watch(
     const last = msgs[msgs.length - 1]
     if (!last) return
     aiRepliedMessageIds.add(msgId)
+    // 百度统计：AI 流式应答触发（核心功能触达）
+    trackEvent('chat', 'ai-reply')
     const question = (last.body as { content?: string }).content || ''
     window.setTimeout(() => {
       simulateStreamMessage(stores.message, {
@@ -226,6 +229,32 @@ watch(
         content: getMockAiReply(question),
       })
     }, 700)
+  },
+)
+
+/* ===== 百度统计：发消息触达（每会话首次，reach 口径不看发送量） ===== */
+const trackedSendConversationIds = new Set<string>()
+
+// 监听当前会话最后一条消息（isSelf、非流式、非撤回、非通知）；
+// timestamp 新鲜度守卫：打开含漫游历史的会话时，历史己方消息不计为「发送」。
+// 已知取舍：本人在其他设备刚发的消息多设备同步进来也会被命中，demo 埋点口径接受该误差
+watch(
+  () => {
+    const cvsId = stores.conversation.currentConversationId
+    if (!cvsId) return null
+    const msgs = stores.message.getMessages(cvsId)
+    const last = msgs[msgs.length - 1]
+    if (!last || !last.isSelf || last.recalled || last.stream || last.type === 'notice') return null
+    if (Date.now() - last.timestamp > 10_000) return null
+    // 随 getter 一并返回消息类型：回调里不重读最后一条，避免期间对方秒回导致 label 串台
+    return { id: last.msgLocalId || last.msgServerId, type: last.type }
+  },
+  (msg) => {
+    if (!msg) return
+    const cvs = stores.conversation.currentConversation
+    if (!cvs || trackedSendConversationIds.has(cvs.id)) return
+    trackedSendConversationIds.add(cvs.id)
+    trackEvent('chat', 'send-message', msg.type)
   },
 )
 </script>

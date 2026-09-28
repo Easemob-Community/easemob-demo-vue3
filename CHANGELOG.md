@@ -15,6 +15,10 @@
 ### 新增
 
 - 接入百度统计：生产构建运行时注入 `hm.baidu.com` 统计脚本（`import.meta.env.PROD` 守卫，开发环境不计入统计）；站点 ID 为公开信息，硬编码于 `src/utils/analytics.ts`；CSP `script-src` 常驻加白 `hm.baidu.com`
+- 百度统计细化埋点（全部经 `src/utils/analytics.ts` 的 `trackPageview` / `trackEvent`，仅生产上报、脚本被拦截时静默跳过）：
+  - SPA 路由切换 pageview 上报（`router.afterEach`，跳过初始导航避免与 hm.js 自动上报重复计数，按 `to.path` 聚合避免 query 拆散统计）
+  - 登录漏斗：`login` 域 `submit` / `success` / `fail` 事件，label 区分 `dev` / `phone` 模式；表单校验失败也记 `fail`（label 为固定枚举如 `dev:empty-field` / `phone:not-agreed`），请求失败的 label 附带截断的错误摘要
+  - 核心功能触达：每会话首次发送消息（`chat/send-message`，label 为消息类型，带 10s 新鲜度守卫避免漫游历史误报）、AI mock 流式应答触发（`chat/ai-reply`）、添加联系人成功（`contacts/add-contact`）、创建群组成功（`contacts/create-group`）
 
 ### 变更
 

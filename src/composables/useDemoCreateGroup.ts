@@ -1,6 +1,8 @@
 import { useGroup, useUIKit } from '@easemob-community/uikit-im'
 import type { CreateGroupParams } from '@easemob-community/uikit-im'
 
+import { trackEvent } from '@/utils/analytics'
+
 /**
  * 创建群组接管（EmCreateGroupModal 的 create-fn）：demo 造数时把群名改为
  * 「群组 + 创建日期时间」，便于区分多次创建的群。
@@ -25,6 +27,7 @@ export function useDemoCreateGroup() {
   async function demoCreateGroup(params: CreateGroupParams) {
     const name = formatGroupName()
     const result = await createGroup({ ...params, name })
+    trackEvent('contacts', 'create-group')
     setTimeout(() => stores.conversation.updateConversation(result.groupId, { name }), 0)
     return result
   }

@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n'
 import { EmAddContactModal, useToast } from '@easemob-community/uikit-im'
 
 import { useContactAdd } from '@/composables/useContactAdd'
+import { trackEvent } from '@/utils/analytics'
 
 /**
  * 添加联系人弹窗：复用 UIKit 内置 EmAddContactModal（单输入框 + 附言，无短信验证码链路）。
@@ -39,6 +40,7 @@ async function addFn(userId: string, message?: string): Promise<void> {
 
 function handleAdded() {
   showToast(t('contacts.addContact.addSuccess'), 'success')
+  trackEvent('contacts', 'add-contact')
   emit('added')
 }
 </script>

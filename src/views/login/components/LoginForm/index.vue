@@ -10,6 +10,7 @@ import { useSmsCode } from '@/composables/useSmsCode'
 import { captchaConfig } from '@/config/captcha'
 import { initAliyunCaptcha, resetAliyunCaptcha } from '@/api/sms'
 import { loginByPhoneApi, mapPhoneLoginError } from '@/api/user'
+import { trackEvent } from '@/utils/analytics'
 import { initUIKit } from '@/utils/uikit'
 // import LoginCaptcha from '../LoginCaptcha/index.vue'
 
@@ -140,9 +141,14 @@ async function handleGetSms() {
 
 async function handleLogin() {
   loginError.value = ''
+  // 百度统计登录漏斗：submit（点击意图）→ success / fail，按 dev / phone 区分模式
+  const modeLabel = props.devMode ? 'dev' : 'phone'
+  trackEvent('login', 'submit', modeLabel)
 
   if (props.devMode) {
     if (!devUserId.value.trim() || !devToken.value.trim()) {
+      // 漏斗口径：校验失败也记 fail（label 用固定枚举，不带原始报错）
+      trackEvent('login', 'fail', 'dev:empty-field')
       loginError.value = t('login.errorDevRequired')
       return
     }
@@ -162,8 +168,11 @@ async function handleLogin() {
       // 每次登录重置特性诱导展示（红点 + 广告弹层）
       useFeaturePromo().resetOnLogin()
       setDevConfig({ ...getDevConfig(), devUserId: trimmedUserId, devToken: trimmedToken })
+      trackEvent('login', 'success', modeLabel)
       await router.push('/chat')
     } catch (err) {
+      const raw = err instanceof Error ? err.message : 'unknown'
+      trackEvent('login', 'fail', `${modeLabel}:${raw.slice(0, 60)}`)
       loginError.value = err instanceof Error ? err.message : t('login.errorLoginFailed')
     } finally {
       loginLoading.value = false
@@ -172,6 +181,8 @@ async function handleLogin() {
   }
 
   if (!agreed.value) {
+    // 漏斗口径：校验失败也记 fail（label 用固定枚举，不带原始报错）
+    trackEvent('login', 'fail', 'phone:not-agreed')
     loginError.value = t('login.errorAgreeTerms')
     return
   }
@@ -198,9 +209,11 @@ async function handleLogin() {
     // 每次登录重置特性诱导展示（红点 + 广告弹层）
     useFeaturePromo().resetOnLogin()
 
+    trackEvent('login', 'success', modeLabel)
     await router.push('/chat')
   } catch (err) {
     const msg = err instanceof Error ? err.message : ''
+    trackEvent('login', 'fail', `${modeLabel}:${(msg || 'unknown').slice(0, 60)}`)
     loginError.value = msg ? mapPhoneLoginError(msg, phone.value) : t('login.errorLoginFailed')
   } finally {
     loginLoading.value = false

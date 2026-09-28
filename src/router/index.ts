@@ -3,6 +3,7 @@ import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 
 import i18n from '@/locales'
 import { useUserStore } from '@/store/modules/user'
+import { trackPageview } from '@/utils/analytics'
 
 NProgress.configure({ showSpinner: false })
 
@@ -77,8 +78,12 @@ router.beforeEach((to) => {
   return true
 })
 
-router.afterEach(() => {
+router.afterEach((to, from) => {
   NProgress.done()
+  // 百度统计 SPA pageview：首次加载由 hm.js 自动上报，这里只报后续路由切换
+  // （初始导航 from.name 为 undefined，跳过避免与自动上报重复计数；
+  //  用 to.path 而非 fullPath，避免 ?redirect=... 等 query 把同一页面拆成多条统计）
+  if (from.name) trackPageview(to.path)
 })
 
 export default router

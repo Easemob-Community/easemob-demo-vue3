@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import { setupBaiduAnalytics } from '@/utils/analytics'
+import { setupBaiduAnalytics, trackEvent, trackPageview } from '@/utils/analytics'
 
 describe('setupBaiduAnalytics', () => {
   afterEach(() => {
@@ -31,5 +31,53 @@ describe('setupBaiduAnalytics', () => {
     expect(script.tagName).toBe('SCRIPT')
     expect(script.src).toContain('hm.baidu.com/hm.js?fe4106b5ec311f704294a641def7bbb3')
     expect(script.async).toBe(true)
+  })
+})
+
+describe('trackPageview / trackEvent', () => {
+  afterEach(() => {
+    vi.unstubAllEnvs()
+    delete window._hmt
+  })
+
+  it('非生产环境不上报', () => {
+    vi.stubEnv('PROD', false)
+    window._hmt = []
+
+    trackPageview('/chat')
+    trackEvent('login', 'submit', 'phone')
+
+    expect(window._hmt).toEqual([])
+  })
+
+  it('生产环境且 hm.js 未加载（_hmt 不存在）时静默跳过不抛错', () => {
+    vi.stubEnv('PROD', true)
+
+    expect(() => {
+      trackPageview('/chat')
+      trackEvent('login', 'submit', 'phone')
+    }).not.toThrow()
+  })
+
+  it('trackPageview 上报 _trackPageview 与路径', () => {
+    vi.stubEnv('PROD', true)
+    window._hmt = []
+
+    trackPageview('/contacts')
+
+    expect(window._hmt).toEqual([['_trackPageview', '/contacts']])
+  })
+
+  it('trackEvent 带 label 与不带 label 的上报参数', () => {
+    vi.stubEnv('PROD', true)
+    window._hmt = []
+
+    trackEvent('login', 'submit', 'phone')
+    trackEvent('contacts', 'add-contact')
+
+    expect(window._hmt).toEqual([
+      ['_trackEvent', 'login', 'submit', 'phone'],
+      ['_trackEvent', 'contacts', 'add-contact'],
+    ])
   })
 })
