@@ -12,6 +12,15 @@
 
 ## [Unreleased]
 
+### 新增
+
+- H5 底部 tabbar 补充「设置」tab（路由 `/settings`），设置页顶部新增「特性控制台」入口（console 图标 + 诱导红点，点击打开设置抽屉，H5 占满主区）；此前 H5 下无任何路径可达设置页与特性控制台
+- H5 会话聊天态自动隐藏底部 tabbar（`useMobileTabbar` 模块级共享状态，聊天页 watch `hasCurrentConversation` + `isMobileView` 驱动，卸载兜底复位），避免顶起表情面板与输入区
+
+### 修复
+
+- H5 布局裸 `100vh` 补 `100dvh` 双声明兜底（layout 与登录页共 4 处），消除移动浏览器地址栏场景的高度误差（对齐 UIKit D55 口径）
+
 ## [0.5.1] - 2026-09-28
 
 ### 变更
