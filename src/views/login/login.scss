@@ -4,6 +4,8 @@
   position: relative;
   /* 满铺高度对页面缩放做补偿，始终铺满视口 */
   min-height: calc(100vh / var(--demo-page-zoom, 1));
+  /* dvh 兜底：移动浏览器地址栏伸缩场景按动态视口高度计算；不支持 dvh 时回退上一条 vh */
+  min-height: calc(100dvh / var(--demo-page-zoom, 1));
   width: 100%;
   display: flex;
   align-items: center;
@@ -134,6 +136,8 @@
     z-index: 10;
     width: 100%;
     min-height: calc(100vh / var(--demo-page-zoom, 1));
+    /* dvh 兜底：移动浏览器地址栏伸缩场景按动态视口高度计算；不支持 dvh 时回退上一条 vh */
+    min-height: calc(100dvh / var(--demo-page-zoom, 1));
     display: flex;
     align-items: center;
     justify-content: center;
