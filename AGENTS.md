@@ -85,6 +85,7 @@ pnpm release     # 正式打版：node scripts/release.mjs <major|minor|patch>�
 - **vue3-uikit 联调（源码方式，备选）**：需要直接调试 uikit 源码时，可在 `vite.config.ts` 的 `resolve.alias` 中将其指向源码目录（配置文件中有注释示例）。
 - **H5 适配**：桌面/H5 双模式响应式（`useMobileView` 768px 断点切换布局形态），样式统一直接写 px、不做 px→vw 转换（曾用 postcss-px-to-viewport，因双模式响应式下会放大桌面优先组件且转换量为 0 而移除，历史见 `.agent/skills/h5-adaptation`），安全区用 `safe-area-top/bottom` 工具类。细则见 `.agent/skills/h5-adaptation`。
 - **设备判断**：启动期决策用 `isMobile`（`src/utils/env.ts`，UA 静态判断），运行期交互/布局切换用 `useMobileView`（`src/composables/useMobileView.ts`，768px 断点，响应式），勿混用。细则见 `.agent/skills/h5-adaptation`。
+- **H5 会话聊天态隐藏底部 tabbar**：显隐状态由 `useMobileTabbar`（`src/composables/useMobileTabbar.ts`，模块级共享状态，暴露只读 `isTabbarHidden` 与 `hideTabbar`/`showTabbar`）管理；聊天页（`src/views/chat/index.vue`）watch 现有 `hasCurrentConversation` + `isMobileView` 驱动——进入会话聊天态隐藏 tabbar（避免顶起表情面板/输入区），返回列表态恢复，`onUnmounted` 兜底复位；`src/layout/index.vue` 底部 tabbar 渲染条件为 `isMobileView && !isTabbarHidden`，PC 下无影响。
 - **设置抽屉**：layout 主区右侧内置滑出抽屉（`src/layout/SettingsDrawer.vue`），开关由 `useSettingsDrawer`（`src/composables/useSettingsDrawer.ts`，模块级共享状态）控制；以挤占式布局展开（flex 兄弟节点宽度 0→360px 过渡动画，H5 占满主区），非遮盖，供 UIKit 特性设置按钮触发。
 - **特性诱导展示**：navbar 特性图标右下角的诱导红点与右侧广告弹层（资源 `src/assets/feature-promo.png`）由 `useFeaturePromo`（`src/composables/useFeaturePromo.ts`，模块级共享状态）控制；登录成功时 `resetOnLogin()` 重置为展示，点特性图标隐藏红点、点弹层右上角 X 关闭弹层，下一次登录再次展示（内存态，不落盘）。
 - **多语言**：`vue-i18n`，语言包在 `src/locales/`（zh-CN / en-US，key 需保持同步）；模板用 `$t`，脚本用 `useI18n()`。新增文案/语言的流程见 `.agent/skills/i18n`。

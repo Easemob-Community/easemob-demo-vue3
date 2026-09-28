@@ -19,6 +19,7 @@ import featurePromoCloseImg from '@/assets/feature-promo-close.svg'
 import CheckUpdates from '@/components/CheckUpdates.vue'
 import FeaturePromoTitle from '@/components/FeaturePromoTitle.vue'
 import { useFeaturePromo } from '@/composables/useFeaturePromo'
+import { useMobileTabbar } from '@/composables/useMobileTabbar'
 import { useMobileView } from '@/composables/useMobileView'
 import { useSettingsDrawer } from '@/composables/useSettingsDrawer'
 import { DEMO_AVATAR_CONFIG } from '@/config/demo'
@@ -28,6 +29,7 @@ import SettingsDrawer from './SettingsDrawer.vue'
 defineOptions({ name: 'AppLayout' })
 
 const isMobileView = useMobileView()
+const { isTabbarHidden } = useMobileTabbar()
 const { isOpen: isSettingsDrawerOpen, toggle: toggleSettingsDrawer } = useSettingsDrawer()
 const {
   showRedDot: showFeatureRedDot,
@@ -205,8 +207,8 @@ function handlePromoClick() {
       </Transition>
     </main>
 
-    <!-- H5：底部 tabbar 导航 -->
-    <nav v-if="isMobileView" class="app-layout__tabbar safe-area-bottom">
+    <!-- H5：底部 tabbar 导航（会话聊天态下隐藏，见 useMobileTabbar） -->
+    <nav v-if="isMobileView && !isTabbarHidden" class="app-layout__tabbar safe-area-bottom">
       <router-link v-for="tab in tabs" :key="tab.key" class="app-layout__tab" :to="tab.to">
         <EmBadge
           v-if="tab.key === 'chat' && totalUnread > 0"

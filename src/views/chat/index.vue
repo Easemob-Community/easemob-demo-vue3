@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, onUnmounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   EmChatContainer,
@@ -22,6 +22,7 @@ import EmptyStateNotice from '@/components/common/EmptyStateNotice.vue'
 import AddContactModal from '@/components/contact/AddContactModal.vue'
 import { useDemoCreateGroup } from '@/composables/useDemoCreateGroup'
 import { useDemoSettings } from '@/composables/useDemoSettings'
+import { useMobileTabbar } from '@/composables/useMobileTabbar'
 import { useMobileView } from '@/composables/useMobileView'
 import { useSidebarWidth } from '@/composables/useSidebarWidth'
 import { getMockAiReply, simulateStreamMessage } from '@/composables/useStreamDemo'
@@ -121,6 +122,23 @@ const takeoverTabLabels = computed<Record<string, string>>(() => ({
 function backToConversationList() {
   leaveConversation()
 }
+
+/* ===== H5 会话聊天态隐藏底部 tabbar（复用 hasCurrentConversation 驱动，不新造平行状态） ===== */
+const { hideTabbar, showTabbar } = useMobileTabbar()
+
+// 仅 H5 生效：进入会话聊天态隐藏 tabbar（避免顶起表情面板 / 输入区），返回列表态恢复；
+// PC 下 tabbar 本就不渲染，此处始终保持显示态、无影响
+watch(
+  [hasCurrentConversation, isMobileView],
+  ([inChat, mobile]) => {
+    if (mobile && inChat) hideTabbar()
+    else showTabbar()
+  },
+  { immediate: true },
+)
+
+// 离开聊天页兜底复位，避免其他页面 tabbar 消失
+onUnmounted(showTabbar)
 
 /* ===== 防诈骗提示条（#notice 插槽，关闭态仅当前会话内隐藏，切换会话重新展示——对齐 React demo 行为） ===== */
 const { success: showToastSuccess } = useToast()
