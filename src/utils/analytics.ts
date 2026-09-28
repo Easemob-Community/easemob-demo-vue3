@@ -29,10 +29,19 @@ export function trackPageview(path: string): void {
 }
 
 /**
- * 自定义事件上报（后台「事件分析」报表，category/action/label 三级钻取，无需后台预配置）。
+ * 自定义事件上报：以「虚拟页面」pageview 形式推送到 `/event/<category>/<action>[/<label>]`。
+ * 原因：百度统计 2024-02 起「事件分析」报表转为付费功能，免费版仅「受访页面」报表可见，
+ * 故事件伪装成 /event/ 前缀的虚拟页面路径，报表内按该前缀过滤即可与真实页面区分。
  * 仅生产环境生效；hm.js 未加载或被广告拦截时静默跳过
  */
 export function trackEvent(category: string, action: string, label?: string): void {
   if (!import.meta.env.PROD) return
-  window._hmt?.push(['_trackEvent', category, action, ...(label !== undefined ? [label] : [])])
+  window._hmt?.push(['_trackPageview', toVirtualEventPath(category, action, label)])
+}
+
+/** 事件参数拼虚拟页面路径；/ ? # 空白等会破坏路径结构的字符统一替换为 -，单段截断防超长 */
+function toVirtualEventPath(category: string, action: string, label?: string): string {
+  const seg = (s: string) => s.replace(/[/?#\s]+/g, '-').slice(0, 60)
+  const safeLabel = label ? seg(label) : ''
+  return `/event/${seg(category)}/${seg(action)}${safeLabel ? `/${safeLabel}` : ''}`
 }

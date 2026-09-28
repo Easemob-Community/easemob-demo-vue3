@@ -68,7 +68,7 @@ describe('trackPageview / trackEvent', () => {
     expect(window._hmt).toEqual([['_trackPageview', '/contacts']])
   })
 
-  it('trackEvent 带 label 与不带 label 的上报参数', () => {
+  it('trackEvent 以虚拟页面 pageview 上报（带 label 与不带 label）', () => {
     vi.stubEnv('PROD', true)
     window._hmt = []
 
@@ -76,8 +76,21 @@ describe('trackPageview / trackEvent', () => {
     trackEvent('contacts', 'add-contact')
 
     expect(window._hmt).toEqual([
-      ['_trackEvent', 'login', 'submit', 'phone'],
-      ['_trackEvent', 'contacts', 'add-contact'],
+      ['_trackPageview', '/event/login/submit/phone'],
+      ['_trackPageview', '/event/contacts/add-contact'],
+    ])
+  })
+
+  it('trackEvent 会替换 label 中破坏路径结构的字符并截断超长段', () => {
+    vi.stubEnv('PROD', true)
+    window._hmt = []
+
+    trackEvent('login', 'fail', 'dev:a/b?c#d e')
+    trackEvent('login', 'fail', 'x'.repeat(100))
+
+    expect(window._hmt).toEqual([
+      ['_trackPageview', '/event/login/fail/dev:a-b-c-d-e'],
+      ['_trackPageview', `/event/login/fail/${'x'.repeat(60)}`],
     ])
   })
 })
