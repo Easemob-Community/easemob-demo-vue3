@@ -247,8 +247,8 @@ export const DEMO_ICON_SIZE = {
 
 /** ===== UIKit 文档配置 ===== */
 export const DEMO_UIKIT_DOCS_CONFIG = {
-  /** UIKit 使用文档地址：「更多」面板跳转查看详细配置（官方文档，新标签页打开） */
-  url: 'https://doc.easemob.com/uikit/chatuikit/web/chatuikit_integrated_vue.html',
+  /** UIKit 使用文档地址：「更多」面板跳转查看详细配置（Vue3 UIKit 文档站，新标签页打开） */
+  url: 'https://webim-vue-uikit-docs.easemob.com/',
 } as const
 
 /** ===== 布局配置 ===== */
