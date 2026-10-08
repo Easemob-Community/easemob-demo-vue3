@@ -12,9 +12,12 @@
 
 ## [Unreleased]
 
+## [0.6.3] - 2026-10-08
+
 ### 变更
 
 - 升级 `@easemob-community/uikit-im` 至 `^3.10.0`（uikit-core 2.10.0）：H5 长按消息操作面板（ActionSheet）支持高频操作网格分区（`gridActionTypes`，默认引用/复制/转发/下载收拢到顶部图标网格，传 `[]` 关闭）；EmActionSheet 新增 `expandable` 半屏/展开双档拖拽（drag handle 上拉 50dvh→78dvh 吸附）；H5 点击消息区空白时失焦输入框并收起软键盘/表情面板（message-input / h5-input 暴露 `blur()`）
+
 
 ## [0.6.2] - 2026-09-28
 
