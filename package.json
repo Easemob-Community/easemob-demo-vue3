@@ -19,8 +19,8 @@
     "release": "node scripts/release.mjs"
   },
   "dependencies": {
-    "@easemob-community/uikit-im": "^3.10.0",
-    "@easemob-community/uikit-sdk-websdk5": "^1.3.4",
+    "@easemob-community/uikit-im": "^3.11.0",
+    "@easemob-community/uikit-sdk-websdk5": "^1.5.0",
     "@vueuse/core": "^14.4.0",
     "axios": "^1.19.0",
     "dayjs": "^1.11.23",
