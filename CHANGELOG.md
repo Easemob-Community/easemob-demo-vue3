@@ -12,6 +12,10 @@
 
 ## [Unreleased]
 
+### 变更
+
+- 升级 `@easemob-community/uikit-im` 至 `^3.11.0`（uikit-core 2.11.0、uikit-sdk-websdk5 ^1.5.0、sdk-contract 1.4.0）：支持 SDK 5.1+ 的 App ID 模式（Provider / init config 新增 `appId`，与 `appKey` 二选一，经 DNSConfig 解析、不可配固定 serverUrls，webim4 / SDK 4.x 不支持）；`sdkConfig` 新增 `loginTimeoutMs` 登录超时可配（SDK 5.1.2+，缺省走 SDK 默认 30s）
+
 ## [0.6.3] - 2026-10-08
 
 ### 变更
