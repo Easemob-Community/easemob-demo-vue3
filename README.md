@@ -4,6 +4,8 @@ Easemob Demo Vue3 是基于环信 IM SDK构建的 Web 即时通讯 Demo，为开
 
 ## ⚡ 快速上手：接入你自己的环信应用
 
+> 从零跑通 Demo（环境要求 → 获取 Demo → 安装运行 → 发单聊/群聊消息）的完整图文步骤见 [`docs/quick-start/`](docs/quick-start/README.md)。
+
 想把本 Demo 改造成连接**自己的环信应用**？只需三步：换 AppKey → 创建用户 → 登录。全程在开发模式（`pnpm dev`）下即可完成，无需改动核心代码。
 
 ### 前置准备
@@ -36,7 +38,7 @@ VITE_APP_KEY=你的orgName#你的appName
 环信 IM 的用户体系挂在应用（AppKey）之下，本 Demo 不含注册页面。在你自己的应用下创建用户有两种途径：
 
 - **环信控制台**：进入你的应用 →「用户管理」→ 创建用户（设置用户 ID 与密码）；
-- **服务端 REST API**：调用环信服务端接口注册用户（详见[环信文档中心](https://docs.easemob.com)，搜索「用户体系集成 / 注册用户」）。
+- **服务端 REST API**：调用环信服务端接口注册用户（详见[环信文档中心](https://doc.easemob.com/document/server-side/account_register_authorized_single.html)）。
 
 ### 第三步：登录
 
