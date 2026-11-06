@@ -37,13 +37,16 @@ import {
 
 defineOptions({ name: 'ChatPage' })
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const isMobileView = useMobileView()
 const { isMobile } = useViewport()
-const { currentConversation, leaveConversation } = useConversation()
+const { currentConversation, leaveConversation, refreshConversationPreviews } = useConversation()
 const { demoCreateGroup } = useDemoCreateGroup()
 
 const hasCurrentConversation = computed(() => !!currentConversation.value)
+
+// 进入页面及切换语言时仅重算摘要，不覆盖草稿、免打扰、名称、头像或本地独有会话
+watch(locale, () => refreshConversationPreviews(), { immediate: true })
 
 /* ===== 会话UIKit 特性开关配置（由特性抽屉「会话」面板驱动） ===== */
 const {

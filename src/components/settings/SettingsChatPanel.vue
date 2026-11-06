@@ -5,7 +5,7 @@
  * 按设计图一比一还原，包含：
  * - 输入框模式（简洁 / 富文本）
  * - 功能栏位置（底部 / 顶部）
- * - 输入框功能（Emoji / 图片 / 文件 / 语音 / 视频 / ＠提及）
+ * - 输入框功能（Emoji / 图片 / 文件 / 语音 / 视频 / 复合消息 / ＠提及）
  * - 输入框扩展配置（自动聚焦、聚焦边框色、光标颜色、选中背景色、最大长度）
  * - 群已读回执（启用、人数上限）
  * - 消息列表（消息搜索、服务端搜索、时间戳展示、状态文本、位置）
@@ -43,7 +43,7 @@ const {
   resetChatSettings,
 } = useDemoSettings()
 
-const FEATURE_KEYS = ['emoji', 'image', 'file', 'voice', 'video', 'mention'] as const
+const FEATURE_KEYS = ['emoji', 'image', 'file', 'voice', 'video', 'multiBody', 'mention'] as const
 
 const MESSAGE_ACTION_KEYS = [
   'enableQuote',

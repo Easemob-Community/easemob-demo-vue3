@@ -22,6 +22,7 @@ describe('useDemoSettings（会话UIKIT特性开关）', () => {
     expect(settings.chatInputMode.value).toBe('simple')
     expect(settings.chatInputStyle.value).toBe('toolbar-top')
     expect(settings.chatInputFeatures.value.emoji).toBe(true)
+    expect(settings.chatInputFeatures.value.multiBody).toBe(true)
     expect(settings.groupReadReceiptEnabled.value).toBe(false)
     expect(settings.chatMessageSearchEnabled.value).toBe(false)
     expect(settings.contactShowHomeSearch.value).toBe(true)
@@ -100,6 +101,7 @@ describe('useDemoSettings（会话UIKIT特性开关）', () => {
       file: false,
       voice: false,
       video: false,
+      multiBody: false,
       mention: false,
     }
     settings.chatInputAutoFocus.value = true
@@ -135,6 +137,7 @@ describe('useDemoSettings（会话UIKIT特性开关）', () => {
     expect(settings.chatInputMode.value).toBe('simple')
     expect(settings.chatInputStyle.value).toBe('toolbar-top')
     expect(settings.chatInputFeatures.value.emoji).toBe(true)
+    expect(settings.chatInputFeatures.value.multiBody).toBe(true)
     expect(settings.chatInputAutoFocus.value).toBe(false)
     expect(settings.chatInputFocusBorderColor.value).toBe('')
     expect(settings.chatInputMaxLength.value).toBe(0)

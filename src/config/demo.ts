@@ -1,6 +1,8 @@
 import type { EmojiStickerPack } from '@easemob-community/uikit-im'
 import type { UiContact } from '@easemob-community/uikit-im'
 
+import { HUANXIN_EMOJI_META, buildDemoStickerExt, resolveStickerLastMessageText } from './sticker'
+
 /**
  * 项目 Demo 配置常量
  *
@@ -157,26 +159,6 @@ export const DEMO_CUSTOM_CONTACTS: UiContact[] = [
   { userId: 'bob', name: 'Bob', remark: 'Bob' },
 ]
 
-/**
- * 环信内置表情包：key 语义标签映射。
- * 文件名约定：{key}.gif 为实际动图、{key}-封面.jpg 为预览图。
- */
-const HUANXIN_EMOJI_META: Array<{ key: string; name: string }> = [
-  { key: 'biubiu', name: '亮个相吧' },
-  { key: 'caffe', name: '辛苦啦' },
-  { key: 'debug', name: 'Bug终结者' },
-  { key: 'dont_wanna', name: '你说神嘛' },
-  { key: 'error', name: '报错了' },
-  { key: 'like', name: '真棒' },
-  { key: 'insane', name: '厉害' },
-  { key: 'jajaja', name: '笑死' },
-  { key: 'likes', name: '真棒棒' },
-  { key: 'success', name: '成功啦' },
-  { key: 'roll_out', name: '上线了' },
-  { key: 'OKDK', name: '好的收到' },
-  { key: 'thanks', name: '谢谢老板' },
-]
-
 /** 环信表情资源（glob：*.gif 为动图、*.jpg 为预览图，query ?url 得到资源地址） */
 const huanxinGifs = import.meta.glob('../assets/emojis/huanxin/*.gif', { eager: true, query: '?url', import: 'default' })
 const huanxinCovers = import.meta.glob('../assets/emojis/huanxin/*-封面.jpg', { eager: true, query: '?url', import: 'default' })
@@ -205,11 +187,14 @@ export const DEMO_STICKER_PACKS: EmojiStickerPack[] = [
  * 通过 EmChatContainer 的 `config` prop 传入（PC / H5 布局共用）。
  */
 export const DEMO_CHAT_CONFIG = {
+  lastMessageTextResolver: resolveStickerLastMessageText,
   input: {
     /** 输入框是否显示发送按钮：对齐 UIKit demo，默认关闭（回车发送） */
     showSendButton: false,
     /** 自定义 GIF 表情包，注入到 emoji picker 的 sticker 标签页 */
     stickerPacks: DEMO_STICKER_PACKS,
+    /** Demo 业务编码；通用 isSticker 标记仍由 UIKit 写入 */
+    stickerExt: buildDemoStickerExt,
     /** Emoji 面板配置：表情视图 tab 使用自定义图标（替换默认文字「表情」） */
     emoji: {
       emojiIcon: new URL('../assets/emojis/emoji-tab-icon.png', import.meta.url).href,

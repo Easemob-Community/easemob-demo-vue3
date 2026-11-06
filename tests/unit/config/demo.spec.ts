@@ -68,6 +68,14 @@ describe('DEMO_CHAT_CONFIG（EmChatContainer 聊天页面配置，对齐 UIKit d
     expect(DEMO_STICKER_PACKS[0].stickers[0].url).toContain('.gif')
     expect(DEMO_STICKER_PACKS[0].stickers[0].thumbUrl).toContain('.jpg')
   })
+
+  it('由 Demo 扩展字段生成稳定 stickerCode，不重复维护 UIKit 的 isSticker', () => {
+    const sticker = DEMO_STICKER_PACKS[0].stickers[0]
+
+    expect(DEMO_CHAT_CONFIG.input.stickerExt?.(sticker, 'huanxin')).toEqual({
+      stickerCode: 'huanxin.biubiu',
+    })
+  })
 })
 
 describe('组件静态属性配置（uikit 组件模板中的静态值）', () => {

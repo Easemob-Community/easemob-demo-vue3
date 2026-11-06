@@ -27,6 +27,27 @@ export default {
   },
   chat: {
     watermark: 'Easemob Demo · For reference only · Beware of scams!',
+    messagePreview: {
+      image: 'Image',
+    },
+    sticker: {
+      fallback: 'Animated Sticker',
+      huanxin: {
+        biubiu: 'Ta-da!',
+        caffe: 'Thanks for Your Hard Work',
+        debug: 'Bug Slayer',
+        dont_wanna: 'What Did You Say?',
+        error: 'Something Went Wrong',
+        like: 'Awesome!',
+        insane: 'Impressive!',
+        jajaja: 'LOL',
+        likes: 'So Awesome!',
+        success: 'Success!',
+        roll_out: "It's Live!",
+        OKDK: 'Got It!',
+        thanks: 'Thanks, Boss!',
+      },
+    },
     antiFraud: {
       title: 'Easemob IM Demo | For feature trial only | Data cleared daily at 00:00',
       text: 'Do not trust messages about transfers, remittances, or prizes. Be cautious with calls from unknown numbers. Report suspicious activity immediately.',
@@ -271,10 +292,11 @@ export default {
         file: 'File',
         voice: 'Voice',
         video: 'Video',
+        multiBody: 'Multi-body (PC)',
         mention: '＠Mention',
       },
       inputFeaturesDesc:
-        'Controls which capability buttons are shown in the input toolbar; unchecking hides the corresponding button and disables the feature',
+        'Controls input capabilities. Multi-body editing and sending are PC-only; disable it to send separate regular messages. H5 still renders received multi-body messages',
       inputExtra: 'Input Extra Config',
       inputAutoFocus: 'Auto Focus',
       focusBorderColor: 'Focus Border Color (default theme)',

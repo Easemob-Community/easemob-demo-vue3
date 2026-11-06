@@ -1,15 +1,19 @@
 import { describe, expect, it, vi } from 'vitest'
 
 import { initUIKit } from '@/utils/uikit'
+import { resolveStickerLastMessageText } from '@/config/sticker'
 
 describe('initUIKit', () => {
-  it('appKey 非空时以 { appKey } 调用 init', async () => {
+  it('appKey 非空时注入 appKey 和统一消息摘要 resolver', async () => {
     const init = vi.fn().mockResolvedValue(undefined)
 
     await initUIKit(init, 'test-app-key')
 
     expect(init).toHaveBeenCalledTimes(1)
-    expect(init).toHaveBeenCalledWith({ appKey: 'test-app-key' })
+    expect(init).toHaveBeenCalledWith({
+      appKey: 'test-app-key',
+      adapterConfig: { lastMessageTextResolver: resolveStickerLastMessageText },
+    })
   })
 
   it('appKey 为空时抛错且不调用 init', async () => {

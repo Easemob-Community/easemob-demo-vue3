@@ -12,6 +12,19 @@
 
 ## [Unreleased]
 
+### 新增
+
+- GIF 动画表情消息采用 `ext.isSticker + ext.stickerCode` 业务协议：13 个环信表情支持中英文会话摘要，历史、未知或异常编码按当前语言兜底；语言切换及快照恢复时仅重算现有会话摘要，保留草稿、免打扰、名称、头像和本地独有会话
+- UIKit 特性控制台「聊天 → 输入框功能」新增复合消息开关，默认开启且重置后恢复开启；PC simple/rich 可编辑和发送复合消息，关闭后恢复普通分开发送，H5 保留接收渲染
+
+### 变更
+
+- 升级 `@easemob-community/uikit-im` 至 `^3.12.0`、`@easemob-community/uikit-sdk-websdk5` 至 `^1.6.0`（uikit-core 2.12.0、sdk-contract 1.5.0），传递依赖 `easemob-websdk` 升至 5.2.0；移除本地 sticker tgz 与 contract override，统一使用 npm registry 正式产物
+
+### 文档
+
+- 新增 GIF 动画表情消息协议与 Demo 快速上手指南，覆盖单聊、群聊、AppKey/token 配置和常见问题
+
 ## [0.6.4] - 2026-10-09
 
 ### 变更

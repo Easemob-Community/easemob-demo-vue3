@@ -1,5 +1,7 @@
 import type { useClient } from '@easemob-community/uikit-im'
 
+import { resolveStickerLastMessageText } from '@/config/sticker'
+
 type ClientInit = ReturnType<typeof useClient>['init']
 
 /**
@@ -13,5 +15,8 @@ export async function initUIKit(init: ClientInit, appKey: string): Promise<void>
   if (!appKey) {
     throw new Error('AppKey 未配置，无法初始化 IM SDK')
   }
-  await init({ appKey })
+  await init({
+    appKey,
+    adapterConfig: { lastMessageTextResolver: resolveStickerLastMessageText },
+  })
 }

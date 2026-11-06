@@ -33,3 +33,7 @@ dist-ssr
 
 # TypeScript
 *.tsbuildinfo
+
+# Local documentation archives and agent process drafts
+/docs/quick-start.zip
+/docs/superpowers/
