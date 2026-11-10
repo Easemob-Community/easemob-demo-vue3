@@ -9,11 +9,11 @@ importers:
   .:
     dependencies:
       '@easemob-community/uikit-im':
-        specifier: ^3.12.0
-        version: 3.12.0(@easemob-community/uikit-sdk-websdk5@1.6.0(pinia@4.0.3(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.41(typescript@5.9.3)))(vue@3.5.41(typescript@5.9.3)))(@floating-ui/dom@1.8.0)(@tiptap/core@3.31.4(@tiptap/pm@3.31.4))(@tiptap/pm@3.31.4)(pinia@4.0.3(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.41(typescript@5.9.3)))(vue@3.5.41(typescript@5.9.3))
+        specifier: ^3.12.1
+        version: 3.12.1(@easemob-community/uikit-sdk-websdk5@1.6.2(pinia@4.0.3(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.41(typescript@5.9.3)))(vue@3.5.41(typescript@5.9.3)))(@floating-ui/dom@1.8.0)(@tiptap/core@3.31.4(@tiptap/pm@3.31.4))(@tiptap/pm@3.31.4)(pinia@4.0.3(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.41(typescript@5.9.3)))(vue@3.5.41(typescript@5.9.3))
       '@easemob-community/uikit-sdk-websdk5':
-        specifier: ^1.6.0
-        version: 1.6.0(pinia@4.0.3(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.41(typescript@5.9.3)))(vue@3.5.41(typescript@5.9.3))
+        specifier: ^1.6.2
+        version: 1.6.2(pinia@4.0.3(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.41(typescript@5.9.3)))(vue@3.5.41(typescript@5.9.3))
       '@vueuse/core':
         specifier: ^14.4.0
         version: 14.4.0(vue@3.5.41(typescript@5.9.3))
@@ -150,11 +150,11 @@ packages:
       '@easemob-community/uikit-sdk-websdk5':
         optional: true
 
-  '@easemob-community/uikit-im@3.12.0':
-    resolution: {integrity: sha512-pP6CP2FFAu/+USmSlgQ81q27IBsa0qzs+OeL9QKW03I4De6WCIZS6nBByJ4pznda1bqDr+DdCM7iFDLNIPNDoA==}
+  '@easemob-community/uikit-im@3.12.1':
+    resolution: {integrity: sha512-DRqitVkCDurZsafoTsz/MD9RdDGuzXiDETiocq7VfmMeyAGurVNybT74s7WLzeKQBsvASEmQ/G0AjN0ag76xYw==}
     peerDependencies:
-      '@easemob-community/uikit-sdk-webim4': ^1.4.1
-      '@easemob-community/uikit-sdk-websdk5': ^1.6.0
+      '@easemob-community/uikit-sdk-webim4': ^1.4.3
+      '@easemob-community/uikit-sdk-websdk5': ^1.6.2
       pinia: ^2.1.0 || ^4.0.0
       vue: ^3.3.0
     peerDependenciesMeta:
@@ -166,8 +166,11 @@ packages:
   '@easemob-community/uikit-sdk-contract@1.5.0':
     resolution: {integrity: sha512-IeeBXko7wcUSINnTqpXQX+4+d8+1PjlAk1YVYg2mDPxOvuM8xfkkOmVhuVKXUwAQHtGyeg3PsTIykvftd5NJ5Q==}
 
-  '@easemob-community/uikit-sdk-websdk5@1.6.0':
-    resolution: {integrity: sha512-Jx4l75EkSFKxKoMKKtpUaYeK+uLWd2COgm5sZrWbxev5OHR6pKL6Odfcw8u9vFNi02t93qB99vr8idPOgaF7bQ==}
+  '@easemob-community/uikit-sdk-contract@1.5.1':
+    resolution: {integrity: sha512-HAcYnXxHNlMcZDlHQKuDMe0kQ+XrfjRttjxbK6oxD8GinAzG2uf3GOyl7yQ1wUgsqhE77MlGhXpQz3LoMk98Wg==}
+
+  '@easemob-community/uikit-sdk-websdk5@1.6.2':
+    resolution: {integrity: sha512-hgL9DmEJvY0jrvrZqLHIMlZ71XOz5mCeBqI0Q0ahA4nMaKcnpoqFE91lsS6spG9qobEx7suTS9jM50qsj+aB7A==}
     peerDependencies:
       pinia: ^2.1.0 || ^4.0.0
       vue: ^3.3.0
@@ -1851,19 +1854,19 @@ snapshots:
       '@babel/helper-string-parser': 8.0.0
       '@babel/helper-validator-identifier': 8.0.4
 
-  '@easemob-community/uikit-core@2.12.0(@easemob-community/uikit-sdk-websdk5@1.6.0(pinia@4.0.3(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.41(typescript@5.9.3)))(vue@3.5.41(typescript@5.9.3)))(pinia@4.0.3(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.41(typescript@5.9.3)))(vue@3.5.41(typescript@5.9.3))':
+  '@easemob-community/uikit-core@2.12.0(@easemob-community/uikit-sdk-websdk5@1.6.2(pinia@4.0.3(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.41(typescript@5.9.3)))(vue@3.5.41(typescript@5.9.3)))(pinia@4.0.3(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.41(typescript@5.9.3)))(vue@3.5.41(typescript@5.9.3))':
     dependencies:
       '@easemob-community/uikit-sdk-contract': 1.5.0
       '@vueuse/core': 14.4.0(vue@3.5.41(typescript@5.9.3))
       pinia: 4.0.3(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.41(typescript@5.9.3))
       vue: 3.5.41(typescript@5.9.3)
     optionalDependencies:
-      '@easemob-community/uikit-sdk-websdk5': 1.6.0(pinia@4.0.3(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.41(typescript@5.9.3)))(vue@3.5.41(typescript@5.9.3))
+      '@easemob-community/uikit-sdk-websdk5': 1.6.2(pinia@4.0.3(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.41(typescript@5.9.3)))(vue@3.5.41(typescript@5.9.3))
 
-  '@easemob-community/uikit-im@3.12.0(@easemob-community/uikit-sdk-websdk5@1.6.0(pinia@4.0.3(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.41(typescript@5.9.3)))(vue@3.5.41(typescript@5.9.3)))(@floating-ui/dom@1.8.0)(@tiptap/core@3.31.4(@tiptap/pm@3.31.4))(@tiptap/pm@3.31.4)(pinia@4.0.3(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.41(typescript@5.9.3)))(vue@3.5.41(typescript@5.9.3))':
+  '@easemob-community/uikit-im@3.12.1(@easemob-community/uikit-sdk-websdk5@1.6.2(pinia@4.0.3(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.41(typescript@5.9.3)))(vue@3.5.41(typescript@5.9.3)))(@floating-ui/dom@1.8.0)(@tiptap/core@3.31.4(@tiptap/pm@3.31.4))(@tiptap/pm@3.31.4)(pinia@4.0.3(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.41(typescript@5.9.3)))(vue@3.5.41(typescript@5.9.3))':
     dependencies:
-      '@easemob-community/uikit-core': 2.12.0(@easemob-community/uikit-sdk-websdk5@1.6.0(pinia@4.0.3(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.41(typescript@5.9.3)))(vue@3.5.41(typescript@5.9.3)))(pinia@4.0.3(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.41(typescript@5.9.3)))(vue@3.5.41(typescript@5.9.3))
-      '@easemob-community/uikit-sdk-contract': 1.5.0
+      '@easemob-community/uikit-core': 2.12.0(@easemob-community/uikit-sdk-websdk5@1.6.2(pinia@4.0.3(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.41(typescript@5.9.3)))(vue@3.5.41(typescript@5.9.3)))(pinia@4.0.3(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.41(typescript@5.9.3)))(vue@3.5.41(typescript@5.9.3))
+      '@easemob-community/uikit-sdk-contract': 1.5.1
       '@tiptap/extension-image': 3.31.4(@tiptap/core@3.31.4(@tiptap/pm@3.31.4))
       '@tiptap/starter-kit': 3.31.4
       '@tiptap/vue-3': 3.31.4(@floating-ui/dom@1.8.0)(@tiptap/core@3.31.4(@tiptap/pm@3.31.4))(@tiptap/pm@3.31.4)(vue@3.5.41(typescript@5.9.3))
@@ -1871,7 +1874,7 @@ snapshots:
       pinia: 4.0.3(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.41(typescript@5.9.3))
       vue: 3.5.41(typescript@5.9.3)
     optionalDependencies:
-      '@easemob-community/uikit-sdk-websdk5': 1.6.0(pinia@4.0.3(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.41(typescript@5.9.3)))(vue@3.5.41(typescript@5.9.3))
+      '@easemob-community/uikit-sdk-websdk5': 1.6.2(pinia@4.0.3(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.41(typescript@5.9.3)))(vue@3.5.41(typescript@5.9.3))
     transitivePeerDependencies:
       - '@floating-ui/dom'
       - '@tiptap/core'
@@ -1879,9 +1882,11 @@ snapshots:
 
   '@easemob-community/uikit-sdk-contract@1.5.0': {}
 
-  '@easemob-community/uikit-sdk-websdk5@1.6.0(pinia@4.0.3(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.41(typescript@5.9.3)))(vue@3.5.41(typescript@5.9.3))':
+  '@easemob-community/uikit-sdk-contract@1.5.1': {}
+
+  '@easemob-community/uikit-sdk-websdk5@1.6.2(pinia@4.0.3(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.41(typescript@5.9.3)))(vue@3.5.41(typescript@5.9.3))':
     dependencies:
-      '@easemob-community/uikit-sdk-contract': 1.5.0
+      '@easemob-community/uikit-sdk-contract': 1.5.1
       easemob-websdk: 5.2.0
       pinia: 4.0.3(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.41(typescript@5.9.3))
       vue: 3.5.41(typescript@5.9.3)
