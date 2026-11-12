@@ -61,8 +61,8 @@ function applyZoom(value: number) {
   if (typeof document === 'undefined') return
   const rootStyle = document.documentElement.style
   rootStyle.setProperty('zoom', String(value / 100))
-  // CSS zoom 下 vh 单位按未缩放视口解析（与浏览器原生缩放不同），会导致满铺高度
-  // 在缩小档底部留白；这里写一份缩放系数，满铺高度以 calc(100vh / var(--demo-page-zoom)) 补偿
+  // CSS zoom 下视口单位按未缩放视口解析（与浏览器原生缩放不同），会导致满铺高度
+  // 在缩小档底部留白；这里写一份缩放系数，满铺高度除以 var(--demo-page-zoom) 补偿
   rootStyle.setProperty('--demo-page-zoom', String(value / 100))
 }
 
