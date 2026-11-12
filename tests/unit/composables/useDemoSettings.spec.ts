@@ -91,6 +91,22 @@ describe('useDemoSettings（会话UIKIT特性开关）', () => {
     expect(settings.conversationTabs.value.length).toBeGreaterThan(1)
   })
 
+  it('聊天顶部横幅默认显示，重置聊天设置后恢复显示', () => {
+    const settings = useDemoSettings()
+
+    expect(settings.chatPinnedBarVisible).toBeDefined()
+    expect(settings.chatGroupAnnouncementBarVisible).toBeDefined()
+    expect(settings.chatPinnedBarVisible.value).toBe(true)
+    expect(settings.chatGroupAnnouncementBarVisible.value).toBe(true)
+
+    settings.chatPinnedBarVisible.value = false
+    settings.chatGroupAnnouncementBarVisible.value = false
+    settings.resetChatSettings()
+
+    expect(settings.chatPinnedBarVisible.value).toBe(true)
+    expect(settings.chatGroupAnnouncementBarVisible.value).toBe(true)
+  })
+
   it('resetChatSettings 重置聊天状态为默认值', () => {
     const settings = useDemoSettings()
     settings.chatInputMode.value = 'rich'

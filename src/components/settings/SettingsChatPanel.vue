@@ -8,7 +8,7 @@
  * - 输入框功能（Emoji / 图片 / 文件 / 语音 / 视频 / 复合消息 / ＠提及）
  * - 输入框扩展配置（自动聚焦、聚焦边框色、光标颜色、选中背景色、最大长度）
  * - 群已读回执（启用、人数上限）
- * - 消息列表（消息搜索、服务端搜索、时间戳展示、状态文本、位置）
+ * - 消息列表（顶部横幅、消息搜索、服务端搜索、时间戳展示、状态文本、位置）
  * - 一键重置
  *
  * 状态来自 useDemoSettings，由 chat/index.vue 绑定到 EmChatContainer。
@@ -31,6 +31,8 @@ const {
   chatInputMaxLength,
   groupReadReceiptEnabled,
   groupReadReceiptMaxSize,
+  chatPinnedBarVisible,
+  chatGroupAnnouncementBarVisible,
   chatShowTime,
   chatMessageSearchEnabled,
   chatMessageServerSearchEnabled,
@@ -311,6 +313,38 @@ const MESSAGE_ACTION_KEYS = [
       <h3 class="settings-chat-panel__section-title">
         {{ t('features.chat.messageList') }}
       </h3>
+
+      <div class="settings-chat-panel__row">
+        <span class="settings-chat-panel__label">
+          {{ t('features.chat.showPinnedBar') }}
+        </span>
+        <button
+          type="button"
+          class="settings-chat-panel__switch"
+          :class="{ 'settings-chat-panel__switch--active': chatPinnedBarVisible }"
+          :aria-checked="chatPinnedBarVisible"
+          role="switch"
+          @click="chatPinnedBarVisible = !chatPinnedBarVisible"
+        >
+          <span class="settings-chat-panel__switch-thumb" />
+        </button>
+      </div>
+
+      <div class="settings-chat-panel__row">
+        <span class="settings-chat-panel__label">
+          {{ t('features.chat.showGroupAnnouncementBar') }}
+        </span>
+        <button
+          type="button"
+          class="settings-chat-panel__switch"
+          :class="{ 'settings-chat-panel__switch--active': chatGroupAnnouncementBarVisible }"
+          :aria-checked="chatGroupAnnouncementBarVisible"
+          role="switch"
+          @click="chatGroupAnnouncementBarVisible = !chatGroupAnnouncementBarVisible"
+        >
+          <span class="settings-chat-panel__switch-thumb" />
+        </button>
+      </div>
 
       <div class="settings-chat-panel__row">
         <span class="settings-chat-panel__label">

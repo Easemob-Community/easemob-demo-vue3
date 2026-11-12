@@ -298,6 +298,8 @@ export default {
       groupReadReceiptMaxSize: '人数上限',
       groupReadReceiptMaxSizePlaceholder: '200',
       messageList: '消息列表',
+      showPinnedBar: '显示置顶消息横幅',
+      showGroupAnnouncementBar: '显示群公告横幅',
       showMessageAvatar: '显示消息头像',
       showMessageAvatarDesc:
         '总开关：关闭后消息列表中己方与对方头像均隐藏；己方头像可单独用「显示自己头像」控制',

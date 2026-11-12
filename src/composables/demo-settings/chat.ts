@@ -36,6 +36,8 @@ function createChatSettings() {
   const groupReadReceiptMaxSize = ref(200)
 
   /* ===== 消息列表配置 ===== */
+  const chatPinnedBarVisible = ref(true)
+  const chatGroupAnnouncementBarVisible = ref(true)
   const chatShowTime = ref<false | true | 'always' | 'hover'>(false)
   const chatMessageSearchEnabled = ref(false)
   const chatMessageServerSearchEnabled = ref(false)
@@ -83,6 +85,8 @@ function createChatSettings() {
     chatInputMaxLength.value = 0
     groupReadReceiptEnabled.value = false
     groupReadReceiptMaxSize.value = 200
+    chatPinnedBarVisible.value = true
+    chatGroupAnnouncementBarVisible.value = true
     chatShowTime.value = false
     chatMessageSearchEnabled.value = false
     chatMessageServerSearchEnabled.value = false
@@ -122,6 +126,8 @@ function createChatSettings() {
     groupReadReceiptEnabled,
     groupReadReceiptMaxSize,
     // 消息列表
+    chatPinnedBarVisible,
+    chatGroupAnnouncementBarVisible,
     chatShowTime,
     chatMessageSearchEnabled,
     chatMessageServerSearchEnabled,

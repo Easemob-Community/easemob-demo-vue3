@@ -311,6 +311,8 @@ export default {
       groupReadReceiptMaxSize: 'Max Size',
       groupReadReceiptMaxSizePlaceholder: '200',
       messageList: 'Message List',
+      showPinnedBar: 'Show Pinned Message Banner',
+      showGroupAnnouncementBar: 'Show Group Announcement Banner',
       showMessageAvatar: 'Show Message Avatar',
       showMessageAvatarDesc:
         'Master switch: when off, avatars for both self and others are hidden in the message list; the self avatar can be controlled separately via "Show Self Avatar"',

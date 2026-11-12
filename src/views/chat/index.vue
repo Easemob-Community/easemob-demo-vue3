@@ -69,6 +69,8 @@ const {
   chatInputMaxLength,
   groupReadReceiptEnabled,
   groupReadReceiptMaxSize,
+  chatPinnedBarVisible,
+  chatGroupAnnouncementBarVisible,
   chatShowTime,
   chatMessageSearchEnabled,
   chatMessageServerSearchEnabled,
@@ -187,6 +189,8 @@ const chatConfig = computed(() => ({
     ...(chatInputMaxLength.value > 0 ? { maxLength: chatInputMaxLength.value } : {}),
   },
   messageList: {
+    pinnedBar: { visible: chatPinnedBarVisible.value },
+    groupAnnouncementBar: { visible: chatGroupAnnouncementBarVisible.value },
     showTime: chatShowTime.value,
     showAvatar: chatMessageListShowAvatar.value,
     showSelfAvatar: chatMessageShowSelfAvatar.value,
