@@ -11,7 +11,7 @@ defineOptions({ name: 'LoginPage' })
 
 const { t, locale } = useI18n()
 
-// 开发者模式：统一由 useDevMode 管理（dev 构建默认开启、生产默认关闭），单击退出、连点 7 次进入
+// 开发者模式：统一由 useDevMode 管理并持久化，单击退出、连点 7 次进入
 const { devEnabled, remaining, isHinting, registerTap, exitDevMode } = useDevMode()
 
 // 连点提示 toast（分段反馈：前 4 次静默，之后提示「再点 X 次」）

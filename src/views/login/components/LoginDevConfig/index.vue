@@ -1,17 +1,23 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   getDevConfig,
   getPersistEnabled,
+  isAppId,
+  isValidAppKey,
+  isValidRestServerUrl,
+  isValidWebSocketUrl,
   setDevConfig,
   setPersistEnabled,
   type DevConfig,
 } from '@/config/dev'
+import { useDevMode } from '@/composables/useDevMode'
 
 defineOptions({ name: 'LoginDevConfig' })
 
 const { t } = useI18n()
+const { enterDevMode } = useDevMode()
 
 const emit = defineEmits<{ exit: [] }>()
 
@@ -20,7 +26,7 @@ const persistEnabled = ref(false)
 const devAppKey = ref('')
 const devImServer = ref('')
 const devRestServer = ref('')
-const devSaveState = ref<'idle' | 'success' | 'error'>('idle')
+const devSaveState = ref<'idle' | 'success' | 'error' | 'invalid-url'>('idle')
 const focused = ref<string | null>(null)
 
 let devSaveTimer: ReturnType<typeof setTimeout> | null = null
@@ -38,9 +44,11 @@ onUnmounted(() => {
   if (devSaveTimer) clearTimeout(devSaveTimer)
 })
 
-function isValidAppKey(value: string): boolean {
-  return /^[^#\s]+#[^#\s]+$/.test(value.trim())
-}
+const appIdMode = computed(() => isAppId(devAppKey.value))
+
+watch(appIdMode, (enabled) => {
+  if (enabled) usePrivateServer.value = false
+})
 
 function handlePersistToggle() {
   persistEnabled.value = !persistEnabled.value
@@ -52,10 +60,15 @@ function handleDevSave() {
   const imServer = devImServer.value.trim()
   const restServer = devRestServer.value.trim()
 
-  if (!isValidAppKey(appKey)) {
+  if (!isValidAppKey(appKey) && !isAppId(appKey)) {
     devSaveState.value = 'error'
-  } else if (usePrivateServer.value && (!imServer || !restServer)) {
+  } else if (!appIdMode.value && usePrivateServer.value && (!imServer || !restServer)) {
     devSaveState.value = 'error'
+  } else if (
+    usePrivateServer.value &&
+    (!isValidWebSocketUrl(imServer) || !isValidRestServerUrl(restServer))
+  ) {
+    devSaveState.value = 'invalid-url'
   } else {
     devSaveState.value = 'success'
     const existing = getDevConfig()
@@ -64,10 +77,11 @@ function handleDevSave() {
       appKey,
       imServer,
       restServer,
-      usePrivateServer: usePrivateServer.value,
+      usePrivateServer: appIdMode.value ? false : usePrivateServer.value,
     }
     setDevConfig(config)
-    // appKey 变更需要 Provider 重新初始化，刷新页面生效
+    enterDevMode()
+    // appKey 与私有服务器变更需要重新创建 SDK，刷新后仍恢复 dev 模式
     setTimeout(() => {
       window.location.reload()
     }, 600)
@@ -108,14 +122,20 @@ function handleDevSave() {
     </div>
 
     <div class="login-page__dev-field">
-      <label>AppKey</label>
+      <label for="dev-app-identity">AppKey / AppID</label>
       <div
         class="login-page__input"
         :class="{ 'login-page__input--focused': focused === 'devAppKey' }"
       >
         <input
+          id="dev-app-identity"
           v-model="devAppKey"
+          name="appIdentity"
           type="text"
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="none"
+          spellcheck="false"
           :placeholder="$t('login.appKeyPlaceholder')"
           @focus="focused = 'devAppKey'"
           @blur="focused = null"
@@ -124,11 +144,14 @@ function handleDevSave() {
     </div>
 
     <div class="login-page__dev-row">
-      <span>{{ $t('login.usePrivateServer') }}</span>
+      <span>
+        {{ appIdMode ? $t('login.appIdPrivateServerUnsupported') : $t('login.usePrivateServer') }}
+      </span>
       <button
         type="button"
         class="login-page__switch"
         :class="{ 'login-page__switch--active': usePrivateServer }"
+        :disabled="appIdMode"
         @click="usePrivateServer = !usePrivateServer"
       >
         <span />
@@ -170,7 +193,7 @@ function handleDevSave() {
         class="login-page__dev-save"
         :class="{
           'login-page__dev-save--success': devSaveState === 'success',
-          'login-page__dev-save--error': devSaveState === 'error',
+          'login-page__dev-save--error': ['error', 'invalid-url'].includes(devSaveState),
         }"
         @click="handleDevSave"
       >
@@ -179,7 +202,9 @@ function handleDevSave() {
             ? `✓  ${t('login.saved')}`
             : devSaveState === 'error'
               ? t('login.checkRequired')
-              : t('login.saveConfig')
+              : devSaveState === 'invalid-url'
+                ? t('login.invalidServerUrl')
+                : t('login.saveConfig')
         }}
       </button>
       <button type="button" class="login-page__dev-exit" @click="emit('exit')">

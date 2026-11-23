@@ -6,17 +6,16 @@ import type { UIKitDataSource } from '@easemob-community/uikit-im'
 
 import AppInitializer from '@/components/AppInitializer.vue'
 import { DEMO_CUSTOM_CONTACTS } from '@/config/demo'
-import { getEffectiveAppKey } from '@/config/dev'
+import { getSDKInitConfig } from '@/config/dev'
 import { useDemoSettings } from '@/composables/useDemoSettings'
 import { useUIKitConfig } from '@/composables/useUIKitConfig'
 import { useUserStore } from '@/store/modules/user'
 
-// UIKit 接入：appKey 优先取开发者本地配置，未配置时回退到环境变量；
-// 均无配置时 Provider 不自动初始化 SDK，待登录逻辑通过 useClient().init(config) 显式初始化
-const appKey = getEffectiveAppKey()
-
 const userStore = useUserStore()
 const router = useRouter()
+
+// 刷新自动登录与手动登录使用同一套模式化配置；Provider 不自动初始化 SDK
+const sdkConfig = getSDKInitConfig(userStore.loginMode === 'dev' ? 'dev' : 'phone')
 
 /** Token 过期：清理登录态并返回登录页 */
 function handleTokenExpired() {
@@ -76,7 +75,8 @@ const providerDataSource = computed<UIKitDataSource | undefined>(() =>
 
 <template>
   <EmUIKitProvider
-    :app-key="appKey"
+    :app-key="sdkConfig.appKey"
+    :app-id="sdkConfig.appId"
     :auto-init="false"
     :on-token-expired="handleTokenExpired"
     :locale="uikitLocale"
@@ -100,7 +100,7 @@ const providerDataSource = computed<UIKitDataSource | undefined>(() =>
     :notice-config="noticeConfig"
     :logger="loggerConfig"
   >
-    <AppInitializer :app-key="appKey">
+    <AppInitializer :sdk-config="sdkConfig">
       <router-view />
     </AppInitializer>
   </EmUIKitProvider>

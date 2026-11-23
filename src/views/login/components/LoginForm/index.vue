@@ -4,7 +4,7 @@ import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/store/modules/user'
-import { getDevConfig, getEffectiveAppKey, setDevConfig } from '@/config/dev'
+import { getDevConfig, getSDKInitConfig, setDevConfig } from '@/config/dev'
 import { useFeaturePromo } from '@/composables/useFeaturePromo'
 import { useSmsCode } from '@/composables/useSmsCode'
 import { captchaConfig } from '@/config/captcha'
@@ -30,9 +30,9 @@ const router = useRouter()
 const userStore = useUserStore()
 const { login, init: initClient } = useClient()
 
-/** 确保 IM SDK 已初始化（appKey 未配置时抛错） */
+/** 按当前登录模式初始化 IM SDK，默认登录不读取 dev 配置 */
 async function initSDK() {
-  await initUIKit(initClient, getEffectiveAppKey())
+  await initUIKit(initClient, getSDKInitConfig(props.devMode ? 'dev' : 'phone'))
 }
 
 const phone = ref('')

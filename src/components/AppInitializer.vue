@@ -4,13 +4,14 @@ import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useClient } from '@easemob-community/uikit-im'
 
+import type { SDKInitConfig } from '@/config/dev'
 import { useUserStore } from '@/store/modules/user'
 import { initUIKit } from '@/utils/uikit'
 import { useNewMessageNotice } from '@/composables/useNewMessageNotice'
 
 interface Props {
-  /** 环信 AppKey，由外层 App.vue 传入 */
-  appKey: string
+  /** 与当前登录模式一致的 SDK 配置，由外层 App.vue 传入 */
+  sdkConfig: SDKInitConfig
 }
 
 const props = defineProps<Props>()
@@ -26,7 +27,9 @@ const router = useRouter()
 useNewMessageNotice()
 
 /** 是否存在可自动登录的凭证（刷新页面后由 user store 从 sessionStorage 恢复） */
-const hasCredentials = Boolean(userStore.token && userStore.userId && props.appKey)
+const hasCredentials = Boolean(
+  userStore.token && userStore.userId && (props.sdkConfig.appKey || props.sdkConfig.appId),
+)
 
 /** 自动登录进行中：全屏 loading，避免未连接态下渲染聊天容器（对齐 uikit demo 的 auto-login-loading） */
 const autoLoggingIn = ref(false)
@@ -35,10 +38,10 @@ async function autoLoginToSDK() {
   if (!hasCredentials) return
   autoLoggingIn.value = true
   try {
-    await initUIKit(initClient, props.appKey)
+    await initUIKit(initClient, props.sdkConfig)
     await login({ user: userStore.userId, accessToken: userStore.token })
   } catch (err) {
-    // 凭证已失效（如 token 过期）：直接清除登录态回登录页，避免卡在无法恢复的错误态
+    // 凭证或服务配置已失效：清除登录态回登录页，避免卡在无法恢复的错误态
     console.error('[AppInitializer] 自动登录 IM SDK 失败，返回登录页', err)
     userStore.reset()
     router.replace('/login')

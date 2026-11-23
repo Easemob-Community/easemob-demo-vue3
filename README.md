@@ -6,16 +6,16 @@ Easemob Demo Vue3 是基于环信 IM SDK构建的 Web 即时通讯 Demo，为开
 
 > 从零跑通 Demo（环境要求 → 获取 Demo → 安装运行 → 发单聊/群聊消息）的完整图文步骤见 [`docs/quick-start/`](docs/quick-start/README.md)。
 
-想把本 Demo 改造成连接**自己的环信应用**？只需三步：换 AppKey → 创建用户 → 登录。全程在开发模式（`pnpm dev`）下即可完成，无需改动核心代码。
+想把本 Demo 改造成连接**自己的环信应用**？只需三步：配置 AppKey 或 AppID → 创建用户 → 登录。全程在开发模式（`pnpm dev`）下即可完成，无需改动核心代码。
 
 ### 前置准备
 
 1. 前往 [环信控制台](https://console.easemob.com) 注册账号并创建应用；
-2. 在应用详情页获取 **AppKey**（格式为 `orgName#appName`，例如 `1111222233334444#demo`）。
+2. 在应用详情页获取 **AppKey**（格式为 `orgName#appName`，例如 `1111222233334444#demo`）或 32 位 **AppID**。
 
-### 第一步：换成你的 AppKey
+### 第一步：配置你的 AppKey 或 AppID
 
-两种方式任选其一，**优先级：登录页开发者配置 > 环境变量**（实现见 `src/config/dev.ts` 的 `getEffectiveAppKey()`）。
+两种方式任选其一。仅在开发者模式登录时，**优先级：登录页开发者配置 > 环境变量**；默认手机号登录始终使用环境变量（实现见 `src/config/dev.ts` 的 `getSDKInitConfig()`）。
 
 **方式一：环境变量（推荐，随仓库走）**
 
@@ -31,7 +31,9 @@ VITE_APP_KEY=你的orgName#你的appName
 2. 在「开发者配置」中填入你的 AppKey，点击保存 —— 配置写入 localStorage（key：`easemob-demo-dev-config`）后页面自动刷新生效；
 3. 如使用私有部署的环信服务器，可同时在面板中开启「私有服务器」并填写 IM / REST 服务器地址。
 
-> 提示：在面板配置过 AppKey 后想回退到环境变量，清除 localStorage 中的 `easemob-demo-dev-config` 即可。
+面板也支持直接填写 32 位 AppID，Demo 会自动按 `appId` 初始化 UIKit。AppID 模式由 SDK 动态解析应用配置，不支持固定私有服务器地址，此时面板会自动禁用该选项。
+
+> 提示：在面板配置过 AppKey 或 AppID 后想回退到环境变量，清除 localStorage 中的 `easemob-demo-dev-config` 即可。
 
 ### 第二步：创建用户（注册）
 
@@ -49,7 +51,9 @@ VITE_APP_KEY=你的orgName#你的appName
 
 点击登录即可进入会话页，此时所有消息收发都发生在你自己的应用下。
 
-> **关于默认的「手机号 + 短信验证码」登录**：该链路依赖环信官方 Demo 的 App Server（`appserver.easesdk.com`）与官方短信服务，只服务于官方 Demo 的 AppKey。**换成自己的 AppKey 后这条链路不可用**，请使用上面的开发者模式登录；如需保留手机号验证码登录体验，见下方「进阶」。
+> **关于默认的「手机号 + 短信验证码」登录**：该链路依赖环信官方 Demo 的 App Server（`appserver.easesdk.com`）与官方短信服务，只服务于官方 Demo 的 AppKey。默认登录始终读取 `VITE_APP_KEY`，开发者模式里保存的自定义 AppKey 不会影响它；如果把 `VITE_APP_KEY` 本身换成自己的 AppKey，这条链路仍不可用，请使用开发者模式登录。
+>
+> 开发者配置保存成功后会自动刷新页面并保持在开发者模式。启用私有服务器时，IM 地址需填写完整的 `ws://` / `wss://` 地址，REST 地址需填写完整的 `http://` / `https://` 地址；SDK 将直连这些地址，不再请求动态 DNS 配置。
 
 ### 进阶：跳过 Demo 登录页，用自有接口登录直达聊天页
 
@@ -70,7 +74,7 @@ VITE_APP_KEY=你的orgName#你的appName
 import { useClient } from '@easemob-community/uikit-im'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/store/modules/user'
-import { getEffectiveAppKey } from '@/config/dev'
+import { getSDKInitConfig } from '@/config/dev'
 import { initUIKit } from '@/utils/uikit'
 
 const router = useRouter()
@@ -82,8 +86,8 @@ async function loginWithMyBackend() {
   // 1. 调你自己的后端接口，换取环信 userId 与 token
   const { userId, token } = await fetch('/my-api/im-token', { method: 'POST' }).then((r) => r.json())
 
-  // 2. 初始化 IM SDK 并登录（appKey 来自环境变量或开发者面板）
-  await initUIKit(init, getEffectiveAppKey())
+  // 2. 按 dev 模式初始化 IM SDK 并登录（appKey 来自开发者面板或环境变量）
+  await initUIKit(init, getSDKInitConfig('dev'))
   await login({ user: userId, accessToken: token })
 
   // 3. 写入 Demo 登录态（路由守卫凭此放行，persistToStorage 支撑刷新后自动重连）
@@ -123,7 +127,7 @@ async function loginWithMyBackend() {
 | `src/App.vue` | `EmUIKitProvider` 挂载点，appKey 注入处 |
 | `src/components/AppInitializer.vue` | 刷新后用已持久化的凭证自动重连 IM SDK |
 | `src/views/login/components/LoginForm/index.vue` | 登录表单（手机号验证码 / 开发者模式两种登录） |
-| `src/views/login/components/LoginDevConfig/index.vue` | 登录页开发者配置面板（AppKey / 私有服务器） |
+| `src/views/login/components/LoginDevConfig/index.vue` | 登录页开发者配置面板（AppKey / AppID / 私有服务器） |
 | `src/composables/useDevMode.ts` | 开发者模式开关（dev 默认开启，生产连点 `</>` 7 次） |
 | `src/api/user.ts` / `src/api/sms.ts` | App Server 与短信服务接口封装 |
 

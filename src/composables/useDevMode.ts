@@ -1,5 +1,7 @@
 import { computed, ref } from 'vue'
 
+import { getDevModeEnabled, setDevModeEnabled } from '@/config/dev'
+
 /**
  * 开发者模式统一状态机：eruda 与登录框 dev 共用一个开关（模块级单例）。
  *
@@ -19,6 +21,8 @@ export interface DevModeOptions {
   resetWindow?: number
   /** 初始是否开启，默认 false */
   initialEnabled?: boolean
+  /** 开关变化时同步到持久化层 */
+  onEnabledChange?: (enabled: boolean) => void
 }
 
 export type DevTapResult =
@@ -28,7 +32,13 @@ export type DevTapResult =
   | { status: 'enabled' }
 
 export function createDevMode(options: DevModeOptions = {}) {
-  const { triggerCount = 7, silentCount = 4, resetWindow = 3000, initialEnabled = false } = options
+  const {
+    triggerCount = 7,
+    silentCount = 4,
+    resetWindow = 3000,
+    initialEnabled = false,
+    onEnabledChange,
+  } = options
 
   const devEnabled = ref(initialEnabled)
   const tapCount = ref(0)
@@ -58,9 +68,16 @@ export function createDevMode(options: DevModeOptions = {}) {
     }, resetWindow)
   }
 
+  function enterDevMode() {
+    devEnabled.value = true
+    onEnabledChange?.(true)
+    resetTap()
+  }
+
   /** 显式退出开发者模式（供配置面板「退出」按钮） */
   function exitDevMode() {
     devEnabled.value = false
+    onEnabledChange?.(false)
     resetTap()
   }
 
@@ -72,8 +89,7 @@ export function createDevMode(options: DevModeOptions = {}) {
     }
     tapCount.value += 1
     if (tapCount.value >= triggerCount) {
-      devEnabled.value = true
-      resetTap()
+      enterDevMode()
       return { status: 'enabled' }
     }
     scheduleReset()
@@ -83,11 +99,14 @@ export function createDevMode(options: DevModeOptions = {}) {
     return { status: 'silent' }
   }
 
-  return { devEnabled, tapCount, remaining, isHinting, registerTap, exitDevMode }
+  return { devEnabled, tapCount, remaining, isHinting, registerTap, enterDevMode, exitDevMode }
 }
 
-/** 全局共享实例：dev 构建默认开启、生产默认关闭（会话级，刷新复位） */
-const shared = createDevMode({ initialEnabled: import.meta.env.DEV })
+/** 全局共享实例：优先恢复持久化开关，无记录时 dev 构建默认开启、生产默认关闭 */
+const shared = createDevMode({
+  initialEnabled: getDevModeEnabled() ?? import.meta.env.DEV,
+  onEnabledChange: setDevModeEnabled,
+})
 
 export function useDevMode() {
   return shared
