@@ -12,9 +12,12 @@
 
 ## [Unreleased]
 
+## [0.9.1] - 2026-11-26
+
 ### 变更
 
 - 升级 `@easemob-community/uikit-im` 至 `^3.14.0`、`@easemob-community/uikit-sdk-websdk5` 至 `^1.7.0`（传递依赖 `uikit-core` 升至 2.14.0、`uikit-sdk-contract` 升至 1.6.0、`easemob-websdk` 升至 5.2.1）
+
 
 ## [0.9.0] - 2026-11-23
 
