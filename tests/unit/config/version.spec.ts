@@ -8,10 +8,12 @@ describe('version 版本信息', () => {
     expect(SDK_VERSION).toMatch(/^\d+\.\d+\.\d+$/)
   })
 
-  it('UIKIT_VERSION 从 package.json 的 uikit-im tgz 依赖名提取，带 VUE 前缀', () => {
+  it('UIKIT_VERSION 从 package.json 的 uikit-im 依赖声明提取，带 VUE 前缀', () => {
     expect(UIKIT_VERSION).toMatch(/^VUE \d+\.\d+\.\d+$/)
-    const tgzVersion = pkg.dependencies['@easemob-community/uikit-im'].match(/(\d+\.\d+\.\d+)/)?.[1]
-    expect(UIKIT_VERSION).toBe(`VUE ${tgzVersion}`)
+    const uikitVersion = pkg.dependencies['@easemob-community/uikit-im'].match(
+      /(\d+\.\d+\.\d+)/,
+    )?.[1]
+    expect(UIKIT_VERSION).toBe(`VUE ${uikitVersion}`)
   })
 
   it('DEMO_VERSION 与 package.json 的 version 一致', () => {
